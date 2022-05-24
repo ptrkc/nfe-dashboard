@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Nota {
+  id         String     @id @db.VarChar(44) // Chave de Acesso
+  date       DateTime   // Data de Emissão
+  total      Decimal    @db.Decimal(6, 2)
+  marketId   String    
+  createdAt  DateTime   @default(now())
+
+  market     Market     @relation(fields: [marketId], references: [id])
+  purchases  Purchase[]  
+}
+
+model Market {
+  id         String @id // cnpj+cep
+  name       String // Nome / Razão Social
+  fantasia   String // Nome Fantasia
+  cnpj       String  
+  address    String 
+  cep        String
+  nickname   String?
+
+  purchases  Purchase[]
+  notas      Nota[]
+}
+
+model Purchase {
+  id            Int      @id @default(autoincrement())
+  name          String
+  ean           String?
+  quantity      Decimal  @db.Decimal(8, 4) // Quantidade Comercial / Quantidade Tributável
+  unit          String
+  unitPrice     Decimal  @db.Decimal(6, 2)
+  regularPrice  Decimal  @db.Decimal(6, 2)
+  discount      Decimal? @db.Decimal(6, 2) // Valor do Desconto
+  chargedPrice  Decimal  @db.Decimal(6, 2)
+  notaId        String
+  marketId      String
+
+  market        Market   @relation(fields: [marketId], references: [id])
+  nota          Nota     @relation(fields: [notaId], references: [id])
+}
+
