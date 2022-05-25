@@ -19,7 +19,6 @@ const PurchasesTable = ({ purchases }) => {
       }
     },
     { unitPrice: 0, regularPrice: 0, discount: 0, chargedPrice: 0 },
-
   ), [purchases])
   const columns = useMemo(
     () => [
@@ -169,7 +168,15 @@ const Nota = ({ nota }) => {
             <tr><td>CNPJ</td><td>{market.cnpj}</td></tr>
             <tr><td>Endreço</td><td>{market.address}</td></tr>
             <tr><td>CEP</td><td>{market.cep}</td></tr>
-            <tr><td>Nome(alt)</td><td>{market.nickname}</td></tr>
+            <tr>
+              <td>Alias</td>
+              <td>
+                {market.nickname || 'nenhum'}
+                <Link href={`/market/${encodeURIComponent(market.id)}`}>
+                  <a>(✍️)</a>
+                </Link>
+              </td>
+            </tr>
           </tbody>
         </table>
         <PurchasesTable purchases={purchases} />

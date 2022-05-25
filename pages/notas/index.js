@@ -8,6 +8,9 @@ import { dateSlice } from 'lib/dateSlice'
 
 const NotasTable = ({ notas }) => {
   const data = useMemo(() => notas, [notas])
+  const totalSum = useMemo(() => notas.reduce(
+    (previousValue, currentValue) => previousValue + parseFloat(currentValue.total), 0,
+  ), [notas])
   const columns = useMemo(
     () => [
       { Header: 'Chave de Acesso', accessor: 'id', disableSortBy: true },
@@ -80,6 +83,14 @@ const NotasTable = ({ notas }) => {
             </tr>
           )
         })}
+        <tr className="odd:bg-white even:bg-slate-100">
+          <td colSpan={3} className="px-2 border border-slate-600 text-right" />
+          <td className="px-2 border border-slate-600 text-right">
+            <Link href="/">
+              <a>{formatBRL(totalSum)}</a>
+            </Link>
+          </td>
+        </tr>
       </tbody>
     </table>
   )
