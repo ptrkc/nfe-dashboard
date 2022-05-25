@@ -6,7 +6,7 @@ export default function Home() {
       <Head>
         <title>NFe Dashboard</title>
       </Head>
-      Wow        
+      Wow
     </div>
   )
 }
