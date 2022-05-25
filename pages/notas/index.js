@@ -1,7 +1,10 @@
 import { useMemo } from 'react'
-import { prisma } from 'lib/prisma'
-import Head from 'next/head'
 import { useTable, useSortBy } from 'react-table'
+import Head from 'next/head'
+import Link from 'next/link'
+import { prisma } from 'lib/prisma'
+import { formatBRL } from 'lib/formatBRL'
+import { dateSlice } from 'lib/dateSlice'
 
 const NotasTable = ({ notas }) => {
   const data = useMemo(() => notas, [notas])
@@ -21,11 +24,10 @@ const NotasTable = ({ notas }) => {
     getTableBodyProps,
     headerGroups,
     rows,
-    prepareRow,
   } = useTable({ columns, data, initialState }, useSortBy)
 
   return (
-    <table {...getTableProps()}>
+    <table {...getTableProps()} className="border-collapse border border-slate-500">
       <thead>
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
@@ -50,19 +52,30 @@ const NotasTable = ({ notas }) => {
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row)
+        {rows.map(({ original: { id, market, date, total } }) => {
+          const marketName = market.nickname || market.name
           return (
-            // eslint-disable-next-line react/jsx-key
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => (
-                // eslint-disable-next-line react/jsx-key
-                <td
-                  {...cell.getCellProps()}
-                >
-                  {cell.render('Cell')}
-                </td>
-              ))}
+            <tr key={id} className="odd:bg-white even:bg-slate-100 hover:bg-slate-300">
+              <td className="border border-slate-600">
+                <Link href={`/notas/${id}`}>
+                  <a className="block w-full h-full">{id}</a>
+                </Link>
+              </td>
+              <td className="border border-slate-600">
+                <Link href={`/notas/${id}`}>
+                  <a className="block w-full h-full">{marketName}</a>
+                </Link>
+              </td>
+              <td className="border border-slate-600">
+                <Link href={`/notas/${id}`}>
+                  <a className="block w-full h-full">{dateSlice(date)}</a>
+                </Link>
+              </td>
+              <td className="border border-slate-600 text-right">
+                <Link href={`/notas/${id}`}>
+                  <a className="block w-full h-full">{formatBRL(total)}</a>
+                </Link>
+              </td>
             </tr>
           )
         })}
