@@ -1,16 +1,20 @@
 import { prisma } from 'lib/prisma'
 
 import Head from 'next/head'
-import { Box, Button, FormLabel, Input } from '@chakra-ui/react'
+import { Box, Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react'
 
 const EditMarketForm = ({ market }) => (
-  <Box>
-    <FormLabel htmlFor="name">Name:</FormLabel>
-    <Input name="name" id="name" value={market.name}disabled />
-    <FormLabel htmlFor="nickname">Alias:</FormLabel>
-    <Input name="nickname" id="nickname" />
+  <VStack align="start" spacing={2} borderRadius="10" boxShadow="md" p="4">
+    <FormControl>
+      <FormLabel htmlFor="name">Name:</FormLabel>
+      <Input name="name" id="name" value={market.name}disabled />
+    </FormControl>
+    <FormControl>
+      <FormLabel htmlFor="nickname">Alias:</FormLabel>
+      <Input name="nickname" id="nickname" />
+    </FormControl>
     <Button>Save</Button>
-  </Box>
+  </VStack>
 )
 
 const EditMarket = ({ market }) => (
@@ -18,7 +22,7 @@ const EditMarket = ({ market }) => (
     <Head>
       <title>NFe Dashboard | Add Market</title>
     </Head>
-    <Box>
+    <Box maxW="md" marginX="auto">
       <EditMarketForm market={market} />
     </Box>
   </>

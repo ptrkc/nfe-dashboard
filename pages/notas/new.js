@@ -6,7 +6,7 @@ import { Box, Button, FormControl, FormLabel, Input, Select, VStack } from '@cha
 const NewNotaForm = ({ markets }) => {
   const options = markets.map(market => ({ label: market.nickname || market.name, value: market.id }))
   return (
-    <VStack align="start" p={4} spacing={2}>
+    <VStack align="start" p={4} spacing={2} borderRadius="10" boxShadow="md">
       <FormControl>
         <FormLabel htmlFor="total">Total:</FormLabel>
         <Input

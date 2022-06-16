@@ -1,14 +1,15 @@
 import { prisma } from 'lib/prisma'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Link, Table, Thead, Tbody, Td, Tr, Th, ButtonGroup, Button, Box } from '@chakra-ui/react'
+import { Link, Table, Thead, Tbody, Td, Tr, Th, Button, Box, Flex } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
-import { formatBRL } from 'lib/formatBRL'
 import { dateSlice } from 'lib/dateSlice'
+import { formatBRL } from 'lib/formatBRL'
+import { formatLongDateBR } from 'lib/formatLongDateBR'
 
-const NotasTable = ({ notas, size = 'md' }) => {
+const NotasTable = ({ notas }) => {
   const data = useMemo(() => notas, [notas])
   const totalSum = useMemo(() => notas.reduce(
     (previousValue, currentValue) => previousValue + parseFloat(currentValue.total), 0,
@@ -32,8 +33,8 @@ const NotasTable = ({ notas, size = 'md' }) => {
   } = useTable({ columns, data, initialState }, useSortBy)
 
   return (
-    <Table variant="striped" colorScheme="gray" size={size} {...getTableProps()}>
-      <Thead>
+    <Table variant="striped" colorScheme="gray" {...getTableProps()}>
+      <Thead bg="gray.300">
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
           <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -74,7 +75,7 @@ const NotasTable = ({ notas, size = 'md' }) => {
               </Td>
               <Td>
                 <NextLink passHref href={`/notas/${id}`}>
-                  <Link>{dateSlice(date)}</Link>
+                  <Link title={formatLongDateBR(date)}>{dateSlice(date)}</Link>
                 </NextLink>
               </Td>
               <Td isNumeric>
@@ -98,33 +99,26 @@ const NotasTable = ({ notas, size = 'md' }) => {
   )
 }
 
-const TableSizeSelector = ({ tableSize, setTableSize }) => {
-  const sizes = ['sm', 'md', 'lg']
-  return (
-    <ButtonGroup size="sm" isAttached variant="outline">
-      {sizes.map((value, index) => (
-        <Button disabled={tableSize === value} onClick={() => setTableSize(value)} key={value}>{index}</Button>
-      ))}
-    </ButtonGroup>)
-}
-
-const Notas = ({ notas }) => {
-  const [tableSize, setTableSize] = useState('md')
-  return (
-    <>
-      <Head>
-        <title>NFe Dashboard</title>
-      </Head>
-      <Box>
+const Notas = ({ notas }) => (
+  <>
+    <Head>
+      <title>NFe Dashboard</title>
+    </Head>
+    <Flex direction="column" gap="2">
+      <Flex justifyContent="space-between" alignItems="center">
+        <Box>
+          Filtros, data, mercado,...?
+        </Box>
         <NextLink href="/notas/new" passHref>
-          <Link>new</Link>
+          <Button as={Link}>New</Button>
         </NextLink>
-        <TableSizeSelector tableSize={tableSize} setTableSize={setTableSize} />
-        <NotasTable size={tableSize} notas={notas} />
+      </Flex>
+      <Box borderRadius="10" boxShadow="md" overflow="hidden">
+        <NotasTable notas={notas} />
       </Box>
-    </>
-  )
-}
+    </Flex>
+  </>
+)
 
 export const getServerSideProps = async () => {
   const notas = await prisma.nota.findMany({

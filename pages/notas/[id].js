@@ -3,12 +3,13 @@ import { prisma } from 'lib/prisma'
 import { useMemo } from 'react'
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Link, Table, Tbody, Thead, Th, Td, Tr, Box } from '@chakra-ui/react'
+import { Link, Table, Tbody, Thead, Th, Td, Tr, Box, HStack } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
 import { formatBRL } from 'lib/formatBRL'
+import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { dateSlice } from 'lib/dateSlice'
 
-const PurchasesTable = ({ purchases, size = 'md' }) => {
+const PurchasesTable = ({ purchases }) => {
   const data = useMemo(() => purchases, [purchases])
   const totals = useMemo(() => purchases.reduce(
     (previousValue, currentValue) => {
@@ -45,8 +46,8 @@ const PurchasesTable = ({ purchases, size = 'md' }) => {
   } = useTable({ columns, data, initialState }, useSortBy)
 
   return (
-    <Table variant="striped" colorScheme="gray" size={size} {...getTableProps()}>
-      <Thead>
+    <Table variant="striped" colorScheme="gray" {...getTableProps()}>
+      <Thead bg="gray.300">
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
           <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -152,30 +153,42 @@ const Nota = ({ nota }) => {
         <title>NFe Dashboard</title>
       </Head>
       <Box>
-        <Table>
-          <Tbody>
-            <Tr><Td colSpan="2">Nota</Td></Tr>
-            <Tr><Td>Chave de acesso</Td><Td>{nota.id}</Td></Tr>
-            <Tr><Td>Data</Td><Td>{dateSlice(nota.date)}</Td></Tr>
-            <Tr><Td>Total</Td><Td>{formatBRL(nota.total)}</Td></Tr>
-            <Tr><Td colSpan="2">Mercado</Td></Tr>
-            <Tr><Td>Nome</Td><Td>{market.name}</Td></Tr>
-            <Tr><Td>Nome fantasia</Td><Td>{market.fantasia}</Td></Tr>
-            <Tr><Td>CNPJ</Td><Td>{market.cnpj}</Td></Tr>
-            <Tr><Td>Endreço</Td><Td>{market.address}</Td></Tr>
-            <Tr><Td>CEP</Td><Td>{market.cep}</Td></Tr>
-            <Tr>
-              <Td>Alias</Td>
-              <Td>
-                {market.nickname || 'nenhum'}
-                <NextLink passHref href={`/market/${encodeURIComponent(market.id)}`}>
-                  <Link>(✍️)</Link>
-                </NextLink>
-              </Td>
-            </Tr>
-          </Tbody>
-        </Table>
-        <PurchasesTable purchases={purchases} />
+        <HStack mb="4">
+          <Table variant="striped" borderRadius="10" boxShadow="md" overflow="hidden">
+            <Thead bg="gray.300">
+              <Tr><Th colSpan="2">Nota</Th></Tr>
+            </Thead>
+            <Tbody>
+              <Tr><Td>Chave de acesso</Td><Td>{nota.id}</Td></Tr>
+              <Tr><Td>Data</Td><Td>{formatLongDateBR(nota.date)}</Td></Tr>
+              <Tr><Td>Total</Td><Td>{formatBRL(nota.total)}</Td></Tr>
+            </Tbody>
+          </Table>
+          <Table variant="striped" borderRadius="10" boxShadow="md" overflow="hidden">
+            <Thead bg="gray.300">
+              <Tr><Th colSpan="2">Mercado</Th></Tr>
+            </Thead>
+            <Tbody>
+              <Tr><Td>Nome</Td><Td>{market.name}</Td></Tr>
+              <Tr><Td>Nome fantasia</Td><Td>{market.fantasia}</Td></Tr>
+              <Tr><Td>CNPJ</Td><Td>{market.cnpj}</Td></Tr>
+              <Tr><Td>Endreço</Td><Td>{market.address}</Td></Tr>
+              <Tr><Td>CEP</Td><Td>{market.cep}</Td></Tr>
+              <Tr>
+                <Td>Alias</Td>
+                <Td>
+                  {market.nickname || 'nenhum'}
+                  <NextLink passHref href={`/market/${encodeURIComponent(market.id)}`}>
+                    <Link>(✍️)</Link>
+                  </NextLink>
+                </Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </HStack>
+        <Box borderRadius="10" boxShadow="md" overflow="hidden">
+          <PurchasesTable purchases={purchases} />
+        </Box>
       </Box>
     </>
   )
