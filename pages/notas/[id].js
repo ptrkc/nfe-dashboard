@@ -1,12 +1,14 @@
+import { prisma } from 'lib/prisma'
+
 import { useMemo } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
+import NextLink from 'next/link'
+import { Link, Table, Tbody, Thead, Th, Td, Tr, Box } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
-import { prisma } from 'lib/prisma'
 import { formatBRL } from 'lib/formatBRL'
 import { dateSlice } from 'lib/dateSlice'
 
-const PurchasesTable = ({ purchases }) => {
+const PurchasesTable = ({ purchases, size = 'md' }) => {
   const data = useMemo(() => purchases, [purchases])
   const totals = useMemo(() => purchases.reduce(
     (previousValue, currentValue) => {
@@ -43,16 +45,15 @@ const PurchasesTable = ({ purchases }) => {
   } = useTable({ columns, data, initialState }, useSortBy)
 
   return (
-    <table {...getTableProps()} className="border-collapse border border-slate-500 mx-auto">
-      <thead>
+    <Table variant="striped" colorScheme="gray" size={size} {...getTableProps()}>
+      <Thead>
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
-          <tr {...headerGroup.getHeaderGroupProps()}>
+          <Tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
               // eslint-disable-next-line react/jsx-key
-              <th
+              <Th
                 {...column.getHeaderProps(column.getSortByToggleProps())}
-
               >
                 {column.render('Header')}
                 <span>
@@ -63,83 +64,83 @@ const PurchasesTable = ({ purchases }) => {
                       : ' ↓'
                     : ' ↕')}
                 </span>
-              </th>
+              </Th>
             ))}
-          </tr>
+          </Tr>
         ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
+      </Thead>
+      <Tbody {...getTableBodyProps()}>
         {rows.map(({ original: {
           id, name, ean, quantity, unit, unitPrice, regularPrice, discount, chargedPrice,
         } }) => (
-          <tr key={id} className="odd:bg-white even:bg-slate-100">
-            <td className="px-2 border border-slate-600">
-              <Link href="/">
-                <a>{name}</a>
-              </Link>
-            </td>
-            <td className="px-2 border border-slate-600">
-              <Link href="/">
-                <a>{ean}</a>
-              </Link>
-            </td>
-            <td className="px-2 border border-slate-600 text-right">
-              <Link href="/">
-                <a>{quantity}</a>
-              </Link>
-            </td>
-            <td className="px-2 border border-slate-600">
-              <Link href="/">
-                <a>{unit}</a>
-              </Link>
-            </td>
-            <td className="px-2 border border-slate-600 text-right">
-              <Link href="/">
-                <a>{formatBRL(unitPrice)}</a>
-              </Link>
-            </td>
-            <td className="px-2 border border-slate-600 text-right">
-              <Link href="/">
-                <a>{formatBRL(regularPrice)}</a>
-              </Link>
-            </td>
-            <td className="px-2 border border-slate-600 text-right">
-              <Link href="/">
-                <a>{formatBRL(discount)}</a>
-              </Link>
-            </td>
-            <td className="px-2 border border-slate-600 text-right">
-              <Link href="/">
-                <a>{formatBRL(chargedPrice)}</a>
-              </Link>
-            </td>
-          </tr>
+          <Tr key={id}>
+            <Td>
+              <NextLink passHref href="/">
+                <Link>{name}</Link>
+              </NextLink>
+            </Td>
+            <Td>
+              <NextLink passHref href="/">
+                <Link>{ean}</Link>
+              </NextLink>
+            </Td>
+            <Td>
+              <NextLink passHref href="/">
+                <Link>{quantity}</Link>
+              </NextLink>
+            </Td>
+            <Td>
+              <NextLink passHref href="/">
+                <Link>{unit}</Link>
+              </NextLink>
+            </Td>
+            <Td>
+              <NextLink passHref href="/">
+                <Link>{formatBRL(unitPrice)}</Link>
+              </NextLink>
+            </Td>
+            <Td>
+              <NextLink passHref href="/">
+                <Link>{formatBRL(regularPrice)}</Link>
+              </NextLink>
+            </Td>
+            <Td>
+              <NextLink passHref href="/">
+                <Link>{formatBRL(discount)}</Link>
+              </NextLink>
+            </Td>
+            <Td>
+              <NextLink passHref href="/">
+                <Link>{formatBRL(chargedPrice)}</Link>
+              </NextLink>
+            </Td>
+          </Tr>
         ))}
-        <tr className="odd:bg-white even:bg-slate-100">
-          <td colSpan={4} className="px-2 border border-slate-600 text-right" />
-          <td className="px-2 border border-slate-600 text-right">
-            <Link href="/">
-              <a>{formatBRL(totals.unitPrice)}</a>
-            </Link>
-          </td>
-          <td className="px-2 border border-slate-600 text-right">
-            <Link href="/">
-              <a>{formatBRL(totals.regularPrice)}</a>
-            </Link>
-          </td>
-          <td className="px-2 border border-slate-600 text-right">
-            <Link href="/">
-              <a>{formatBRL(totals.discount)}</a>
-            </Link>
-          </td>
-          <td className="px-2 border border-slate-600 text-right">
-            <Link href="/">
-              <a>{formatBRL(totals.chargedPrice)}</a>
-            </Link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <Tr>
+          <Td colSpan={4} />
+          <Td>
+            <NextLink passHref href="/">
+              <Link>{formatBRL(totals.unitPrice)}</Link>
+            </NextLink>
+          </Td>
+          <Td>
+            <NextLink passHref href="/">
+              <Link>{formatBRL(totals.regularPrice)}</Link>
+            </NextLink>
+          </Td>
+          <Td>
+            <NextLink passHref href="/">
+              <Link>{formatBRL(totals.discount)}</Link>
+            </NextLink>
+          </Td>
+          <Td>
+            <NextLink passHref href="/">
+              <Link>{formatBRL(totals.chargedPrice)}</Link>
+            </NextLink>
+          </Td>
+        </Tr>
+      </Tbody>
+    </Table>
   )
 }
 
@@ -150,37 +151,32 @@ const Nota = ({ nota }) => {
       <Head>
         <title>NFe Dashboard</title>
       </Head>
-
-      <main>
-        <table className="standard-table">
-          <tbody>
-
-            <tr><td colSpan="2" className="text-center">Nota</td></tr>
-
-            <tr><td>Chave de acesso</td><td>{nota.id}</td></tr>
-            <tr><td>Data</td><td>{dateSlice(nota.date)}</td></tr>
-            <tr><td>Total</td><td>{formatBRL(nota.total)}</td></tr>
-
-            <tr><td colSpan="2" className="text-center">Mercado</td></tr>
-
-            <tr><td>Nome</td><td>{market.name}</td></tr>
-            <tr><td>Nome fantasia</td><td>{market.fantasia}</td></tr>
-            <tr><td>CNPJ</td><td>{market.cnpj}</td></tr>
-            <tr><td>Endreço</td><td>{market.address}</td></tr>
-            <tr><td>CEP</td><td>{market.cep}</td></tr>
-            <tr>
-              <td>Alias</td>
-              <td>
+      <Box>
+        <Table>
+          <Tbody>
+            <Tr><Td colSpan="2">Nota</Td></Tr>
+            <Tr><Td>Chave de acesso</Td><Td>{nota.id}</Td></Tr>
+            <Tr><Td>Data</Td><Td>{dateSlice(nota.date)}</Td></Tr>
+            <Tr><Td>Total</Td><Td>{formatBRL(nota.total)}</Td></Tr>
+            <Tr><Td colSpan="2">Mercado</Td></Tr>
+            <Tr><Td>Nome</Td><Td>{market.name}</Td></Tr>
+            <Tr><Td>Nome fantasia</Td><Td>{market.fantasia}</Td></Tr>
+            <Tr><Td>CNPJ</Td><Td>{market.cnpj}</Td></Tr>
+            <Tr><Td>Endreço</Td><Td>{market.address}</Td></Tr>
+            <Tr><Td>CEP</Td><Td>{market.cep}</Td></Tr>
+            <Tr>
+              <Td>Alias</Td>
+              <Td>
                 {market.nickname || 'nenhum'}
-                <Link href={`/market/${encodeURIComponent(market.id)}`}>
-                  <a>(✍️)</a>
-                </Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <NextLink passHref href={`/market/${encodeURIComponent(market.id)}`}>
+                  <Link>(✍️)</Link>
+                </NextLink>
+              </Td>
+            </Tr>
+          </Tbody>
+        </Table>
         <PurchasesTable purchases={purchases} />
-      </main>
+      </Box>
     </>
   )
 }

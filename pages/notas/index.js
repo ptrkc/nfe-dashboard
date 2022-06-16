@@ -1,12 +1,14 @@
-import { useMemo } from 'react'
-import { useTable, useSortBy } from 'react-table'
-import Head from 'next/head'
-import Link from 'next/link'
 import { prisma } from 'lib/prisma'
+
+import { useMemo, useState } from 'react'
+import Head from 'next/head'
+import NextLink from 'next/link'
+import { Link, Table, Thead, Tbody, Td, Tr, Th, ButtonGroup, Button, Box } from '@chakra-ui/react'
+import { useTable, useSortBy } from 'react-table'
 import { formatBRL } from 'lib/formatBRL'
 import { dateSlice } from 'lib/dateSlice'
 
-const NotasTable = ({ notas }) => {
+const NotasTable = ({ notas, size = 'md' }) => {
   const data = useMemo(() => notas, [notas])
   const totalSum = useMemo(() => notas.reduce(
     (previousValue, currentValue) => previousValue + parseFloat(currentValue.total), 0,
@@ -16,7 +18,7 @@ const NotasTable = ({ notas }) => {
       { Header: 'Chave de Acesso', accessor: 'id', disableSortBy: true },
       { Header: 'Mercado', accessor: 'market.name' },
       { Header: 'Data', accessor: 'date' },
-      { Header: 'Total', accessor: 'total' },
+      { Header: 'Total', accessor: 'total', isNumeric: true },
     ],
     [],
   )
@@ -30,16 +32,16 @@ const NotasTable = ({ notas }) => {
   } = useTable({ columns, data, initialState }, useSortBy)
 
   return (
-    <table {...getTableProps()} className="border-collapse border border-slate-500 mx-auto">
-      <thead>
+    <Table variant="striped" colorScheme="gray" size={size} {...getTableProps()}>
+      <Thead>
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
-          <tr {...headerGroup.getHeaderGroupProps()}>
+          <Tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
               // eslint-disable-next-line react/jsx-key
-              <th
+              <Th
+                {...(column.isNumeric && { isNumeric: true })}
                 {...column.getHeaderProps(column.getSortByToggleProps())}
-                className="px-2"
               >
                 {column.render('Header')}
                 <span>
@@ -50,62 +52,79 @@ const NotasTable = ({ notas }) => {
                       : ' ↓'
                     : ' ↕')}
                 </span>
-              </th>
+              </Th>
             ))}
-          </tr>
+          </Tr>
         ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
+      </Thead>
+      <Tbody {...getTableBodyProps()}>
         {rows.map(({ original: { id, market, date, total } }) => {
           const marketName = market.nickname || market.name
           return (
-            <tr key={id} className="odd:bg-white even:bg-slate-100 hover:bg-slate-300">
-              <td className="px-2 border border-slate-600 text-right">
-                <Link href={`/notas/${id}`}>
-                  <a className="block w-full h-full" title={id}>...{id.slice(-8)}</a>
-                </Link>
-              </td>
-              <td className="px-2 border border-slate-600">
-                <Link href={`/notas/${id}`}>
-                  <a className="block w-full h-full">{marketName}</a>
-                </Link>
-              </td>
-              <td className="px-2 border border-slate-600">
-                <Link href={`/notas/${id}`}>
-                  <a className="block w-full h-full">{dateSlice(date)}</a>
-                </Link>
-              </td>
-              <td className="px-2 border border-slate-600 text-right">
-                <Link href={`/notas/${id}`}>
-                  <a className="block w-full h-full">{formatBRL(total)}</a>
-                </Link>
-              </td>
-            </tr>
+            <Tr key={id}>
+              <Td>
+                <NextLink passHref href={`/notas/${id}`}>
+                  <Link title={id}>...{id.slice(-8)}</Link>
+                </NextLink>
+              </Td>
+              <Td>
+                <NextLink passHref href={`/notas/${id}`}>
+                  <Link>{marketName}</Link>
+                </NextLink>
+              </Td>
+              <Td>
+                <NextLink passHref href={`/notas/${id}`}>
+                  <Link>{dateSlice(date)}</Link>
+                </NextLink>
+              </Td>
+              <Td isNumeric>
+                <NextLink passHref href={`/notas/${id}`}>
+                  <Link>{formatBRL(total)}</Link>
+                </NextLink>
+              </Td>
+            </Tr>
           )
         })}
-        <tr className="odd:bg-white even:bg-slate-100">
-          <td colSpan={3} className="px-2 border border-slate-600 text-right" />
-          <td className="px-2 border border-slate-600 text-right">
-            <Link href="/">
-              <a>{formatBRL(totalSum)}</a>
-            </Link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <Tr>
+          <Td colSpan={3} />
+          <Td isNumeric>
+            <NextLink passHref href="/">
+              <Link>{formatBRL(totalSum)}</Link>
+            </NextLink>
+          </Td>
+        </Tr>
+      </Tbody>
+    </Table>
   )
 }
 
-const Notas = ({ notas }) => (
-  <>
-    <Head>
-      <title>NFe Dashboard</title>
-    </Head>
-    <main>
-      <NotasTable notas={notas} />
-    </main>
-  </>
-)
+const TableSizeSelector = ({ tableSize, setTableSize }) => {
+  const sizes = ['sm', 'md', 'lg']
+  return (
+    <ButtonGroup size="sm" isAttached variant="outline">
+      {sizes.map((value, index) => (
+        <Button disabled={tableSize === value} onClick={() => setTableSize(value)} key={value}>{index}</Button>
+      ))}
+    </ButtonGroup>)
+}
+
+const Notas = ({ notas }) => {
+  const [tableSize, setTableSize] = useState('md')
+  return (
+    <>
+      <Head>
+        <title>NFe Dashboard</title>
+      </Head>
+      <Box>
+        <NextLink href="/notas/new" passHref>
+          <Link>new</Link>
+        </NextLink>
+        <TableSizeSelector tableSize={tableSize} setTableSize={setTableSize} />
+        <NotasTable size={tableSize} notas={notas} />
+      </Box>
+    </>
+  )
+}
 
 export const getServerSideProps = async () => {
   const notas = await prisma.nota.findMany({

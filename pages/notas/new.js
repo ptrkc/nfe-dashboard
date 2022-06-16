@@ -1,18 +1,33 @@
-import Head from 'next/head'
 import { prisma } from 'lib/prisma'
+
+import Head from 'next/head'
+import { Box, Button, FormControl, FormLabel, Input, Select, VStack } from '@chakra-ui/react'
 
 const NewNotaForm = ({ markets }) => {
   const options = markets.map(market => ({ label: market.nickname || market.name, value: market.id }))
   return (
-    <div className="flex flex-col bg-slate-200 max-w-lg mx-auto p-4">
-      <label htmlFor="total">Total:</label>
-      <input name="total" id="total" />
-      <label htmlFor="markets">Choose a market:</label>
-      <select name="markets" id="markets">
-        {options.map(({ label, value }) => (<option key={value} value={value}>{label}</option>))}
-      </select>
-      <button>Add</button>
-    </div>
+    <VStack align="start" p={4} spacing={2}>
+      <FormControl>
+        <FormLabel htmlFor="total">Total:</FormLabel>
+        <Input
+          name="total"
+          id="total"
+          type="text"
+          aria-label="Total"
+          placeholder="Total"
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel htmlFor="markets">Choose a market:</FormLabel>
+        <Select
+          name="markets"
+          id="markets"
+        >
+          {options.map(({ label, value }) => (<option key={value} value={value}>{label}</option>))}
+        </Select>
+      </FormControl>
+      <Button>Add</Button>
+    </VStack>
   )
 }
 
@@ -21,9 +36,9 @@ const NewNota = ({ markets }) => (
     <Head>
       <title>NFe Dashboard</title>
     </Head>
-    <main>
+    <Box maxW="md" marginX="auto">
       <NewNotaForm markets={markets} />
-    </main>
+    </Box>
   </>
 )
 
