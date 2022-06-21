@@ -1,41 +1,51 @@
 import { Box, Button, Divider, Flex, Heading, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
 
-const SidebarLink = ({ href, text }) => (
-  <NextLink href={href} passHref>
-    <Button as={Link}>
+const SidebarLink = ({ option: { href, text, disabled } }) => {
+  if (disabled) return (
+    <Button as={Link} isDisabled={disabled}>
       <Flex justifyContent="flex-start" w="100%">
         {text}
       </Flex>
     </Button>
-  </NextLink>
-)
+  )
+
+  return (
+    <NextLink href={href} passHref>
+      <Button as={Link}>
+        <Flex justifyContent="flex-start" w="100%">
+          {text}
+        </Flex>
+      </Button>
+    </NextLink>
+  )
+}
 
 const Sidebar = () => {
   const mainOptions = [
-    { href: '/notas', text: '🧾 Notas' },
-    { href: '/mercados', text: '🛒 Mercados' },
-    { href: '/graficos', text: '📊 Gráficos' },
+    { href: '/notas', text: '🧾 Notas', disabled: false },
+    { href: '/mercados', text: '🛒 Mercados', disabled: false },
+    { href: '/graficos', text: '📊 Gráficos', disabled: true },
   ]
   const userOptions = [
-    { href: '/login', text: '🏠 Login' },
-    { href: '/signup', text: '🌱 Sign Up' },
+    { href: '/login', text: '🏠 Login', disabled: true },
+    { href: '/signup', text: '🌱 Sign Up', disabled: true },
   ]
   return (
-    <Flex bg="blue.500" w="xs" color="white" p="2" justifyContent="space-between" flexDirection="column">
+    <Flex bg="blackAlpha.700" w="xs" color="white" p="2" justifyContent="space-between" flexDirection="column">
       <Box>
         <Heading as="h1" textAlign="center">
           NFe Dash
         </Heading>
         <Divider />
         <Flex direction="column" gap="2" m="2">
-          {mainOptions.map(option => (<SidebarLink key={option.href} href={option.href} text={option.text} />))}
+          {mainOptions.map(option => (<SidebarLink key={option.href} option={option} />))}
         </Flex>
       </Box>
       <Box>
         <Divider />
-        <Flex direction="column" gap="2" m="2" w="100%">
-          {userOptions.map(option => (<SidebarLink key={option.href} href={option.href} text={option.text} />))}
+        <Flex direction="column" gap="2" m="2">
+          {userOptions.map(option => (<SidebarLink key={option.href} option={option} />))}
         </Flex>
       </Box>
     </Flex>

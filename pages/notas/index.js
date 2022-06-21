@@ -33,8 +33,8 @@ const NotasTable = ({ notas }) => {
   } = useTable({ columns, data, initialState }, useSortBy)
 
   return (
-    <Table variant="striped" colorScheme="gray" {...getTableProps()}>
-      <Thead bg="gray.300">
+    <Table {...getTableProps()}>
+      <Thead>
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
           <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -110,7 +110,7 @@ const Notas = ({ notas }) => (
           Filtros, data, mercado,...?
         </Box>
         <NextLink href="/notas/new" passHref>
-          <Button as={Link}>New</Button>
+          <Button as={Link}>+ Nova Nota</Button>
         </NextLink>
       </Flex>
       <Box borderRadius="10" boxShadow="md" overflow="hidden">
