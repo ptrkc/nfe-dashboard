@@ -25,7 +25,7 @@ const CustomControls = ({ defaultValue }) => (
     defaultValue={defaultValue}
     isPreviewFocusable={false}
   >
-    <Flex alignItems="center" justifyContent="space-between">
+    <Flex alignItems="center" justifyContent="space-between" gap="2">
       <EditablePreview />
       <Input as={EditableInput} size="sm" />
       <EditableControls />

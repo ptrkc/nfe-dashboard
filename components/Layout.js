@@ -23,8 +23,11 @@ const SidebarLink = ({ option: { href, text, disabled } }) => {
 
 const Sidebar = () => {
   const mainOptions = [
+    { href: '/', text: '🏠 Home', disabled: false },
     { href: '/notas', text: '🧾 Notas', disabled: false },
     { href: '/mercados', text: '🛒 Mercados', disabled: false },
+    { href: '/compras', text: '🛒 Compras', disabled: false },
+    { href: '/produtos', text: '🛒 Produtos', disabled: false },
     { href: '/graficos', text: '📊 Gráficos', disabled: true },
   ]
   const userOptions = [

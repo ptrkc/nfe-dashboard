@@ -1,17 +1,17 @@
 import { prisma } from 'lib/prisma'
 
 import Head from 'next/head'
-import { Box } from '@chakra-ui/react'
 import { MarketTable } from 'components/MarketTable'
+import { RoundedFrame } from 'components/RoundedFrame'
 
 const EditMarket = ({ market }) => (
   <>
     <Head>
       <title>NFe Dashboard | Mercado</title>
     </Head>
-    <Box overflow="hidden" borderWidth={1} borderColor="gray.700">
+    <RoundedFrame>
       <MarketTable market={market} />
-    </Box>
+    </RoundedFrame>
   </>
 )
 

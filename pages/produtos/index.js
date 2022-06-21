@@ -7,16 +7,14 @@ import { Link, Table, Thead, Tbody, Td, Tr, Th, Button, Box, Flex } from '@chakr
 import { useTable, useSortBy } from 'react-table'
 import { RoundedFrame } from 'components/RoundedFrame'
 
-const MarketsTable = ({ markets }) => {
-  const data = useMemo(() => markets, [markets])
+const PurchasesTable = ({ purchases }) => {
+  const data = useMemo(() => purchases, [purchases])
 
   const columns = useMemo(
     () => [
-      { Header: 'ID', accessor: 'id' },
-      { Header: 'Nome', accessor: 'name' },
-      { Header: 'Fantasia', accessor: 'fantasia' },
-      { Header: 'Alias', accessor: 'nickname' },
-      { Header: 'Endereço', accessor: 'address' },
+      { Header: 'id', accessor: 'id' },
+      { Header: 'name', accessor: 'name' },
+      { Header: 'ean', accessor: 'ean' },
     ],
     [],
   )
@@ -56,31 +54,21 @@ const MarketsTable = ({ markets }) => {
         ))}
       </Thead>
       <Tbody {...getTableBodyProps()}>
-        {rows.map(({ original: { id, name, fantasia, nickname, address } }) => (
+        {rows.map(({ original: { id, ean, name } }) => (
           <Tr key={id}>
             <Td>
-              <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
+              <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
                 <Link title={id}>{id}</Link>
               </NextLink>
             </Td>
             <Td>
-              <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
+              <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
                 <Link>{name}</Link>
               </NextLink>
             </Td>
             <Td>
-              <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
-                <Link>{fantasia}</Link>
-              </NextLink>
-            </Td>
-            <Td>
-              <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
-                <Link>{nickname}</Link>
-              </NextLink>
-            </Td>
-            <Td>
-              <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
-                <Link>{address}</Link>
+              <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
+                <Link>{ean}</Link>
               </NextLink>
             </Td>
           </Tr>
@@ -90,10 +78,10 @@ const MarketsTable = ({ markets }) => {
   )
 }
 
-const Markets = ({ markets }) => (
+const Purchases = ({ purchases }) => (
   <>
     <Head>
-      <title>NFe Dashboard | Mercados</title>
+      <title>NFe Dashboard | Produtos</title>
     </Head>
     <Flex direction="column" gap="2">
       <Flex justifyContent="space-between" alignItems="center">
@@ -105,26 +93,36 @@ const Markets = ({ markets }) => (
         </NextLink>
       </Flex>
       <RoundedFrame>
-        <MarketsTable markets={markets} />
+        <PurchasesTable purchases={purchases} />
       </RoundedFrame>
     </Flex>
   </>
 )
 
 export const getServerSideProps = async () => {
-  const markets = await prisma.market.findMany({
+  const purchases = await prisma.purchase.findMany({
+    where: {},
+    distinct: ['ean'],
     select: {
       id: true,
       name: true,
-      fantasia: true,
-      nickname: true,
-      address: true,
+      ean: true,
+      quantity: true,
+      unit: true,
+      unitPrice: true,
+      regularPrice: true,
+      discount: true,
+      chargedPrice: true,
+      notaId: true,
+      marketId: true,
     },
   })
 
+  console.log(purchases)
+
   return {
-    props: { markets: JSON.parse(JSON.stringify(markets)) }, // will be passed to the page component as props
+    props: { purchases: JSON.parse(JSON.stringify(purchases)) }, // will be passed to the page component as props
   }
 }
 
-export default Markets
+export default Purchases
