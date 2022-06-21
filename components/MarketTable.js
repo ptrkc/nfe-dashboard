@@ -10,12 +10,12 @@ const EditableControls = () => {
   } = useEditableControls()
 
   return isEditing ? (
-    <ButtonGroup size="sm">
+    <ButtonGroup size="xs">
       <Button {...getSubmitButtonProps()}>Salvar</Button>
       <Button {...getCancelButtonProps()}>Cancelar</Button>
     </ButtonGroup>
   ) : (
-    <Button size="sm" {...getEditButtonProps()}>Editar</Button>
+    <Button size="xs" {...getEditButtonProps()}>Editar</Button>
   )
 }
 
@@ -27,7 +27,7 @@ const CustomControls = ({ defaultValue }) => (
   >
     <Flex alignItems="center" justifyContent="space-between" gap="2">
       <EditablePreview />
-      <Input as={EditableInput} size="sm" />
+      <Input as={EditableInput} variant="flushed" size="sm" />
       <EditableControls />
     </Flex>
   </Editable>
@@ -61,7 +61,7 @@ export const MarketTable = ({ market: { name, nickname, fantasia, cnpj, address,
       </Tr>
       <Tr>
         <Td>Alias</Td>
-        <Td>
+        <Td py="0">
           <CustomControls defaultValue={nickname} />
         </Td>
       </Tr>

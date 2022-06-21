@@ -81,7 +81,7 @@ const ProductPurchasesTable = ({ purchases }) => {
               </NextLink>
             </Td>
             <Td>
-              <NextLink passHref href={`$/produtos/${ean}`}>
+              <NextLink passHref href={`/produtos/${ean}`}>
                 <Link>{ean}</Link>
               </NextLink>
             </Td>
