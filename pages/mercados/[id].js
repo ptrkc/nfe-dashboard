@@ -1,10 +1,10 @@
 import { prisma } from 'lib/prisma'
 
 import Head from 'next/head'
+import { Flex } from '@chakra-ui/react'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
 import { NotasTable } from 'components/NotasTable'
-import { Flex } from '@chakra-ui/react'
 
 const EditMarket = ({ market }) => (
   <>

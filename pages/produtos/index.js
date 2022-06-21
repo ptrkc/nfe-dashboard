@@ -3,7 +3,7 @@ import { prisma } from 'lib/prisma'
 import { useMemo } from 'react'
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Link, Table, Thead, Tbody, Td, Tr, Th, Button, Box, Flex } from '@chakra-ui/react'
+import { Link, Table, Thead, Tbody, Td, Tr, Th, Box, Flex } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
 import { RoundedFrame } from 'components/RoundedFrame'
 
@@ -88,9 +88,6 @@ const Purchases = ({ purchases }) => (
         <Box>
           Filtros..., adicionar mercado, editar
         </Box>
-        <NextLink href="/mercados/new" passHref>
-          <Button as={Link}>+ Novo Mercado</Button>
-        </NextLink>
       </Flex>
       <RoundedFrame>
         <PurchasesTable purchases={purchases} />

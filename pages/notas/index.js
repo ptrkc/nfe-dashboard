@@ -3,6 +3,7 @@ import { prisma } from 'lib/prisma'
 import Head from 'next/head'
 import NextLink from 'next/link'
 import { Link, Button, Box, Flex } from '@chakra-ui/react'
+import { AddIcon } from '@chakra-ui/icons'
 import { RoundedFrame } from 'components/RoundedFrame'
 import { NotasTable } from 'components/NotasTable'
 
@@ -17,7 +18,7 @@ const Notas = ({ notas }) => (
           Filtros, data, mercado,...?
         </Box>
         <NextLink href="/notas/new" passHref>
-          <Button as={Link}>+ Nova Nota</Button>
+          <Button as={Link} leftIcon={<AddIcon w="3" />}>Nova Nota</Button>
         </NextLink>
       </Flex>
       <RoundedFrame>

@@ -21,7 +21,7 @@ const EditableControls = () => {
 
 const CustomControls = ({ defaultValue }) => (
   <Editable
-    onSubmit={e => console.log(e)}
+    onSubmit={event => console.log(event)}
     defaultValue={defaultValue}
     isPreviewFocusable={false}
   >

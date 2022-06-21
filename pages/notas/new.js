@@ -1,7 +1,8 @@
 import { prisma } from 'lib/prisma'
 
 import Head from 'next/head'
-import { Box, Button, FormControl, FormLabel, Input, InputGroup, Select, VStack } from '@chakra-ui/react'
+import { Box, Button, FormControl, FormLabel, IconButton, Input, InputGroup, Select, VStack } from '@chakra-ui/react'
+import { AddIcon } from '@chakra-ui/icons'
 
 const NewNotaForm = ({ markets }) => {
   const options = markets.map(market => ({ label: market.nickname || market.name, value: market.id }))
@@ -29,17 +30,17 @@ const NewNotaForm = ({ markets }) => {
       </FormControl>
       <FormControl>
         <FormLabel htmlFor="markets">Escolha o mercado:</FormLabel>
-        <InputGroup>
+        <InputGroup gap="2">
           <Select
             name="markets"
             id="markets"
           >
             {options.map(({ label, value }) => (<option key={value} value={value}>{label}</option>))}
           </Select>
-          <Button>+</Button>
+          <IconButton icon={<AddIcon w="3" />} />
         </InputGroup>
       </FormControl>
-      <Button>Add</Button>
+      <Button>Adicionar</Button>
     </VStack>
   )
 }

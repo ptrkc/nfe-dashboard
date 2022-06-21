@@ -13,7 +13,6 @@ export const NotasTable = ({ notas }) => {
   ), [notas])
   const columns = useMemo(
     () => [
-      { Header: 'Chave de Acesso', accessor: 'id', disableSortBy: true },
       { Header: 'Mercado', accessor: 'market.name' },
       { Header: 'Data', accessor: 'date' },
       { Header: 'Total', accessor: 'total', isNumeric: true },
@@ -62,11 +61,6 @@ export const NotasTable = ({ notas }) => {
             <Tr key={id}>
               <Td>
                 <NextLink passHref href={`/notas/${id}`}>
-                  <Link title={id}>...{id.slice(-8)}</Link>
-                </NextLink>
-              </Td>
-              <Td>
-                <NextLink passHref href={`/notas/${id}`}>
                   <Link>{marketName}</Link>
                 </NextLink>
               </Td>
@@ -84,7 +78,7 @@ export const NotasTable = ({ notas }) => {
           )
         })}
         <Tr>
-          <Td colSpan={3} />
+          <Td colSpan={2} />
           <Td isNumeric>
             <NextLink passHref href="/">
               <Link>{formatBRL(totalSum)}</Link>

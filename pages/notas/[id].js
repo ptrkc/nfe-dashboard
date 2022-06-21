@@ -3,19 +3,20 @@ import { prisma } from 'lib/prisma'
 import { useMemo } from 'react'
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Box, HStack, Link, Stat, StatHelpText, StatLabel, StatNumber, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Box, Flex, Link, Stat, StatHelpText, StatLabel, StatNumber, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
 import { formatBRL } from 'lib/formatBRL'
 import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
 
-const NotaStatCard = ({ nota: { date, total, market: { name, nickname } } }) => (
+const NotaStatCard = ({ nota: { id, date, total, market: { name, nickname } } }) => (
   <RoundedFrame pt={2} px={2} bg="blackAlpha.700">
     <Stat>
       <StatLabel>{nickname || name}</StatLabel>
       <StatNumber>{formatBRL(total)}</StatNumber>
       <StatHelpText>{formatLongDateBR(date)}</StatHelpText>
+      <StatHelpText>{id}</StatHelpText>
     </Stat>
   </RoundedFrame>
 )
@@ -164,24 +165,16 @@ const Nota = ({ nota }) => {
         <title>NFe Dashboard | Nota</title>
       </Head>
       <Box>
-        <HStack mb="4">
-          <NotaStatCard nota={nota} />
-          <RoundedFrame>
-            <Table>
-              <Thead>
-                <Tr><Th colSpan="2">Nota</Th></Tr>
-              </Thead>
-              <Tbody>
-                <Tr><Td>Chave de acesso</Td><Td>{nota.id}</Td></Tr>
-                <Tr><Td>Data</Td><Td>{formatLongDateBR(nota.date)}</Td></Tr>
-                <Tr><Td>Total</Td><Td>{formatBRL(nota.total)}</Td></Tr>
-              </Tbody>
-            </Table>
-          </RoundedFrame>
-          <RoundedFrame>
-            <MarketTable market={market} />
-          </RoundedFrame>
-        </HStack>
+        <Flex direction={{ base: 'column', lg: 'row' }} mb="4" gap="2">
+          <Box>
+            <NotaStatCard nota={nota} />
+          </Box>
+          <Box>
+            <RoundedFrame>
+              <MarketTable market={market} />
+            </RoundedFrame>
+          </Box>
+        </Flex>
         <RoundedFrame>
           <PurchasesTable purchases={purchases} />
         </RoundedFrame>

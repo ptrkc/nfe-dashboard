@@ -1,8 +1,9 @@
-import { Box, Button, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading,
-  Link, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
-import NextLink from 'next/link'
-import { useRouter } from 'next/router'
 import { useRef } from 'react'
+import { useRouter } from 'next/router'
+import NextLink from 'next/link'
+import { Box, Button, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading,
+  IconButton, Link, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
+import { HamburgerIcon } from '@chakra-ui/icons'
 
 const MAIN_OPTIONS = [
   { href: '/', text: '🏠 Home', disabled: false },
@@ -76,9 +77,7 @@ const LeftDrawer = () => {
 
   return (
     <>
-      <Button ref={btnRef} onClick={onOpen}>
-        Open
-      </Button>
+      <IconButton size="md" aria-label="Open Sidebar" icon={<HamburgerIcon />} ref={btnRef} onClick={onOpen} />
       <Drawer
         isOpen={isOpen}
         placement="left"
@@ -86,7 +85,7 @@ const LeftDrawer = () => {
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent bg="gray.900">
+        <DrawerContent bg="gray.900" onClick={onClose}>
           <DrawerCloseButton />
           <DrawerHeader>{header}</DrawerHeader>
           <Flex direction="column" justifyContent="space-between" h="100%" p="2">
@@ -100,7 +99,7 @@ const LeftDrawer = () => {
 }
 
 const TopBar = () => (
-  <Flex bg="gray.900">
+  <Flex bg="gray.900" p="2">
     <LeftDrawer />
   </Flex>
 )
