@@ -8,6 +8,7 @@ import { useTable, useSortBy } from 'react-table'
 import { formatBRL } from 'lib/formatBRL'
 import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { MarketTable } from 'components/MarketTable'
+import { RoundedFrame } from 'components/RoundedFrame'
 
 const PurchasesTable = ({ purchases }) => {
   const data = useMemo(() => purchases, [purchases])
@@ -46,7 +47,7 @@ const PurchasesTable = ({ purchases }) => {
   } = useTable({ columns, data, initialState }, useSortBy)
 
   return (
-    <Table colorScheme="gray" {...getTableProps()}>
+    <Table {...getTableProps()}>
       <Thead>
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
@@ -150,25 +151,29 @@ const Nota = ({ nota }) => {
   return (
     <>
       <Head>
-        <title>NFe Dashboard</title>
+        <title>NFe Dashboard | Nota</title>
       </Head>
       <Box>
         <HStack mb="4">
-          <Table borderRadius="10" boxShadow="md" overflow="hidden">
-            <Thead>
-              <Tr><Th colSpan="2">Nota</Th></Tr>
-            </Thead>
-            <Tbody>
-              <Tr><Td>Chave de acesso</Td><Td>{nota.id}</Td></Tr>
-              <Tr><Td>Data</Td><Td>{formatLongDateBR(nota.date)}</Td></Tr>
-              <Tr><Td>Total</Td><Td>{formatBRL(nota.total)}</Td></Tr>
-            </Tbody>
-          </Table>
-          <MarketTable market={market} />
+          <RoundedFrame>
+            <Table>
+              <Thead>
+                <Tr><Th colSpan="2">Nota</Th></Tr>
+              </Thead>
+              <Tbody>
+                <Tr><Td>Chave de acesso</Td><Td>{nota.id}</Td></Tr>
+                <Tr><Td>Data</Td><Td>{formatLongDateBR(nota.date)}</Td></Tr>
+                <Tr><Td>Total</Td><Td>{formatBRL(nota.total)}</Td></Tr>
+              </Tbody>
+            </Table>
+          </RoundedFrame>
+          <RoundedFrame>
+            <MarketTable market={market} />
+          </RoundedFrame>
         </HStack>
-        <Box borderRadius="10" boxShadow="md" overflow="hidden">
+        <RoundedFrame>
           <PurchasesTable purchases={purchases} />
-        </Box>
+        </RoundedFrame>
       </Box>
     </>
   )

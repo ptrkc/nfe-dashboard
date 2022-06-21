@@ -34,7 +34,7 @@ const CustomControls = ({ defaultValue }) => (
 )
 
 export const MarketTable = ({ market: { name, nickname, fantasia, cnpj, address, cep } }) => (
-  <Table borderRadius="10" boxShadow="md" overflow="hidden">
+  <Table>
     <Thead>
       <Tr><Th colSpan="2">Mercado</Th></Tr>
     </Thead>
@@ -52,7 +52,7 @@ export const MarketTable = ({ market: { name, nickname, fantasia, cnpj, address,
         <Td w="full">{cnpj}</Td>
       </Tr>
       <Tr>
-        <Td whiteSpace="nowrap">Endreço</Td>
+        <Td whiteSpace="nowrap">Endereço</Td>
         <Td w="full">{address}</Td>
       </Tr>
       <Tr>

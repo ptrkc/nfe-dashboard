@@ -7,9 +7,9 @@ import { MarketTable } from 'components/MarketTable'
 const EditMarket = ({ market }) => (
   <>
     <Head>
-      <title>NFe Dashboard | Add Market</title>
+      <title>NFe Dashboard | Mercado</title>
     </Head>
-    <Box>
+    <Box overflow="hidden" borderWidth={1} borderColor="gray.700">
       <MarketTable market={market} />
     </Box>
   </>

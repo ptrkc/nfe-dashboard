@@ -8,6 +8,7 @@ import { useTable, useSortBy } from 'react-table'
 import { dateSlice } from 'lib/dateSlice'
 import { formatBRL } from 'lib/formatBRL'
 import { formatLongDateBR } from 'lib/formatLongDateBR'
+import { RoundedFrame } from 'components/RoundedFrame'
 
 const NotasTable = ({ notas }) => {
   const data = useMemo(() => notas, [notas])
@@ -102,7 +103,7 @@ const NotasTable = ({ notas }) => {
 const Notas = ({ notas }) => (
   <>
     <Head>
-      <title>NFe Dashboard</title>
+      <title>NFe Dashboard | Notas</title>
     </Head>
     <Flex direction="column" gap="2">
       <Flex justifyContent="space-between" alignItems="center">
@@ -113,9 +114,9 @@ const Notas = ({ notas }) => (
           <Button as={Link}>+ Nova Nota</Button>
         </NextLink>
       </Flex>
-      <Box borderRadius="10" boxShadow="md" overflow="hidden">
+      <RoundedFrame>
         <NotasTable notas={notas} />
-      </Box>
+      </RoundedFrame>
     </Flex>
   </>
 )

@@ -1,4 +1,4 @@
-import { prisma } from '../../../lib/prisma'
+import { prisma } from 'lib/prisma'
 import * as cheerio from 'cheerio'
 
 const toDecimal = number => parseFloat(number.replace(',', '.')) || null

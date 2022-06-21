@@ -6,7 +6,7 @@ import { Box, Button, FormControl, FormLabel, Input, InputGroup, Select, VStack 
 const NewNotaForm = ({ markets }) => {
   const options = markets.map(market => ({ label: market.nickname || market.name, value: market.id }))
   return (
-    <VStack align="start" p={4} spacing={2} borderRadius="10" boxShadow="md">
+    <VStack align="start" p={4} spacing={2}>
       <FormControl>
         <FormLabel htmlFor="file">Arquivo HTML:</FormLabel>
         <Input
@@ -28,7 +28,7 @@ const NewNotaForm = ({ markets }) => {
         />
       </FormControl>
       <FormControl>
-        <FormLabel htmlFor="markets">Choose a market:</FormLabel>
+        <FormLabel htmlFor="markets">Escolha o mercado:</FormLabel>
         <InputGroup>
           <Select
             name="markets"
@@ -47,7 +47,7 @@ const NewNotaForm = ({ markets }) => {
 const NewNota = ({ markets }) => (
   <>
     <Head>
-      <title>NFe Dashboard</title>
+      <title>NFe Dashboard | +Nota</title>
     </Head>
     <Box maxW="md" marginX="auto">
       <NewNotaForm markets={markets} />

@@ -5,6 +5,7 @@ import Head from 'next/head'
 import NextLink from 'next/link'
 import { Link, Table, Thead, Tbody, Td, Tr, Th, Button, Box, Flex } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
+import { RoundedFrame } from 'components/RoundedFrame'
 
 const MarketsTable = ({ markets }) => {
   const data = useMemo(() => markets, [markets])
@@ -28,7 +29,7 @@ const MarketsTable = ({ markets }) => {
   } = useTable({ columns, data, initialState }, useSortBy)
 
   return (
-    <Table colorScheme="gray" {...getTableProps()}>
+    <Table {...getTableProps()}>
       <Thead>
         {headerGroups.map(headerGroup => (
           // eslint-disable-next-line react/jsx-key
@@ -97,9 +98,9 @@ const Markets = ({ markets }) => (
           <Button as={Link}>+ Novo Mercado</Button>
         </NextLink>
       </Flex>
-      <Box borderRadius="10" boxShadow="md" overflow="hidden">
+      <RoundedFrame>
         <MarketsTable markets={markets} />
-      </Box>
+      </RoundedFrame>
     </Flex>
   </>
 )
