@@ -2,39 +2,41 @@ import { useRef } from 'react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import { Box, Button, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading,
+  Icon,
   IconButton, Link, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
+import { FiHome, FiFile, FiShoppingCart, FiShoppingBag, FiPackage, FiTrendingUp, FiLock, FiUserPlus } from 'react-icons/fi'
 
 const MAIN_OPTIONS = [
-  { href: '/', text: '🏠 Home', disabled: false },
-  { href: '/notas', text: '🧾 Notas', disabled: false },
-  { href: '/mercados', text: '🛒 Mercados', disabled: false },
-  { href: '/compras', text: '🛍️ Compras', disabled: false },
-  { href: '/produtos', text: '🥑 Produtos', disabled: false },
-  { href: '/graficos', text: '📊 Gráficos', disabled: true },
+  { href: '/', text: 'Home', icon: FiHome, disabled: false },
+  { href: '/notas', text: 'Notas', icon: FiFile, disabled: false },
+  { href: '/mercados', text: 'Mercados', icon: FiShoppingCart, disabled: false },
+  { href: '/compras', text: 'Compras', icon: FiShoppingBag, disabled: false },
+  { href: '/produtos', text: 'Produtos', icon: FiPackage, disabled: false },
+  { href: '/graficos', text: 'Gráficos', icon: FiTrendingUp, disabled: true },
 ]
 const FOOTER_OPTIONS = [
-  { href: '/login', text: '🔓 Login', disabled: true },
-  { href: '/signup', text: '🌱 Sign Up', disabled: true },
+  { href: '/login', text: 'Login', icon: FiLock, disabled: true },
+  { href: '/signup', text: 'Sign Up', icon: FiUserPlus, disabled: true },
 ]
 
 const header = 'NFe Dash'
 
-const SidebarLink = ({ option: { href, text, disabled } }) => {
+const SidebarLink = ({ option: { href, icon, text, disabled } }) => {
   const { pathname } = useRouter()
   const isActive = pathname.split('/')[1] === href.substring(1)
 
   return (disabled ? (
-    <Button as={Link} isDisabled={disabled}>
-      <Flex justifyContent="flex-start" w="100%">
-        {text}
+    <Button variant="ghost" as={Link} isDisabled={disabled}>
+      <Flex justifyContent="flex-start" w="100%" gap={2}>
+        <Icon as={icon} />{text}
       </Flex>
     </Button>
   ) : (
     <NextLink href={href} passHref>
-      <Button as={Link} isActive={isActive}>
-        <Flex justifyContent="flex-start" w="100%">
-          {text}
+      <Button variant="ghost" as={Link} isActive={isActive}>
+        <Flex justifyContent="flex-start" w="100%" gap={2}>
+          <Icon as={icon} />{text}
         </Flex>
       </Button>
     </NextLink>
