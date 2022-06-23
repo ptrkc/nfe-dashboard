@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react'
 export const RoundedFrame = ({ children, ...props }) => (
   <Box
     borderRadius={10}
-    overflow="scroll"
+    overflow="hidden"
     borderWidth="1px"
     borderColor="inherit"
     transition=".2s"

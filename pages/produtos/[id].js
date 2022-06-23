@@ -175,8 +175,6 @@ export const getServerSideProps = async ({ query }) => {
     },
   })
 
-  console.log(purchases)
-
   return {
     props: { purchases: JSON.parse(JSON.stringify(purchases)) }, // will be passed to the page component as props
   }

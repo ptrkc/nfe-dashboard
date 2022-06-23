@@ -2,8 +2,7 @@ import { useRef } from 'react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import { Box, Button, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading,
-  Icon,
-  IconButton, Link, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
+  Icon, IconButton, Link, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { FiHome, FiFile, FiShoppingCart, FiShoppingBag, FiPackage, FiTrendingUp, FiLock, FiUserPlus } from 'react-icons/fi'
 
@@ -122,7 +121,7 @@ export const Layout = ({ children }) => {
   return (
     <Flex h="100vh" direction={{ base: 'column', md: 'row' }}>
       {isDesktop ? <Sidebar /> : <TopBar />}
-      <Box w="full" overflow="scroll" p={4}>{children}</Box>
+      <Box w="full" overflowY="scroll" p={4}>{children}</Box>
     </Flex>
   )
 }

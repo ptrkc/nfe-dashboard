@@ -68,8 +68,7 @@ const DeleteButton = ({ name, selectedFiles, setSelectedFiles }) => {
   )
 }
 
-export const FileDropzone = ({ multiple }) => {
-  const [selectedFiles, setSelectedFiles] = useState([])
+export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedFiles, multiple }) => {
   const isEmpty = !selectedFiles.length
   const inputRef = useRef()
 
