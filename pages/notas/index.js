@@ -12,13 +12,13 @@ const Notas = ({ notas }) => (
     <Head>
       <title>NFe Dashboard | Notas</title>
     </Head>
-    <Flex direction="column" gap="2">
+    <Flex direction="column" gap={2}>
       <Flex justifyContent="space-between" alignItems="center">
         <Box>
           Filtros, data, mercado,...?
         </Box>
         <NextLink href="/notas/new" passHref>
-          <Button as={Link} leftIcon={<AddIcon w="3" />}>Nova Nota</Button>
+          <Button as={Link} leftIcon={<AddIcon w={3} />}>Nova Nota</Button>
         </NextLink>
       </Flex>
       <RoundedFrame>

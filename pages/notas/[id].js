@@ -165,7 +165,7 @@ const Nota = ({ nota }) => {
         <title>NFe Dashboard | Nota</title>
       </Head>
       <Box>
-        <Flex direction={{ base: 'column', lg: 'row' }} mb="4" gap="2">
+        <Flex direction={{ base: 'column', lg: 'row' }} mb="4" gap={2}>
           <Box>
             <NotaStatCard nota={nota} />
           </Box>

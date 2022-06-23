@@ -44,7 +44,7 @@ const SidebarLink = ({ option: { href, text, disabled } }) => {
 const SidebarContent = () => (
   <Box>
     <Divider />
-    <Flex direction="column" gap="2" m="2">
+    <Flex direction="column" gap={2} m={2}>
       {MAIN_OPTIONS.map(option => (<SidebarLink key={option.href} option={option} />))}
     </Flex>
   </Box>
@@ -53,14 +53,24 @@ const SidebarContent = () => (
 const SidebarFooter = () => (
   <Box>
     <Divider />
-    <Flex direction="column" gap="2" m="2">
+    <Flex direction="column" gap={2} m={2}>
       {FOOTER_OPTIONS.map(option => (<SidebarLink key={option.href} option={option} />))}
     </Flex>
   </Box>
 )
 
 const Sidebar = () => (
-  <Flex bg="gray.900" w="xs" color="white" p="2" justifyContent="space-between" flexDirection="column">
+  <Flex
+    bg="#22272e"
+    w="xs"
+    color="white"
+    p={2}
+    justifyContent="space-between"
+    flexDirection="column"
+    borderRight="1px"
+    borderRightWidth="1px"
+    borderRightColor="inherit"
+  >
     <Box>
       <Heading as="h1" textAlign="center">
         {header}
@@ -85,10 +95,10 @@ const LeftDrawer = () => {
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent bg="gray.900" onClick={onClose}>
+        <DrawerContent bg="#22272e" onClick={onClose}>
           <DrawerCloseButton />
           <DrawerHeader>{header}</DrawerHeader>
-          <Flex direction="column" justifyContent="space-between" h="100%" p="2">
+          <Flex direction="column" justifyContent="space-between" h="100%" p={2}>
             <SidebarContent />
             <SidebarFooter />
           </Flex>
@@ -99,7 +109,7 @@ const LeftDrawer = () => {
 }
 
 const TopBar = () => (
-  <Flex bg="gray.900" p="2">
+  <Flex bg="#2d333b" p={2}>
     <LeftDrawer />
   </Flex>
 )
@@ -110,7 +120,7 @@ export const Layout = ({ children }) => {
   return (
     <Flex h="100vh" direction={{ base: 'column', md: 'row' }}>
       {isDesktop ? <Sidebar /> : <TopBar />}
-      <Box w="full" overflow="scroll" p="4">{children}</Box>
+      <Box w="full" overflow="scroll" p={4}>{children}</Box>
     </Flex>
   )
 }

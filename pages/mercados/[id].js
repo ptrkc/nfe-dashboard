@@ -11,7 +11,7 @@ const EditMarket = ({ market }) => (
     <Head>
       <title>NFe Dashboard | Mercado</title>
     </Head>
-    <Flex direction="column" gap="2">
+    <Flex direction="column" gap={2}>
       <RoundedFrame>
         <MarketTable market={market} />
       </RoundedFrame>

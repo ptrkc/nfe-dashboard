@@ -83,7 +83,7 @@ const Purchases = ({ purchases }) => (
     <Head>
       <title>NFe Dashboard | Produtos</title>
     </Head>
-    <Flex direction="column" gap="2">
+    <Flex direction="column" gap={2}>
       <Flex justifyContent="space-between" alignItems="center">
         <Box>
           Filtros..., adicionar mercado, editar
