@@ -3,6 +3,7 @@ import NextLink from 'next/link'
 import { Box, Button, Link, SimpleGrid, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import { StatCard } from 'components/StatCard'
+import { SlidingSegmentedControl } from 'components/SlidingSegmentedControl'
 
 const Home = () => (
   <Box>
@@ -34,6 +35,7 @@ const Home = () => (
         <StatHelpText>01 Jun - 30 Jun</StatHelpText>
       </StatCard>
     </SimpleGrid>
+    <SlidingSegmentedControl options={['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'OUT', 'NOV', 'DEZ']} />
   </Box>
 )
 
