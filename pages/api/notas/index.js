@@ -1,6 +1,6 @@
 import { prisma } from 'lib/prisma'
 
-const getReceipts = () => prisma.nota.findMany({
+const getReceipts = () => prisma.receipt.findMany({
   select: {
     id: true,
     date: true,
@@ -10,6 +10,9 @@ const getReceipts = () => prisma.nota.findMany({
         name: true,
       },
     },
+  },
+  orderBy: {
+    date: 'desc',
   },
 })
 

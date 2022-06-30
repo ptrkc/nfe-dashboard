@@ -7,6 +7,7 @@ import { Link, Table, Thead, Tbody, Td, Tr, Th } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
 import { RoundedFrame } from 'components/RoundedFrame'
 import { formatBRL } from 'lib/formatBRL'
+import { dateSlice } from 'lib/dateSlice'
 
 const ProductPurchasesTable = ({ purchases }) => {
   const data = useMemo(() => purchases, [purchases])
@@ -26,7 +27,7 @@ const ProductPurchasesTable = ({ purchases }) => {
   const columns = useMemo(
     () => [
       { Header: 'Nome', accessor: 'name' },
-      { Header: 'EAN', accessor: 'ean', disableSortBy: true },
+      { Header: 'Data', accessor: 'receipt.date' },
       { Header: 'Quantidade', accessor: 'quantity' },
       { Header: 'UN', accessor: 'unit', disableSortBy: true },
       { Header: 'Preço Un', accessor: 'unitPrice', disableSortBy: true },
@@ -72,7 +73,7 @@ const ProductPurchasesTable = ({ purchases }) => {
       </Thead>
       <Tbody {...getTableBodyProps()}>
         {rows.map(({ original: {
-          id, name, ean, quantity, unit, unitPrice, regularPrice, discount, chargedPrice,
+          id, name, receipt, quantity, unit, unitPrice, regularPrice, discount, chargedPrice,
         } }) => (
           <Tr key={id}>
             <Td>
@@ -81,8 +82,8 @@ const ProductPurchasesTable = ({ purchases }) => {
               </NextLink>
             </Td>
             <Td>
-              <NextLink passHref href={`/produtos/${ean}`}>
-                <Link>{ean}</Link>
+              <NextLink passHref href="/">
+                <Link>{dateSlice(receipt.date)}</Link>
               </NextLink>
             </Td>
             <Td>
@@ -163,17 +164,23 @@ export const getServerSideProps = async ({ query }) => {
     select: {
       id: true,
       name: true,
-      ean: true,
       quantity: true,
       unit: true,
       unitPrice: true,
       regularPrice: true,
       discount: true,
       chargedPrice: true,
-      notaId: true,
+      receiptId: true,
       marketId: true,
+      receipt: {
+        select: {
+          date: true,
+        },
+      },
     },
   })
+
+  console.log(purchases)
 
   return {
     props: { purchases: JSON.parse(JSON.stringify(purchases)) }, // will be passed to the page component as props

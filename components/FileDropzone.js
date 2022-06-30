@@ -68,6 +68,12 @@ const DeleteButton = ({ name, selectedFiles, setSelectedFiles }) => {
   )
 }
 
+const readFile = file => new Promise((resolve) => {
+  const reader = new FileReader()
+  reader.onload = () => resolve(reader.result)
+  reader.readAsText(file)
+})
+
 export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedFiles, multiple }) => {
   const isEmpty = !selectedFiles.length
   const inputRef = useRef()
@@ -77,17 +83,19 @@ export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedF
     for (const item of event.dataTransfer.items) {
       if (item?.kind === 'file') {
         const file = item.getAsFile()
-        files.push(file)
+        const content = await readFile(file)
+        files.push({ name: file.name, content })
       }
     }
     setSelectedFiles(files)
   }
 
-  const handleFilePicker = (event) => {
+  const handleFilePicker = async (event) => {
     const files = [...selectedFiles]
     for (const file of event.target.files) {
       if (file.type === 'text/html') {
-        files.push(file)
+        const content = await readFile(file)
+        files.push({ name: file.name, content })
       }
     }
     setSelectedFiles(files)

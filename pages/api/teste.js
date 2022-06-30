@@ -3,7 +3,7 @@ const handler = async (req, res) => {
 
   if (method === 'POST') {
     console.log(body)
-    return res.status(204).json()
+    return res.status(200).json(body)
   }
 
   return res.status(504)

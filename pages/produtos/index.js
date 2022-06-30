@@ -110,7 +110,7 @@ export const getServerSideProps = async () => {
       regularPrice: true,
       discount: true,
       chargedPrice: true,
-      notaId: true,
+      receiptId: true,
       marketId: true,
     },
   })

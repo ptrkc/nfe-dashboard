@@ -16,7 +16,7 @@ const EditMarket = ({ market }) => (
         <MarketTable market={market} />
       </RoundedFrame>
       <RoundedFrame>
-        <ReceiptsTable receipts={market.notas} />
+        <ReceiptsTable receipts={market.receipts} />
       </RoundedFrame>
     </Flex>
   </>
@@ -34,7 +34,7 @@ export const getServerSideProps = async ({ query }) => {
       address: true,
       cep: true,
       nickname: true,
-      notas: {
+      receipts: {
         select: {
           id: true,
           date: true,

@@ -5,7 +5,7 @@ const toDecimal = number => parseFloat(number.replace(',', '.')) || null
 
 const generatePrismaData = (receivedFile) => {
   const $ = cheerio.load(receivedFile)
-  const notaId = $('.box span').first().text().replace(/\s/g, '')
+  const receiptId = $('.box span').first().text().replace(/\s/g, '')
   const total = $('#NFe > fieldset:nth-child(1) > table > tbody > tr > td:nth-child(6) > span').text()
   const [day, month, year] = $(
     '#NFe fieldset:nth-child(1) td:nth-child(4) > span:nth-child(2)',
@@ -21,25 +21,30 @@ const generatePrismaData = (receivedFile) => {
     '#Emitente > fieldset > table > tbody > tr:nth-child(2) > td:nth-child(2) > span',
   ).text().replace(/\s{2,}/g, ' ')
 
-  const rawPricesPerUnit = $(
+  const pricePerUnit = $(
     'table.toggable > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(1) > span:nth-child(2)',
-  )
-  const rawProducts = $('#aba_nft_3 table.toggle.box .fixo-prod-serv-descricao')
-  const rawQuantities = $('#aba_nft_3 table.toggle.box .fixo-prod-serv-qtd')
-  const rawUnities = $('#aba_nft_3 table.toggle.box .fixo-prod-serv-uc')
-  const rawRegularPrices = $('#aba_nft_3 table.toggle.box .fixo-prod-serv-vb')
-  const rawDiscounts = $(
+  ).map((_, element) => $(element).text()).toArray()
+  const products = $(
+    '#aba_nft_3 table.toggle.box .fixo-prod-serv-descricao',
+  ).map((_, element) => $(element).text()).toArray()
+  const quantity = $(
+    '#aba_nft_3 table.toggle.box .fixo-prod-serv-qtd',
+  ).map((_, element) => $(element).text()).toArray()
+  const unities = $(
+    '#aba_nft_3 table.toggle.box .fixo-prod-serv-uc',
+  ).map((_, element) => $(element).text()).toArray()
+  const regularPrices = $(
+    '#aba_nft_3 table.toggle.box .fixo-prod-serv-vb',
+  ).map((_, element) => $(element).text()).toArray()
+  const discounts = $(
     'table.toggable > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(1) > span:nth-child(2)',
-  )
-  const products = rawProducts.map(element => $(element).text()).toArray()
-  const quantity = rawQuantities.map(element => $(element).text()).toArray()
-  const unities = rawUnities.map(element => $(element).text()).toArray()
-  const pricePerUnit = rawPricesPerUnit.map(element => $(element).text()).toArray()
-  const regularPrices = rawRegularPrices.map(element => $(element).text()).toArray()
-  const discounts = rawDiscounts.map(element => $(element).text()).toArray()
+  ).map((_, element) => $(element).text()).toArray()
+  const eans = $(
+    'table.toggable > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > span:nth-child(2)',
+  ).map((_, element) => $(element).text()).toArray().map(ean => (isNaN(parseInt(ean)) ? null : ean.replace(/^0+/, '')))
 
-  const thisNota = {
-    id: notaId,
+  const receipt = {
+    id: receiptId,
     date,
     total: toDecimal(total),
     market: {
@@ -62,8 +67,9 @@ const generatePrismaData = (receivedFile) => {
     },
   }
   for (let index = 0; index < products.length; index += 1) {
-    thisNota.purchases.createMany.data.push({
+    receipt.purchases.createMany.data.push({
       name: products[index],
+      ean: eans[index],
       quantity: toDecimal(quantity[index]),
       unit: unities[index],
       unitPrice: toDecimal(pricePerUnit[index]),
@@ -75,7 +81,7 @@ const generatePrismaData = (receivedFile) => {
       marketId,
     })
   }
-  return thisNota
+  return receipt
 }
 
 // 46,78 Zona Sul Barra 3/4
@@ -84,11 +90,11 @@ const handler = async (req, res) => {
   const { method, body } = req
 
   if (method === 'POST') {
-    const data = generatePrismaData(body)
-    const isAdded = await prisma.nota.findUnique({ where: { id: data.id } })
+    const data = generatePrismaData(body.content)
+    const isAdded = await prisma.receipt.findUnique({ where: { id: data.id } })
     if (isAdded) return res.status(400).json({ error: 'Nota já existe' })
 
-    await prisma.nota.create({ data })
+    await prisma.receipt.create({ data })
     return res.status(204).json()
   }
 

@@ -10,7 +10,7 @@ import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
 
-const NotaStatCard = ({ nota: { id, date, total, market: { name, nickname } } }) => (
+const ReceiptStatCard = ({ receipt: { id, date, total, market: { name, nickname } } }) => (
   <RoundedFrame pt={2} px={2} bg="blackAlpha.700">
     <Stat>
       <StatLabel>{nickname || name}</StatLabel>
@@ -157,8 +157,8 @@ const PurchasesTable = ({ purchases }) => {
   )
 }
 
-const Nota = ({ nota }) => {
-  const { purchases, market } = nota
+const Receipt = ({ receipt }) => {
+  const { purchases, market } = receipt
   return (
     <>
       <Head>
@@ -167,7 +167,7 @@ const Nota = ({ nota }) => {
       <Box>
         <Flex direction={{ base: 'column', lg: 'row' }} mb="4" gap={2}>
           <Box>
-            <NotaStatCard nota={nota} />
+            <ReceiptStatCard receipt={receipt} />
           </Box>
           <Box>
             <RoundedFrame>
@@ -185,7 +185,7 @@ const Nota = ({ nota }) => {
 
 export const getServerSideProps = async ({ query }) => {
   const { id } = query
-  const nota = await prisma.nota.findUnique({
+  const receipt = await prisma.receipt.findUnique({
     where: { id },
     select: {
       id: true,
@@ -219,8 +219,8 @@ export const getServerSideProps = async ({ query }) => {
   })
 
   return {
-    props: { nota: JSON.parse(JSON.stringify(nota)) }, // will be passed to the page component as props
+    props: { receipt: JSON.parse(JSON.stringify(receipt)) }, // will be passed to the page component as props
   }
 }
 
-export default Nota
+export default Receipt

@@ -6,6 +6,7 @@ import NextLink from 'next/link'
 import { Link, Table, Thead, Tbody, Td, Tr, Th, Box, Flex } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
 import { RoundedFrame } from 'components/RoundedFrame'
+import { formatBRL } from 'lib/formatBRL'
 
 const PurchasesTable = ({ purchases }) => {
   const data = useMemo(() => purchases, [purchases])
@@ -14,8 +15,8 @@ const PurchasesTable = ({ purchases }) => {
     () => [
       { Header: 'ID', accessor: 'id' },
       { Header: 'Nome', accessor: 'name' },
-      { Header: 'ean', accessor: 'ean' },
-      { Header: 'chargedPrice', accessor: 'chargedPrice' },
+      { Header: 'EAN', accessor: 'ean' },
+      { Header: 'Total', accessor: 'chargedPrice' },
     ],
     [],
   )
@@ -74,7 +75,7 @@ const PurchasesTable = ({ purchases }) => {
             </Td>
             <Td>
               <NextLink passHref href={`/produtos/${encodeURIComponent(id)}`}>
-                <Link>{chargedPrice}</Link>
+                <Link>{formatBRL(chargedPrice)}</Link>
               </NextLink>
             </Td>
           </Tr>
@@ -114,7 +115,7 @@ export const getServerSideProps = async () => {
       regularPrice: true,
       discount: true,
       chargedPrice: true,
-      notaId: true,
+      receiptId: true,
       marketId: true,
     },
   })

@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Nota {
+model Receipt {
   id         String     @id @db.VarChar(44) // Chave de Acesso
   date       DateTime   // Data de Emissão
   total      Decimal    @db.Decimal(6, 2)
@@ -31,7 +31,7 @@ model Market {
   nickname   String?
 
   purchases  Purchase[]
-  notas      Nota[]
+  receipts   Receipt[]
 }
 
 model Purchase {
@@ -44,9 +44,10 @@ model Purchase {
   regularPrice  Decimal  @db.Decimal(6, 2)
   discount      Decimal? @db.Decimal(6, 2) // Valor do Desconto
   chargedPrice  Decimal  @db.Decimal(6, 2)
-  notaId        String
+  receiptId     String
   marketId      String
+  ignore        Boolean?
 
   market        Market   @relation(fields: [marketId], references: [id])
-  nota          Nota     @relation(fields: [notaId], references: [id])
+  receipt       Receipt  @relation(fields: [receiptId], references: [id])
 }

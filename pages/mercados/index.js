@@ -12,7 +12,6 @@ const MarketsTable = ({ markets }) => {
 
   const columns = useMemo(
     () => [
-      { Header: 'ID', accessor: 'id' },
       { Header: 'Nome', accessor: 'name' },
       { Header: 'Fantasia', accessor: 'fantasia' },
       { Header: 'Alias', accessor: 'nickname' },
@@ -58,11 +57,6 @@ const MarketsTable = ({ markets }) => {
       <Tbody {...getTableBodyProps()}>
         {rows.map(({ original: { id, name, fantasia, nickname, address } }) => (
           <Tr key={id}>
-            <Td>
-              <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
-                <Link title={id}>{id}</Link>
-              </NextLink>
-            </Td>
             <Td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
                 <Link>{name}</Link>

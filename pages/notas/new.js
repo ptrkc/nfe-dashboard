@@ -72,7 +72,7 @@ const MarketSelection = ({ register, setValue, options }) => {
   const modalFocusRef = useRef()
 
   useEffect(() => {
-    if (!localOptions[0].selected) return
+    if (!localOptions[0]?.selected) return
 
     setValue('market', localOptions[0].value)
   }, [localOptions, setValue])
@@ -140,21 +140,19 @@ const MarketSelection = ({ register, setValue, options }) => {
   )
 }
 
-const NewNotaForm = ({ markets }) => {
+const NewReceiptForm = ({ markets }) => {
   const { register, control, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm()
   const options = markets.map(market => ({ label: market.nickname || market.name, value: market.id }))
     .sort(sortBy('label'))
 
-  const onSubmit = async ({ files, ...data }) => {
-    const formData = new FormData()
-    files.forEach((file, index) => {
-      formData.append(`file${index}`, file)
-    })
-    Object.keys(data).forEach(key => formData.append(key, data[key]))
-    await fetch('/api/teste', {
-      method: 'POST',
-      body: formData,
-    })
+  const onSubmit = async (data) => {
+    for (const { content } of data.files) {
+      await fetch('/api/notas/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      })
+    }
   }
 
   return (
@@ -200,13 +198,13 @@ const NewNotaForm = ({ markets }) => {
   )
 }
 
-const NewNota = ({ markets }) => (
+const NewReceipt = ({ markets }) => (
   <>
     <Head>
       <title>NFe Dashboard | +Nota</title>
     </Head>
     <Box maxW="2xl" marginX="auto">
-      <NewNotaForm markets={markets} />
+      <NewReceiptForm markets={markets} />
     </Box>
   </>
 )
@@ -221,8 +219,8 @@ export const getServerSideProps = async () => {
   })
 
   return {
-    props: { markets: JSON.parse(JSON.stringify(markets)) }, // will be passed to the page component as props
+    props: { markets }, // will be passed to the page component as props
   }
 }
 
-export default NewNota
+export default NewReceipt
