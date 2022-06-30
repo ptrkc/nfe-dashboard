@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { Flex } from '@chakra-ui/react'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
-import { NotasTable } from 'components/NotasTable'
+import { ReceiptsTable } from 'components/ReceiptsTable'
 
 const EditMarket = ({ market }) => (
   <>
@@ -16,7 +16,7 @@ const EditMarket = ({ market }) => (
         <MarketTable market={market} />
       </RoundedFrame>
       <RoundedFrame>
-        <NotasTable notas={market.notas} />
+        <ReceiptsTable receipts={market.notas} />
       </RoundedFrame>
     </Flex>
   </>
@@ -48,8 +48,6 @@ export const getServerSideProps = async ({ query }) => {
       },
     },
   })
-
-  console.log(market)
 
   return {
     props: { market: JSON.parse(JSON.stringify(market)) }, // will be passed to the page component as props

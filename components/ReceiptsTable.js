@@ -1,16 +1,16 @@
 import { useMemo } from 'react'
 import NextLink from 'next/link'
-import { Tr, Td, Table, Thead, Th, Tbody, Link } from '@chakra-ui/react'
+import { Tr, Td, Table, Thead, Th, Tbody, Link, Skeleton } from '@chakra-ui/react'
 import { useSortBy, useTable } from 'react-table'
 import { formatBRL } from 'lib/formatBRL'
 import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { dateSlice } from 'lib/dateSlice'
 
-export const NotasTable = ({ notas }) => {
-  const data = useMemo(() => notas, [notas])
-  const totalSum = useMemo(() => notas.reduce(
+export const ReceiptsTable = ({ receipts, isLoading }) => {
+  const data = useMemo(() => receipts, [receipts])
+  const totalSum = useMemo(() => receipts.reduce(
     (previousValue, currentValue) => previousValue + parseFloat(currentValue.total), 0,
-  ), [notas])
+  ), [receipts])
   const columns = useMemo(
     () => [
       { Header: 'Mercado', accessor: 'market.name' },
@@ -27,6 +27,8 @@ export const NotasTable = ({ notas }) => {
     headerGroups,
     rows,
   } = useTable({ columns, data, initialState }, useSortBy)
+
+  // if (isLoading) return (<Skeleton> lol</Skeleton>)
 
   return (
     <Table {...getTableProps()}>
@@ -55,28 +57,38 @@ export const NotasTable = ({ notas }) => {
         ))}
       </Thead>
       <Tbody {...getTableBodyProps()}>
-        {rows.map(({ original: { id, market, date, total } }) => {
-          const marketName = market.nickname || market.name
-          return (
-            <Tr key={id}>
-              <Td>
-                <NextLink passHref href={`/notas/${id}`}>
-                  <Link>{marketName}</Link>
-                </NextLink>
-              </Td>
-              <Td>
-                <NextLink passHref href={`/notas/${id}`}>
-                  <Link title={formatLongDateBR(date)}>{dateSlice(date)}</Link>
-                </NextLink>
-              </Td>
-              <Td isNumeric>
-                <NextLink passHref href={`/notas/${id}`}>
-                  <Link>{formatBRL(total)}</Link>
-                </NextLink>
+        {isLoading
+          ? [...Array(5).keys()].map(key => (
+            <Tr key={key}>
+              <Td colSpan={columns.length}>
+                <Skeleton w="100%">
+                  {key}
+                </Skeleton>
               </Td>
             </Tr>
-          )
-        })}
+          ))
+          : rows.map(({ original: { id, market, date, total } }) => {
+            const marketName = market.nickname || market.name
+            return (
+              <Tr key={id}>
+                <Td>
+                  <NextLink passHref href={`/notas/${id}`}>
+                    <Link>{marketName}</Link>
+                  </NextLink>
+                </Td>
+                <Td>
+                  <NextLink passHref href={`/notas/${id}`}>
+                    <Link title={formatLongDateBR(date)}>{dateSlice(date)}</Link>
+                  </NextLink>
+                </Td>
+                <Td isNumeric>
+                  <NextLink passHref href={`/notas/${id}`}>
+                    <Link>{formatBRL(total)}</Link>
+                  </NextLink>
+                </Td>
+              </Tr>
+            )
+          })}
         <Tr>
           <Td colSpan={2} />
           <Td isNumeric>

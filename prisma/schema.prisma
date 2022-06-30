@@ -14,19 +14,19 @@ model Nota {
   id         String     @id @db.VarChar(44) // Chave de Acesso
   date       DateTime   // Data de Emissão
   total      Decimal    @db.Decimal(6, 2)
-  marketId   String    
+  marketId   String
   createdAt  DateTime   @default(now())
 
   market     Market     @relation(fields: [marketId], references: [id])
-  purchases  Purchase[]  
+  purchases  Purchase[]
 }
 
 model Market {
   id         String @id // cnpj+cep
   name       String // Nome / Razão Social
   fantasia   String // Nome Fantasia
-  cnpj       String  
-  address    String 
+  cnpj       String
+  address    String
   cep        String
   nickname   String?
 
@@ -50,4 +50,3 @@ model Purchase {
   market        Market   @relation(fields: [marketId], references: [id])
   nota          Nota     @relation(fields: [notaId], references: [id])
 }
-
