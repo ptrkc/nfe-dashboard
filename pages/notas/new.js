@@ -1,11 +1,14 @@
 import { prisma } from 'lib/prisma'
 
+import { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
 import { Box, Button, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, useDisclosure, VStack } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import { useForm, Controller } from 'react-hook-form'
+import { SlidingSegmentedControl } from 'components/SlidingSegmentedControl'
 import { FileDropzone } from 'components/FileDropzone'
-import { useEffect, useRef, useState } from 'react'
+
+const newReceiptOptions = [{ label: 'File', value: 'file' }, { label: 'Manual', value: 'manual' }]
 
 const sortBy = key => (prev, next) => {
   const prevValue = prev[key].toLowerCase()
@@ -55,6 +58,7 @@ const TotalInput = ({ register }) => {
         }}
         {...register('total', {
           onChange,
+          shouldUnregister: true,
         })}
       />
       <NumberInputStepper>
@@ -83,7 +87,14 @@ const MarketSelection = ({ register, setValue, options }) => {
   }
   const addMarket = (value) => {
     if (isValid) {
-      setLocalOptions([{ label: value, value, selected: true }, ...options])
+      setLocalOptions([
+        {
+          label: value,
+          value: JSON.stringify({ name: value, id: `MRKT${Date.now()}` }),
+          selected: true,
+        },
+        ...options,
+      ])
       onClose()
     }
   }
@@ -97,7 +108,9 @@ const MarketSelection = ({ register, setValue, options }) => {
           name="market"
           id="market"
           placeholder="Escolha ou adicione"
-          {...register('market')}
+          {...register('market', {
+            shouldUnregister: true,
+          })}
         >
           {localOptions.map(({ label, value }) => (<option key={value} value={value}>{label}</option>))}
         </Select>
@@ -141,16 +154,27 @@ const MarketSelection = ({ register, setValue, options }) => {
 }
 
 const NewReceiptForm = ({ markets }) => {
+  const [formType, setFormType] = useState('file')
+  const thisYear = (new Date()).getFullYear()
   const { register, control, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm()
-  const options = markets.map(market => ({ label: market.nickname || market.name, value: market.id }))
+  const options = markets.map(market => ({ label: market.nickname || market.name,
+    value: JSON.stringify({ name: market.name, id: market.id }) }))
     .sort(sortBy('label'))
 
   const onSubmit = async (data) => {
-    for (const { content } of data.files) {
+    if (formType === 'file') {
+      for (const { content } of data.files) {
+        await fetch('/api/notas/new', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: formType, content }),
+        })
+      }
+    } else {
       await fetch('/api/notas/new', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ ...data, type: formType, total: data.total.replace(',', '.') }),
       })
     }
   }
@@ -158,35 +182,66 @@ const NewReceiptForm = ({ markets }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack align="start" p={4} spacing={2}>
-        <FormControl>
-          <FormLabel htmlFor="files">Arquivo HTML:</FormLabel>
-          <Controller
-            control={control}
-            name="files"
-            render={({ field: { value, onChange } }) => (
-              <FileDropzone multiple value={value} onChange={onChange} />
-            )}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="total">Total:</FormLabel>
-          <TotalInput register={register} />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="market">Mercado:</FormLabel>
-          <MarketSelection register={register} setValue={setValue} options={options} />
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="date">Data:</FormLabel>
-          <InputGroup gap={2}>
-            <Input
-              name="date"
-              id="date"
-              type="date"
-              {...register('date')}
+        <SlidingSegmentedControl
+          options={newReceiptOptions}
+          selectedValue={formType}
+          setSelectedValue={setFormType}
+        />
+        {formType === 'file' ? (
+          <FormControl isRequired>
+            <FormLabel htmlFor="files">Arquivo HTML:</FormLabel>
+            <Controller
+              control={control}
+              name="files"
+              render={({ field: { value, onChange } }) => (
+                <FileDropzone multiple value={value} onChange={onChange} />
+              )}
+              shouldUnregister
             />
-          </InputGroup>
-        </FormControl>
+          </FormControl>
+        ) : (
+          <>
+            <FormControl isRequired>
+              <FormLabel htmlFor="description">Descrição:</FormLabel>
+              <InputGroup gap={2}>
+                <Input
+                  name="description"
+                  id="description"
+                  {...register('description', {
+                    shouldUnregister: true,
+                  })}
+                />
+              </InputGroup>
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel htmlFor="total">Total:</FormLabel>
+              <TotalInput
+                register={register}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel htmlFor="market">Mercado:</FormLabel>
+              <MarketSelection register={register} setValue={setValue} options={options} />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel htmlFor="date">Data:</FormLabel>
+              <InputGroup gap={2}>
+                <Input
+                  name="date"
+                  id="date"
+                  type="date"
+                  min="2021-01-01"
+                  max={`${thisYear}-12-31`}
+                  {...register('date', {
+                    shouldUnregister: true,
+                    min: '2021-01-01',
+                    max: `${thisYear}-12-31`,
+                  })}
+                />
+              </InputGroup>
+            </FormControl>
+          </>
+        )}
         <Button
           type="submit"
           isLoading={isSubmitting}

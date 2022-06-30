@@ -69,12 +69,12 @@ const generatePrismaData = (receivedFile) => {
   for (let index = 0; index < products.length; index += 1) {
     receipt.purchases.createMany.data.push({
       name: products[index],
-      ean: eans[index],
+      ean: eans[index] || null,
       quantity: toDecimal(quantity[index]),
       unit: unities[index],
       unitPrice: toDecimal(pricePerUnit[index]),
       regularPrice: toDecimal(regularPrices[index]),
-      discount: toDecimal(discounts[index]),
+      discount: toDecimal(discounts[index]) || null,
       chargedPrice: !discounts[index]
         ? toDecimal(regularPrices[index])
         : (parseInt(regularPrices[index].replace(',', '')) - parseInt(discounts[index].replace(',', ''))) / 100,
@@ -90,9 +90,46 @@ const handler = async (req, res) => {
   const { method, body } = req
 
   if (method === 'POST') {
-    const data = generatePrismaData(body.content)
-    const isAdded = await prisma.receipt.findUnique({ where: { id: data.id } })
-    if (isAdded) return res.status(400).json({ error: 'Nota já existe' })
+    let data
+    if (body.type === 'file') {
+      data = generatePrismaData(body.content)
+      const isAdded = await prisma.receipt.findUnique({ where: { id: data.id } })
+      if (isAdded) return res.status(400).json({ error: 'Nota já existe' })
+    } else {
+      console.log(body)
+      const { date, total, market, description } = body
+      const { name: marketName, id: marketId } = JSON.parse(market)
+      data = {
+        id: `RCPT${Date.now()}`,
+        date: new Date(date),
+        total,
+        market: {
+          connectOrCreate: {
+            where: { id: marketId },
+            create: {
+              id: marketId,
+              name: marketName,
+            },
+          },
+        },
+        purchases: {
+          createMany: {
+            data: [
+              {
+                name: description,
+                ean: `PRDCT${Date.now()}`,
+                quantity: 1,
+                unit: 'UN',
+                unitPrice: total,
+                regularPrice: total,
+                chargedPrice: total,
+                marketId,
+              },
+            ],
+          },
+        },
+      }
+    }
 
     await prisma.receipt.create({ data })
     return res.status(204).json()

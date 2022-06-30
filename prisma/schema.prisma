@@ -22,12 +22,12 @@ model Receipt {
 }
 
 model Market {
-  id         String @id // cnpj+cep
-  name       String // Nome / Razão Social
-  fantasia   String // Nome Fantasia
-  cnpj       String
-  address    String
-  cep        String
+  id         String  @id // cnpj+cep OR MRKTXXX
+  name       String  // Nome / Razão Social
+  fantasia   String? // Nome Fantasia
+  cnpj       String?
+  address    String?
+  cep        String?
   nickname   String?
 
   purchases  Purchase[]
@@ -49,5 +49,5 @@ model Purchase {
   ignore        Boolean?
 
   market        Market   @relation(fields: [marketId], references: [id])
-  receipt       Receipt  @relation(fields: [receiptId], references: [id])
+  receipt       Receipt  @relation(fields: [receiptId], references: [id], onDelete: Cascade)
 }
