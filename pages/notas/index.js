@@ -8,6 +8,7 @@ import { useQuery } from 'react-query'
 import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { formatBRL } from 'lib/formatBRL'
 import { RoundedFrame } from 'components/RoundedFrame'
+import { fetchData } from 'lib/fetch'
 
 const ReceiptCard = ({ receipt }) => (
   <LinkBox>
@@ -24,7 +25,7 @@ const ReceiptCard = ({ receipt }) => (
 )
 
 const Receipts = () => {
-  const { data: receipts = [], isLoading } = useQuery('/api/notas', () => fetch('/api/notas').then(res => res.json()))
+  const { data: receipts = [], isLoading } = useQuery('/api/notas', () => fetchData('/api/notas'))
   return (
     <>
       <Head>

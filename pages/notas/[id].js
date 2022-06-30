@@ -3,12 +3,15 @@ import { prisma } from 'lib/prisma'
 import { useMemo } from 'react'
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Box, Flex, Link, Stat, StatHelpText, StatLabel, StatNumber, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Box, Button, Flex, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stat, StatHelpText, StatLabel, StatNumber, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, VStack } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
 import { formatBRL } from 'lib/formatBRL'
 import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
+import { useMutation } from 'react-query'
+import { useRouter } from 'next/router'
+import { fetchData } from 'lib/fetch'
 
 const ReceiptStatCard = ({ receipt: { id, date, total, market: { name, nickname } } }) => (
   <RoundedFrame pt={2} px={2} bg="blackAlpha.700">
@@ -157,6 +160,51 @@ const PurchasesTable = ({ purchases }) => {
   )
 }
 
+const DeleteButton = ({ url }) => {
+  const router = useRouter()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const { isLoading, mutate } = useMutation(
+    () => fetchData(url, { method: 'DELETE' }),
+    { onSuccess: () => router.push('/notas') },
+  )
+
+  return (
+    <>
+      <Button colorScheme="red" onClick={onOpen}>
+        Deletar
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Deletar Nota</ModalHeader>
+          <ModalCloseButton isDisabled={isLoading} />
+          <ModalBody>
+            Tem certeza que deseja excluir essa nota?
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={onClose}
+              isDisabled={isLoading}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={mutate}
+              colorScheme="red"
+              isLoading={isLoading}
+            >
+              Deletar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
+
 const Receipt = ({ receipt }) => {
   const { purchases, market } = receipt
   return (
@@ -164,8 +212,8 @@ const Receipt = ({ receipt }) => {
       <Head>
         <title>NFe Dashboard | Nota</title>
       </Head>
-      <Box>
-        <Flex direction={{ base: 'column', lg: 'row' }} mb="4" gap={2}>
+      <VStack gap="2" alignItems="flex-start">
+        <Flex direction={{ base: 'column', lg: 'row' }} gap={2}>
           <Box>
             <ReceiptStatCard receipt={receipt} />
           </Box>
@@ -178,7 +226,8 @@ const Receipt = ({ receipt }) => {
         <RoundedFrame>
           <PurchasesTable purchases={purchases} />
         </RoundedFrame>
-      </Box>
+        <DeleteButton url={`/api/notas/${receipt.id}`} />
+      </VStack>
     </>
   )
 }

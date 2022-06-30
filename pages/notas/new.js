@@ -7,6 +7,7 @@ import { AddIcon } from '@chakra-ui/icons'
 import { useForm, Controller } from 'react-hook-form'
 import { SlidingSegmentedControl } from 'components/SlidingSegmentedControl'
 import { FileDropzone } from 'components/FileDropzone'
+import { fetchData } from 'lib/fetch'
 
 const newReceiptOptions = [{ label: 'File', value: 'file' }, { label: 'Manual', value: 'manual' }]
 
@@ -164,17 +165,15 @@ const NewReceiptForm = ({ markets }) => {
   const onSubmit = async (data) => {
     if (formType === 'file') {
       for (const { content } of data.files) {
-        await fetch('/api/notas/new', {
+        await fetchData('/api/notas/new', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: formType, content }),
+          body: { type: formType, content },
         })
       }
     } else {
-      await fetch('/api/notas/new', {
+      await fetchData('/api/notas/new', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, type: formType, total: data.total.replace(',', '.') }),
+        body: { ...data, type: formType, total: data.total.replace(',', '.') },
       })
     }
   }
