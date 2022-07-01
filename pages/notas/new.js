@@ -7,7 +7,7 @@ import { AddIcon } from '@chakra-ui/icons'
 import { useForm, Controller } from 'react-hook-form'
 import { SlidingSegmentedControl } from 'components/SlidingSegmentedControl'
 import { FileDropzone } from 'components/FileDropzone'
-import { fetchData } from 'lib/fetch'
+import { fetchData } from 'lib/fetchData'
 
 const newReceiptOptions = [{ label: 'File', value: 'file' }, { label: 'Manual', value: 'manual' }]
 
@@ -255,7 +255,7 @@ const NewReceiptForm = ({ markets }) => {
 const NewReceipt = ({ markets }) => (
   <>
     <Head>
-      <title>NFe Dashboard | +Nota</title>
+      <title>💸NFe Dashboard | +Nota</title>
     </Head>
     <Box maxW="2xl" marginX="auto">
       <NewReceiptForm markets={markets} />

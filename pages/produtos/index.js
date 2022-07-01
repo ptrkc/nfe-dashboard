@@ -81,7 +81,7 @@ const PurchasesTable = ({ purchases }) => {
 const Purchases = ({ purchases }) => (
   <>
     <Head>
-      <title>NFe Dashboard | Produtos</title>
+      <title>💸NFe Dashboard | Produtos</title>
     </Head>
     <Flex direction="column" gap={2}>
       <Flex justifyContent="space-between" alignItems="center">

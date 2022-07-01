@@ -89,53 +89,57 @@ const generatePrismaData = (receivedFile) => {
 const handler = async (req, res) => {
   const { method, body } = req
 
-  if (method === 'POST') {
-    let data
-    if (body.type === 'file') {
-      data = generatePrismaData(body.content)
-      const isAdded = await prisma.receipt.findUnique({ where: { id: data.id } })
-      if (isAdded) return res.status(400).json({ error: 'Nota já existe' })
-    } else {
-      console.log(body)
-      const { date, total, market, description } = body
-      const { name: marketName, id: marketId } = JSON.parse(market)
-      data = {
-        id: `RCPT${Date.now()}`,
-        date: new Date(date),
-        total,
-        market: {
-          connectOrCreate: {
-            where: { id: marketId },
-            create: {
-              id: marketId,
-              name: marketName,
+  try {
+    if (method === 'POST') {
+      let data
+      if (body.type === 'file') {
+        data = generatePrismaData(body.content)
+        const isAdded = await prisma.receipt.findUnique({ where: { id: data.id } })
+        if (isAdded) return res.status(400).json({ error: 'Nota já existe' })
+      } else {
+        const { date, total, market, description } = body
+        const { name: marketName, id: marketId } = JSON.parse(market)
+        data = {
+          id: `RCPT${Date.now()}`,
+          date: new Date(date),
+          total,
+          market: {
+            connectOrCreate: {
+              where: { id: marketId },
+              create: {
+                id: marketId,
+                name: marketName,
+              },
             },
           },
-        },
-        purchases: {
-          createMany: {
-            data: [
-              {
-                name: description,
-                ean: `PRDCT${Date.now()}`,
-                quantity: 1,
-                unit: 'UN',
-                unitPrice: total,
-                regularPrice: total,
-                chargedPrice: total,
-                marketId,
-              },
-            ],
+          purchases: {
+            createMany: {
+              data: [
+                {
+                  name: description,
+                  ean: `PRDCT${Date.now()}`,
+                  quantity: 1,
+                  unit: 'UN',
+                  unitPrice: total,
+                  regularPrice: total,
+                  chargedPrice: total,
+                  marketId,
+                },
+              ],
+            },
           },
-        },
+        }
       }
+
+      await prisma.receipt.create({ data })
+      return res.status(204).end()
     }
 
-    await prisma.receipt.create({ data })
-    return res.status(204).json()
+    return res.status(504).end()
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json(error)
   }
-
-  return res.status(504)
 }
 
 export default handler

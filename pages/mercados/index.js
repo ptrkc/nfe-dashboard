@@ -16,6 +16,7 @@ const MarketsTable = ({ markets }) => {
       { Header: 'Fantasia', accessor: 'fantasia' },
       { Header: 'Alias', accessor: 'nickname' },
       { Header: 'Endereço', accessor: 'address' },
+      { Header: 'Notas', accessor: '_count.receipts' },
     ],
     [],
   )
@@ -55,7 +56,7 @@ const MarketsTable = ({ markets }) => {
         ))}
       </Thead>
       <Tbody {...getTableBodyProps()}>
-        {rows.map(({ original: { id, name, fantasia, nickname, address } }) => (
+        {rows.map(({ original: { id, name, fantasia, nickname, address, _count: { receipts } } }) => (
           <Tr key={id}>
             <Td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
@@ -77,6 +78,11 @@ const MarketsTable = ({ markets }) => {
                 <Link>{address}</Link>
               </NextLink>
             </Td>
+            <Td>
+              <NextLink passHref href={`/mercados/${encodeURIComponent(id)}`}>
+                <Link>{receipts}</Link>
+              </NextLink>
+            </Td>
           </Tr>
         ))}
       </Tbody>
@@ -87,7 +93,7 @@ const MarketsTable = ({ markets }) => {
 const Markets = ({ markets }) => (
   <>
     <Head>
-      <title>NFe Dashboard | Mercados</title>
+      <title>💸NFe Dashboard | Mercados</title>
     </Head>
     <Flex direction="column" gap={2}>
       <Flex justifyContent="space-between" alignItems="center">
@@ -110,11 +116,14 @@ export const getServerSideProps = async () => {
       fantasia: true,
       nickname: true,
       address: true,
+      _count: {
+        select: { receipts: true },
+      },
     },
   })
 
   return {
-    props: { markets: JSON.parse(JSON.stringify(markets)) }, // will be passed to the page component as props
+    props: { markets }, // will be passed to the page component as props
   }
 }
 

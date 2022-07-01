@@ -4,7 +4,7 @@ const handler = async (req, res) => {
   const { method, query: { id } } = req
   try {
     if (method === 'DELETE') {
-      await prisma.receipt.delete({ where: { id } })
+      await prisma.market.delete({ where: { id } })
       return res.status(204).end()
     }
     return res.status(504)

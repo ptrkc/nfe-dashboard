@@ -5,11 +5,12 @@ import { Flex } from '@chakra-ui/react'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
 import { ReceiptsTable } from 'components/ReceiptsTable'
+import { DeleteConfirmation } from 'components/DeleteConfirmation'
 
 const EditMarket = ({ market }) => (
   <>
     <Head>
-      <title>NFe Dashboard | Mercado</title>
+      <title>💸NFe Dashboard | Mercado</title>
     </Head>
     <Flex direction="column" gap={2}>
       <RoundedFrame>
@@ -18,6 +19,12 @@ const EditMarket = ({ market }) => (
       <RoundedFrame>
         <ReceiptsTable receipts={market.receipts} />
       </RoundedFrame>
+      <DeleteConfirmation
+        reqUrl={`/api/mercados/${market.id}`}
+        redirectUrl="/mercados"
+        header="Deletar Mercado"
+        body="Tem certeza que deseja excluir esse mercado?"
+      />
     </Flex>
   </>
 )

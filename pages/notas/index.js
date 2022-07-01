@@ -8,7 +8,7 @@ import { useQuery } from 'react-query'
 import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { formatBRL } from 'lib/formatBRL'
 import { RoundedFrame } from 'components/RoundedFrame'
-import { fetchData } from 'lib/fetch'
+import { fetchData } from 'lib/fetchData'
 
 const ReceiptCard = ({ receipt }) => (
   <LinkBox>
@@ -29,7 +29,7 @@ const Receipts = () => {
   return (
     <>
       <Head>
-        <title>NFe Dashboard | Notas</title>
+        <title>💸NFe Dashboard | Notas</title>
       </Head>
       <Flex direction="column" gap={2}>
         <Flex justifyContent="space-between" alignItems="center">

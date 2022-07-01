@@ -149,7 +149,7 @@ const ProductPurchasesTable = ({ purchases }) => {
 const ProductPage = ({ purchases }) => (
   <>
     <Head>
-      <title>NFe Dashboard | Produto</title>
+      <title>💸NFe Dashboard | Produto</title>
     </Head>
     <RoundedFrame>
       <ProductPurchasesTable purchases={purchases} />

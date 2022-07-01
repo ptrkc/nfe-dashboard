@@ -12,7 +12,7 @@ const MyApp = ({ Component, pageProps }) => (
         <Component {...pageProps} />
       </Layout>
     </ChakraProvider>
-    <ReactQueryDevtools initialIsOpen={false} />
+    <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
   </QueryClientProvider>
 )
 
