@@ -1,5 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
+import { RoundedFrame } from './RoundedFrame'
 
 export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedValue }) => {
   const [selectedIndex, setSelectedIndex] = useState(options.map(option => option.value).indexOf(selectedValue))
@@ -11,7 +12,7 @@ export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedVal
   }
   return (
     // Frame
-    <Flex justifyContent="space-around" alignItems="center" w="full" borderRadius={6} bg="#1c1c1e" color="white" position="relative">
+    <Flex justifyContent="space-around" alignItems="center" w="full" borderRadius={6} position="relative" bg="blackAlpha.300">
       {options.map(({ value }, index) => index !== options.length - 1 && (
         // Divider
         <Box
@@ -20,7 +21,7 @@ export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedVal
           left={`calc( ${optionWidth} * ${index + 1 } )`}
           h="55%"
           w="1px"
-          bg="gray.600"
+          bg="blackAlpha.300"
         />
       ))}
       {/* Background Frame */}
@@ -35,14 +36,17 @@ export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedVal
       >
         {/* Background */}
         <Box
-          borderRadius={6}
-          bg="blackAlpha.500"
+          borderRadius="md"
           h="100%"
+          borderWidth="1px"
+          boxShadow="lg"
+          bg="white"
         />
       </Box>
       {options.map(({ value, label }, index) => (
         // Option
         <Flex
+          color="blackAlpha.900"
           fontSize="xl"
           w="100%"
           alignItems="center"
@@ -57,5 +61,6 @@ export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedVal
           {label}
         </Flex>
       ))}
-    </Flex>)
+    </Flex>
+  )
 }

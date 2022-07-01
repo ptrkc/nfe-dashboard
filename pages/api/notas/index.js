@@ -24,7 +24,7 @@ const handler = async (req, res) => {
       return res.status(200).json(receipts)
     }
 
-    return res.status(504)
+    return res.status(501)
   } catch (error) {
     console.log(error)
     return res.status(500).json(error)

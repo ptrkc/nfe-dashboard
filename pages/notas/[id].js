@@ -3,19 +3,16 @@ import { prisma } from 'lib/prisma'
 import { useMemo } from 'react'
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Box, Button, Flex, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stat, StatHelpText, StatLabel, StatNumber, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Flex, Link, Stat, StatHelpText, StatLabel, StatNumber, Table, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
 import { formatBRL } from 'lib/formatBRL'
 import { formatLongDateBR } from 'lib/formatLongDateBR'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
-import { useMutation } from 'react-query'
-import { useRouter } from 'next/router'
-import { fetchData } from 'lib/fetchData'
 import { DeleteConfirmation } from 'components/DeleteConfirmation'
 
 const ReceiptStatCard = ({ receipt: { id, date, total, market: { name, nickname } } }) => (
-  <RoundedFrame pt={2} px={2} bg="blackAlpha.700">
+  <RoundedFrame pt={2} px={2} bg="white">
     <Stat>
       <StatLabel>{nickname || name}</StatLabel>
       <StatNumber>{formatBRL(total)}</StatNumber>

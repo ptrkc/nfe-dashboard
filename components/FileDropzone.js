@@ -1,7 +1,13 @@
 import { useRef, useState } from 'react'
-import { Box, Button, Center, HStack, Icon, IconButton, Input, List, ListItem, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, HStack, Icon, IconButton, Input, List, ListItem, Spinner, Text, VStack } from '@chakra-ui/react'
 import { FiUploadCloud, FiTrash2, FiFileText } from 'react-icons/fi'
 import { RoundedFrame } from 'components/RoundedFrame'
+
+const statusIcon = {
+  loading: <Spinner />,
+  error: '❌',
+  done: '✅',
+}
 
 const DropzoneFrame = (props) => {
   const {
@@ -35,19 +41,19 @@ const DropzoneFrame = (props) => {
 
   return (
     <VStack
-      borderRadius={10}
+      borderRadius="md"
       borderWidth="1px"
       borderStyle="dashed"
       borderColor="inherit"
       _hover={{
-        borderColor: 'whiteAlpha.400',
+        borderColor: 'blackAlpha.400',
       }}
       transition=".2s"
       overflow="hidden"
       fontSize="sm"
       position="relative"
       cursor={isEmpty ? 'pointer' : 'unset'}
-      bg={isHovering ? 'whiteAlpha.500' : 'unset'}
+      bg={isHovering ? 'blackAlpha.500' : 'unset'}
       p={4}
       onDragEnter={onDragEnter}
       onDragOver={onDragOver}
@@ -106,13 +112,16 @@ export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedF
       onDrop={onDrop}
       inputRef={inputRef}
       isEmpty={isEmpty}
+      bg="white"
+
     >
       {isEmpty ? (
         <>
           <Center
-            borderRadius={10}
-            bg="whiteAlpha.200"
+            borderRadius="md"
+            bg="blackAlpha.300"
             p={2}
+
           >
             <Icon as={FiUploadCloud} w={5} h={5} />
           </Center>
@@ -128,14 +137,18 @@ export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedF
       ) : (
         <>
           <List w="full" spacing={2}>
-            {selectedFiles.map(({ name }) => (
+            {selectedFiles.map(({ name, status }) => (
               <ListItem key={name} gap={2}>
                 <RoundedFrame display="flex" p={2} justifyContent="space-between" alignItems="center">
                   <HStack justifyContent="center" alignItems="center">
                     <Icon w={6} h={6} as={FiFileText} />
                     <Text noOfLines={2}>{name}</Text>
                   </HStack>
-                  <DeleteButton name={name} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+                  {status ? (
+                    statusIcon[status]
+                  ) : (
+                    <DeleteButton name={name} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+                  )}
                 </RoundedFrame>
               </ListItem>
             ))}

@@ -34,6 +34,7 @@ const TotalInput = ({ register }) => {
   }
   return (
     <NumberInput
+      bg="white"
       as={InputGroup}
       name="total"
       id="total"
@@ -106,6 +107,7 @@ const MarketSelection = ({ register, setValue, options }) => {
     <>
       <InputGroup gap={2}>
         <Select
+          bg="white"
           name="market"
           id="market"
           placeholder="Escolha ou adicione"
@@ -145,7 +147,7 @@ const MarketSelection = ({ register, setValue, options }) => {
             >
               Adicionar
             </Button>
-            <Button onClick={onClose}>Cancelar</Button>
+            <Button onClick={onClose} variant="outline">Cancelar</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -157,18 +159,28 @@ const MarketSelection = ({ register, setValue, options }) => {
 const NewReceiptForm = ({ markets }) => {
   const [formType, setFormType] = useState('file')
   const thisYear = (new Date()).getFullYear()
-  const { register, control, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm()
+  const { register, control, handleSubmit, setValue, getValues, formState: { errors, isSubmitting } } = useForm()
   const options = markets.map(market => ({ label: market.nickname || market.name,
     value: JSON.stringify({ name: market.name, id: market.id }) }))
     .sort(sortBy('label'))
 
   const onSubmit = async (data) => {
     if (formType === 'file') {
-      for (const { content } of data.files) {
-        await fetchData('/api/notas/new', {
-          method: 'POST',
-          body: { type: formType, content },
-        })
+      const files = getValues('files').map(file => ({ ...file, status: 'loading' }))
+      setValue('files', files)
+      for (const [index, file] of data.files.entries()) {
+        try {
+          await fetchData('/api/notas/new', {
+            method: 'POST',
+            body: { type: formType, content: file.content },
+          })
+          files[index] = { ...file, status: 'done' }
+          setValue('files', files)
+        } catch (error) {
+          console.log(error)
+          files[index] = { ...file, status: 'error' }
+          setValue('files', files)
+        }
       }
     } else {
       await fetchData('/api/notas/new', {
@@ -204,6 +216,7 @@ const NewReceiptForm = ({ markets }) => {
               <FormLabel htmlFor="description">Descrição:</FormLabel>
               <InputGroup gap={2}>
                 <Input
+                  bg="white"
                   name="description"
                   id="description"
                   {...register('description', {
@@ -226,6 +239,7 @@ const NewReceiptForm = ({ markets }) => {
               <FormLabel htmlFor="date">Data:</FormLabel>
               <InputGroup gap={2}>
                 <Input
+                  bg="white"
                   name="date"
                   id="date"
                   type="date"

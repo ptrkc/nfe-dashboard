@@ -7,7 +7,7 @@ const handler = async (req, res) => {
       await prisma.market.delete({ where: { id } })
       return res.status(204).end()
     }
-    return res.status(504)
+    return res.status(501)
   } catch (error) {
     console.log(error)
     return res.status(500).json(error)

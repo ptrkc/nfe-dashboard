@@ -1,7 +1,7 @@
 import { prisma } from 'lib/prisma'
 
 import Head from 'next/head'
-import { Flex } from '@chakra-ui/react'
+import { Flex, VStack } from '@chakra-ui/react'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
 import { ReceiptsTable } from 'components/ReceiptsTable'
@@ -12,7 +12,7 @@ const EditMarket = ({ market }) => (
     <Head>
       <title>💸NFe Dashboard | Mercado</title>
     </Head>
-    <Flex direction="column" gap={2}>
+    <VStack alignItems="flex-start" gap={2}>
       <RoundedFrame>
         <MarketTable market={market} />
       </RoundedFrame>
@@ -25,7 +25,7 @@ const EditMarket = ({ market }) => (
         header="Deletar Mercado"
         body="Tem certeza que deseja excluir esse mercado?"
       />
-    </Flex>
+    </VStack>
   </>
 )
 

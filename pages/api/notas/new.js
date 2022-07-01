@@ -95,7 +95,7 @@ const handler = async (req, res) => {
       if (body.type === 'file') {
         data = generatePrismaData(body.content)
         const isAdded = await prisma.receipt.findUnique({ where: { id: data.id } })
-        if (isAdded) return res.status(400).json({ error: 'Nota já existe' })
+        if (isAdded) return res.status(201).end()
       } else {
         const { date, total, market, description } = body
         const { name: marketName, id: marketId } = JSON.parse(market)
@@ -132,10 +132,10 @@ const handler = async (req, res) => {
       }
 
       await prisma.receipt.create({ data })
-      return res.status(204).end()
+      return res.status(201).end()
     }
 
-    return res.status(504).end()
+    return res.status(501).end()
   } catch (error) {
     console.log(error)
     return res.status(500).json(error)

@@ -2,9 +2,9 @@ import { useRef } from 'react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import { Box, Button, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading,
-  Icon, IconButton, Link, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
+  Icon, IconButton, Link, Text, useBreakpointValue, useDisclosure } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
-import { FiHome, FiFile, FiShoppingCart, FiShoppingBag, FiPackage, FiTrendingUp, FiLock, FiUserPlus } from 'react-icons/fi'
+import { FiHome, FiFile, FiShoppingCart, FiShoppingBag, FiPackage, FiTrendingUp, FiLock, FiUserPlus, FiFileText } from 'react-icons/fi'
 
 const MAIN_OPTIONS = [
   { href: '/', text: 'Home', icon: FiHome, disabled: false },
@@ -19,21 +19,35 @@ const FOOTER_OPTIONS = [
   { href: '/signup', text: 'Sign Up', icon: FiUserPlus, disabled: true },
 ]
 
-const header = 'NFe Dash'
+const header = (
+  <Flex justifyContent="center" alignItems="center" p="4">
+    <Icon as={FiFileText} />
+    NFe-Dash
+  </Flex>)
 
 const SidebarLink = ({ option: { href, icon, text, disabled } }) => {
   const { pathname } = useRouter()
   const isActive = pathname.split('/')[1] === href.substring(1)
 
   return (disabled ? (
-    <Button variant="ghost" as={Link} isDisabled={disabled}>
+    <Button
+      bg="blue.600"
+      _hover={{ bg: 'blue.500', textDecoration: 'none' }}
+      _active={{ bg: 'blue.500', textDecoration: 'none' }}
+      as={Link} isDisabled={disabled}
+    >
       <Flex justifyContent="flex-start" w="100%" gap={2}>
         <Icon as={icon} />{text}
       </Flex>
     </Button>
   ) : (
     <NextLink href={href} passHref>
-      <Button variant="ghost" as={Link} isActive={isActive}>
+      <Button
+        bg="blue.600"
+        _hover={{ bg: 'blue.500', textDecoration: 'none' }}
+        _active={{ bg: 'blue.500', textDecoration: 'none' }}
+        as={Link} isActive={isActive}
+      >
         <Flex justifyContent="flex-start" w="100%" gap={2}>
           <Icon as={icon} />{text}
         </Flex>
@@ -44,7 +58,6 @@ const SidebarLink = ({ option: { href, icon, text, disabled } }) => {
 
 const SidebarContent = () => (
   <Box>
-    <Divider />
     <Flex direction="column" gap={2} m={2}>
       {MAIN_OPTIONS.map(option => (<SidebarLink key={option.href} option={option} />))}
     </Flex>
@@ -62,9 +75,9 @@ const SidebarFooter = () => (
 
 const Sidebar = () => (
   <Flex
-    bg="#22272e"
+    bg="blue.600"
+    color="gray.200"
     w="xs"
-    color="white"
     p={2}
     justifyContent="space-between"
     flexDirection="column"
@@ -94,9 +107,14 @@ const LeftDrawer = () => {
         placement="left"
         onClose={onClose}
         finalFocusRef={btnRef}
+
       >
         <DrawerOverlay />
-        <DrawerContent bg="#22272e" onClick={onClose}>
+        <DrawerContent
+          bg="blue.600"
+          color="gray.200"
+          onClick={onClose}
+        >
           <DrawerCloseButton />
           <DrawerHeader>{header}</DrawerHeader>
           <Flex direction="column" justifyContent="space-between" h="100%" p={2}>
@@ -110,7 +128,7 @@ const LeftDrawer = () => {
 }
 
 const TopBar = () => (
-  <Flex bg="#2d333b" p={2}>
+  <Flex p={2}>
     <LeftDrawer />
   </Flex>
 )

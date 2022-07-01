@@ -2,13 +2,15 @@ import { Box } from '@chakra-ui/react'
 
 export const RoundedFrame = ({ children, ...props }) => (
   <Box
-    borderRadius={10}
+    bg="white"
+    borderRadius="md"
     overflow="hidden"
     borderWidth="1px"
     borderColor="inherit"
     transition=".2s"
+    boxShadow="sm"
     _hover={{
-      borderColor: 'whiteAlpha.400',
+      boxShadow: 'md',
     }}
     w="100%"
     {...props}
