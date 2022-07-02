@@ -6,7 +6,7 @@ import { queryClient } from 'lib/queryClient'
 import { Layout } from 'components/Layout'
 
 const MyApp = ({ Component, pageProps }) => (
-  <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient} resetCSS>
     <ChakraProvider theme={theme}>
       <Layout>
         <Component {...pageProps} />

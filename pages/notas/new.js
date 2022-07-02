@@ -8,6 +8,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { SlidingSegmentedControl } from 'components/SlidingSegmentedControl'
 import { FileDropzone } from 'components/FileDropzone'
 import { fetchData } from 'lib/fetchData'
+import { useRouter } from 'next/router'
 
 const newReceiptOptions = [{ label: 'File', value: 'file' }, { label: 'Manual', value: 'manual' }]
 
@@ -157,8 +158,9 @@ const MarketSelection = ({ register, setValue, options }) => {
 }
 
 const NewReceiptForm = ({ markets }) => {
+  const router = useRouter()
   const [formType, setFormType] = useState('file')
-  const thisYear = (new Date()).getFullYear()
+  const currentYear = (new Date()).getFullYear()
   const { register, control, handleSubmit, setValue, getValues, formState: { errors, isSubmitting } } = useForm()
   const options = markets.map(market => ({ label: market.nickname || market.name,
     value: JSON.stringify({ name: market.name, id: market.id }) }))
@@ -170,11 +172,11 @@ const NewReceiptForm = ({ markets }) => {
       setValue('files', files)
       for (const [index, file] of data.files.entries()) {
         try {
-          await fetchData('/api/notas/new', {
+          const { status } = await fetchData('/api/notas/new', {
             method: 'POST',
             body: { type: formType, content: file.content },
           })
-          files[index] = { ...file, status: 'done' }
+          files[index] = { ...file, status }
           setValue('files', files)
         } catch (error) {
           console.log(error)
@@ -183,16 +185,17 @@ const NewReceiptForm = ({ markets }) => {
         }
       }
     } else {
-      await fetchData('/api/notas/new', {
+      const response = await fetchData('/api/notas/new', {
         method: 'POST',
         body: { ...data, type: formType, total: data.total.replace(',', '.') },
       })
+      router.push(`/notas/${response.id}`)
     }
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack align="start" p={4} spacing={2}>
+      <VStack p={4} spacing={2}>
         <SlidingSegmentedControl
           options={newReceiptOptions}
           selectedValue={formType}
@@ -244,11 +247,11 @@ const NewReceiptForm = ({ markets }) => {
                   id="date"
                   type="date"
                   min="2021-01-01"
-                  max={`${thisYear}-12-31`}
+                  max={`${currentYear}-12-31`}
                   {...register('date', {
                     shouldUnregister: true,
                     min: '2021-01-01',
-                    max: `${thisYear}-12-31`,
+                    max: `${currentYear}-12-31`,
                   })}
                 />
               </InputGroup>
@@ -259,7 +262,7 @@ const NewReceiptForm = ({ markets }) => {
           type="submit"
           isLoading={isSubmitting}
         >
-          Adicionar
+          Enviar
         </Button>
       </VStack>
     </form>
@@ -269,7 +272,7 @@ const NewReceiptForm = ({ markets }) => {
 const NewReceipt = ({ markets }) => (
   <>
     <Head>
-      <title>💸NFe Dashboard | +Nota</title>
+      <title>💸 NFe Dashboard | +Nota</title>
     </Head>
     <Box maxW="2xl" marginX="auto">
       <NewReceiptForm markets={markets} />

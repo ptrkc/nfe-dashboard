@@ -3,14 +3,19 @@ import * as cheerio from 'cheerio'
 
 const toDecimal = number => parseFloat(number.replace(',', '.')) || null
 
-const generatePrismaData = (receivedFile) => {
+const generatePrismaDataFromHTML = (receivedFile) => {
   const $ = cheerio.load(receivedFile)
   const receiptId = $('.box span').first().text().replace(/\s/g, '')
-  const total = $('#NFe > fieldset:nth-child(1) > table > tbody > tr > td:nth-child(6) > span').text()
-  const [day, month, year] = $(
+  const qrCode = $(
+    '#Inf > fieldset:nth-child(1) > fieldset:nth-child(4) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > span:nth-child(2)',
+  ).text()
+  const total = toDecimal($('#NFe > fieldset:nth-child(1) > table > tbody > tr > td:nth-child(6) > span').text())
+
+  const [unformattedDate, unformattedTime] = $(
     '#NFe fieldset:nth-child(1) td:nth-child(4) > span:nth-child(2)',
-  ).text().slice(0, 10).split('/')
-  const date = new Date(`${year}-${month}-${day}`)
+  ).text().split(' ')
+  const [day, month, year] = unformattedDate.split('/')
+  const date = new Date(`${year}-${month}-${day}T${unformattedTime.slice(0, 8)}`)
 
   const marketName = $('#NFe > fieldset:nth-child(2) > table > tbody > tr > td.col-2 > span').text()
   const cnpj = $('#NFe > fieldset:nth-child(2) > table > tbody > tr > td:nth-child(1) > span').text()
@@ -46,7 +51,9 @@ const generatePrismaData = (receivedFile) => {
   const receipt = {
     id: receiptId,
     date,
-    total: toDecimal(total),
+    qrCode,
+    total,
+    filteredTotal: total,
     market: {
       connectOrCreate: {
         where: { id: marketId },
@@ -84,55 +91,62 @@ const generatePrismaData = (receivedFile) => {
   return receipt
 }
 
+const generatePrismaDataFromForm = (body) => {
+  const { date, total, market, description } = body
+  const { name: marketName, id: marketId } = JSON.parse(market)
+  return {
+    id: `RCPT${Date.now()}`,
+    date: new Date(date),
+    total,
+    filteredTotal: total,
+    market: {
+      connectOrCreate: {
+        where: { id: marketId },
+        create: {
+          id: marketId,
+          name: marketName,
+        },
+      },
+    },
+    purchases: {
+      createMany: {
+        data: [
+          {
+            name: description,
+            ean: `PRDCT${Date.now()}`,
+            quantity: 1,
+            unit: 'UN',
+            unitPrice: total,
+            regularPrice: total,
+            chargedPrice: total,
+            marketId,
+          },
+        ],
+      },
+    },
+  }
+}
+
 // 46,78 Zona Sul Barra 3/4
 
 const handler = async (req, res) => {
   const { method, body } = req
-
+  console.log(body)
   try {
     if (method === 'POST') {
       let data
       if (body.type === 'file') {
-        data = generatePrismaData(body.content)
-        const isAdded = await prisma.receipt.findUnique({ where: { id: data.id } })
-        if (isAdded) return res.status(201).end()
+        const id = body.content.match(/[\d ]{54}/)[0].replaceAll(' ', '')
+        const isAdded = await prisma.receipt.findUnique({ where: { id } })
+        if (isAdded) return res.status(201).json({ status: 'alreadyAdded' })
+
+        data = generatePrismaDataFromHTML(body.content)
       } else {
-        const { date, total, market, description } = body
-        const { name: marketName, id: marketId } = JSON.parse(market)
-        data = {
-          id: `RCPT${Date.now()}`,
-          date: new Date(date),
-          total,
-          market: {
-            connectOrCreate: {
-              where: { id: marketId },
-              create: {
-                id: marketId,
-                name: marketName,
-              },
-            },
-          },
-          purchases: {
-            createMany: {
-              data: [
-                {
-                  name: description,
-                  ean: `PRDCT${Date.now()}`,
-                  quantity: 1,
-                  unit: 'UN',
-                  unitPrice: total,
-                  regularPrice: total,
-                  chargedPrice: total,
-                  marketId,
-                },
-              ],
-            },
-          },
-        }
+        data = generatePrismaDataFromForm(body)
       }
 
       await prisma.receipt.create({ data })
-      return res.status(201).end()
+      return res.status(201).json({ status: 'added', id: data.id })
     }
 
     return res.status(501).end()

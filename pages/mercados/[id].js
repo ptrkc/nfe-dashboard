@@ -10,7 +10,7 @@ import { DeleteConfirmation } from 'components/DeleteConfirmation'
 const EditMarket = ({ market }) => (
   <>
     <Head>
-      <title>💸NFe Dashboard | Mercado</title>
+      <title>💸 NFe Dashboard | Mercado</title>
     </Head>
     <VStack alignItems="flex-start" gap={2}>
       <RoundedFrame>

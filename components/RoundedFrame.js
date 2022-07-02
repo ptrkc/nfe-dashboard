@@ -5,10 +5,8 @@ export const RoundedFrame = ({ children, ...props }) => (
     bg="white"
     borderRadius="md"
     overflow="hidden"
-    borderWidth="1px"
-    borderColor="inherit"
     transition=".2s"
-    boxShadow="sm"
+    boxShadow="rgba(48, 49, 51, 0.05) 0px 0px 1px 0px, rgba(48, 49, 51, 0.1) 0px 2px 4px 0px"
     _hover={{
       boxShadow: 'md',
     }}

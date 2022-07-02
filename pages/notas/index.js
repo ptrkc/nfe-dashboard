@@ -29,7 +29,7 @@ const Receipts = () => {
   return (
     <>
       <Head>
-        <title>💸NFe Dashboard | Notas</title>
+        <title>💸 NFe Dashboard | Notas</title>
       </Head>
       <Flex direction="column" gap={2}>
         <Flex justifyContent="space-between" alignItems="center">

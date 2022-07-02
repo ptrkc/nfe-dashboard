@@ -93,7 +93,7 @@ const MarketsTable = ({ markets }) => {
 const Markets = ({ markets }) => (
   <>
     <Head>
-      <title>💸NFe Dashboard | Mercados</title>
+      <title>💸 NFe Dashboard | Mercados</title>
     </Head>
     <Flex direction="column" gap={2}>
       <Flex justifyContent="space-between" alignItems="center">

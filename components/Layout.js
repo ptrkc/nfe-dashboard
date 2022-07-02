@@ -19,12 +19,6 @@ const FOOTER_OPTIONS = [
   { href: '/signup', text: 'Sign Up', icon: FiUserPlus, disabled: true },
 ]
 
-const header = (
-  <Flex justifyContent="center" alignItems="center" p="4">
-    <Icon as={FiFileText} />
-    NFe-Dash
-  </Flex>)
-
 const SidebarLink = ({ option: { href, icon, text, disabled } }) => {
   const { pathname } = useRouter()
   const isActive = pathname.split('/')[1] === href.substring(1)
@@ -36,7 +30,7 @@ const SidebarLink = ({ option: { href, icon, text, disabled } }) => {
       _active={{ bg: 'blue.500', textDecoration: 'none' }}
       as={Link} isDisabled={disabled}
     >
-      <Flex justifyContent="flex-start" w="100%" gap={2}>
+      <Flex justifyContent="flex-start" alignItems="center" w="100%" gap={2}>
         <Icon as={icon} />{text}
       </Flex>
     </Button>
@@ -86,8 +80,8 @@ const Sidebar = () => (
     borderRightColor="inherit"
   >
     <Box>
-      <Heading as="h1" textAlign="center">
-        {header}
+      <Heading as="h1" textAlign="center" display="flex" justifyContent="center" alignItems="center" noOfLines={1}>
+        <Icon as={FiFileText} /><Text as="span">NFe Dash</Text>
       </Heading>
       <SidebarContent />
     </Box>
@@ -116,7 +110,10 @@ const LeftDrawer = () => {
           onClick={onClose}
         >
           <DrawerCloseButton />
-          <DrawerHeader>{header}</DrawerHeader>
+          <DrawerHeader>
+            <Icon as={FiFileText} />
+            NFe Dash
+          </DrawerHeader>
           <Flex direction="column" justifyContent="space-between" h="100%" p={2}>
             <SidebarContent />
             <SidebarFooter />
@@ -128,7 +125,14 @@ const LeftDrawer = () => {
 }
 
 const TopBar = () => (
-  <Flex p={2}>
+  <Flex
+    p={2}
+    bg="white"
+    w="100%"
+    zIndex={2}
+    boxShadow="md"
+    borderBottomWidth="1px"
+  >
     <LeftDrawer />
   </Flex>
 )

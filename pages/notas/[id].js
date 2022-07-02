@@ -6,18 +6,18 @@ import NextLink from 'next/link'
 import { Box, Flex, Link, Stat, StatHelpText, StatLabel, StatNumber, Table, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react'
 import { useTable, useSortBy } from 'react-table'
 import { formatBRL } from 'lib/formatBRL'
-import { formatLongDateBR } from 'lib/formatLongDateBR'
+import { formatLongDateBR, formatTimeBR } from 'lib/formatLongDateBR'
 import { MarketTable } from 'components/MarketTable'
 import { RoundedFrame } from 'components/RoundedFrame'
 import { DeleteConfirmation } from 'components/DeleteConfirmation'
 
-const ReceiptStatCard = ({ receipt: { id, date, total, market: { name, nickname } } }) => (
+const ReceiptStatCard = ({ receipt: { id, date, total, qrCode, market: { name, nickname } } }) => (
   <RoundedFrame pt={2} px={2} bg="white">
     <Stat>
       <StatLabel>{nickname || name}</StatLabel>
       <StatNumber>{formatBRL(total)}</StatNumber>
-      <StatHelpText>{formatLongDateBR(date)}</StatHelpText>
-      <StatHelpText>{id}</StatHelpText>
+      <StatHelpText>{`${formatLongDateBR(date) }, ${ formatTimeBR(date)}`}</StatHelpText>
+      <StatHelpText><Link href={qrCode} isExternal>{id}</Link></StatHelpText>
     </Stat>
   </RoundedFrame>
 )
@@ -163,7 +163,7 @@ const Receipt = ({ receipt }) => {
   return (
     <>
       <Head>
-        <title>💸NFe Dashboard | Nota</title>
+        <title>💸 NFe Dashboard | Nota</title>
       </Head>
       <VStack gap="2" alignItems="flex-start">
         <Flex direction={{ base: 'column', lg: 'row' }} gap={2}>
@@ -198,6 +198,8 @@ export const getServerSideProps = async ({ query }) => {
       id: true,
       date: true,
       total: true,
+      filteredTotal: true,
+      qrCode: true,
       market: {
         select: {
           id: true,
@@ -220,6 +222,7 @@ export const getServerSideProps = async ({ query }) => {
           regularPrice: true,
           discount: true,
           chargedPrice: true,
+          ignore: true,
         },
       },
     },

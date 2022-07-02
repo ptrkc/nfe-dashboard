@@ -1,12 +1,25 @@
 import { useRef, useState } from 'react'
-import { Box, Button, Center, HStack, Icon, IconButton, Input, List, ListItem, Spinner, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, HStack, Icon, IconButton, Input, List, ListItem, Spinner, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { FiUploadCloud, FiTrash2, FiFileText } from 'react-icons/fi'
 import { RoundedFrame } from 'components/RoundedFrame'
 
 const statusIcon = {
-  loading: <Spinner />,
-  error: '❌',
-  done: '✅',
+  loading: {
+    text: 'Enviando...',
+    icon: <Spinner />,
+  },
+  error: {
+    text: 'Erro',
+    icon: '❌',
+  },
+  added: {
+    text: 'Adicionada',
+    icon: '✅',
+  },
+  alreadyAdded: {
+    text: 'Já adicionada',
+    icon: '😎',
+  },
 }
 
 const DropzoneFrame = (props) => {
@@ -145,7 +158,9 @@ export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedF
                     <Text noOfLines={2}>{name}</Text>
                   </HStack>
                   {status ? (
-                    statusIcon[status]
+                    <Tooltip label={statusIcon[status].text}>
+                      {statusIcon[status].icon}
+                    </Tooltip>
                   ) : (
                     <DeleteButton name={name} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
                   )}

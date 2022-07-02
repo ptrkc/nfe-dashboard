@@ -1,42 +1,46 @@
 import Head from 'next/head'
 import NextLink from 'next/link'
-import { Box, Button, Flex, Link, SimpleGrid, StatHelpText, StatLabel, StatNumber, VStack } from '@chakra-ui/react'
+import { Box, Button, Link, Select, SimpleGrid, StatHelpText, StatLabel, StatNumber, useBreakpointValue, VStack } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import { StatCard } from 'components/StatCard'
 import { SlidingSegmentedControl } from 'components/SlidingSegmentedControl'
 import { useState } from 'react'
 
-const monthOptions = [
-  { label: 'JAN', value: 0 },
-  { label: 'FEV', value: 1 },
-  { label: 'MAR', value: 2 },
-  { label: 'ABR', value: 3 },
-  { label: 'MAI', value: 4 },
-  { label: 'JUN', value: 5 },
-  { label: 'JUL', value: 6 },
-  { label: 'AGO', value: 7 },
-  { label: 'SET', value: 8 },
-  { label: 'OUT', value: 9 },
-  { label: 'NOV', value: 10 },
-  { label: 'DEZ', value: 11 },
-]
+const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+
+const longMonthOptions = months.map((month, index) => ({ value: index, label: month }))
+const shortMonthOptions = months.map((month, index) => ({ value: index, label: month.substring(0, 3) }))
 
 const Home = () => {
-  const [selectedValue, setSelectedValue] = useState((new Date()).getMonth())
+  const [selectedMonth, setSelectedMonth] = useState((new Date()).getMonth())
+  const isDesktop = useBreakpointValue({ base: false, md: true })
   return (
     <Box>
       <Head>
-        <title>💸NFe Dashboard</title>
+        <title>💸 NFe Dashboard</title>
       </Head>
       <VStack alignItems="flex-start">
         <NextLink href="/notas/new" passHref>
           <Button as={Link} leftIcon={<AddIcon w={3} />}>Nova Nota</Button>
         </NextLink>
-        <SlidingSegmentedControl
-          options={monthOptions}
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-        />
+        {isDesktop ? (
+          <SlidingSegmentedControl
+            options={shortMonthOptions}
+            selectedValue={selectedMonth}
+            setSelectedValue={setSelectedMonth}
+          />
+        )
+          : (
+            <Select
+              bg="white"
+              name="market"
+              id="market"
+              value={selectedMonth}
+              onChange={evt => setSelectedMonth(evt.target.value)}
+            >
+              {longMonthOptions.map(({ label, value }) => (<option key={value} value={value}>{label}</option>))}
+            </Select>
+          )}
         <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} gap={4} w="full">
           <StatCard>
             <StatLabel>Dinheiro Gasto</StatLabel>

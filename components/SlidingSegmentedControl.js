@@ -1,6 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
-import { RoundedFrame } from './RoundedFrame'
 
 export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedValue }) => {
   const [selectedIndex, setSelectedIndex] = useState(options.map(option => option.value).indexOf(selectedValue))
