@@ -9,6 +9,6 @@ const nextConfig = {
       'public',
     ],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

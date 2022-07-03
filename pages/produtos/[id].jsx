@@ -1,29 +1,29 @@
-import { prisma } from 'lib/prisma'
+import prisma from 'lib/prisma';
 
-import { useMemo } from 'react'
-import Head from 'next/head'
-import NextLink from 'next/link'
-import { Link, Table, Thead, Tbody, Td, Tr, Th } from '@chakra-ui/react'
-import { useTable, useSortBy } from 'react-table'
-import { RoundedFrame } from 'components/RoundedFrame'
-import { formatBRL } from 'lib/formatBRL'
-import { dateSlice } from 'lib/dateSlice'
+import { useMemo } from 'react';
+import Head from 'next/head';
+import NextLink from 'next/link';
+import { Link, Table, Thead, Tbody, Td, Tr, Th } from '@chakra-ui/react';
+import { useTable, useSortBy } from 'react-table';
+import RoundedFrame from 'components/RoundedFrame';
+import formatBRL from 'lib/formatBRL';
+import dateSlice from 'lib/dateSlice';
 
-const ProductPurchasesTable = ({ purchases }) => {
-  const data = useMemo(() => purchases, [purchases])
+function ProductPurchasesTable({ purchases }) {
+  const data = useMemo(() => purchases, [purchases]);
 
   const totals = useMemo(() => purchases.reduce(
     (previousValue, currentValue) => {
-      const { unitPrice, regularPrice, discount, chargedPrice } = previousValue
+      const { unitPrice, regularPrice, discount, chargedPrice } = previousValue;
       return {
         unitPrice: unitPrice + (parseFloat(currentValue.unitPrice) || 0),
         regularPrice: regularPrice + (parseFloat(currentValue.regularPrice) || 0),
         discount: discount + (parseFloat(currentValue.discount) || 0),
         chargedPrice: chargedPrice + (parseFloat(currentValue.chargedPrice) || 0),
-      }
+      };
     },
     { unitPrice: 0, regularPrice: 0, discount: 0, chargedPrice: 0 },
-  ), [purchases])
+  ), [purchases]);
   const columns = useMemo(
     () => [
       { Header: 'Nome', accessor: 'name' },
@@ -36,23 +36,23 @@ const ProductPurchasesTable = ({ purchases }) => {
       { Header: 'Total', accessor: 'chargedPrice' },
     ],
     [],
-  )
-  const initialState = useMemo(() => ({ sortBy: [{ id: 'chargedPrice', desc: true }] }), [])
+  );
+  const initialState = useMemo(() => ({ sortBy: [{ id: 'chargedPrice', desc: true }] }), []);
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
-  } = useTable({ columns, data, initialState }, useSortBy)
+  } = useTable({ columns, data, initialState }, useSortBy);
 
   return (
     <Table {...getTableProps()}>
       <Thead>
-        {headerGroups.map(headerGroup => (
+        {headerGroups.map((headerGroup) => (
           // eslint-disable-next-line react/jsx-key
           <Tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
+            {headerGroup.headers.map((column) => (
               // eslint-disable-next-line react/jsx-key
               <Th
                 {...column.getHeaderProps(column.getSortByToggleProps())}
@@ -72,48 +72,46 @@ const ProductPurchasesTable = ({ purchases }) => {
         ))}
       </Thead>
       <Tbody {...getTableBodyProps()}>
-        {rows.map(({ original: {
-          id, name, receipt, quantity, unit, unitPrice, regularPrice, discount, chargedPrice,
-        } }) => (
-          <Tr key={id}>
+        {rows.map(({ original: row }) => (
+          <Tr key={row.id}>
             <Td>
               <NextLink passHref href="/">
-                <Link>{name}</Link>
+                <Link>{row.name}</Link>
               </NextLink>
             </Td>
             <Td>
               <NextLink passHref href="/">
-                <Link>{dateSlice(receipt.date)}</Link>
+                <Link>{dateSlice(row.receipt.date)}</Link>
               </NextLink>
             </Td>
             <Td>
               <NextLink passHref href="/">
-                <Link>{quantity}</Link>
+                <Link>{row.quantity}</Link>
               </NextLink>
             </Td>
             <Td>
               <NextLink passHref href="/">
-                <Link>{unit}</Link>
+                <Link>{row.unit}</Link>
               </NextLink>
             </Td>
             <Td>
               <NextLink passHref href="/">
-                <Link>{formatBRL(unitPrice)}</Link>
+                <Link>{formatBRL(row.unitPrice)}</Link>
               </NextLink>
             </Td>
             <Td>
               <NextLink passHref href="/">
-                <Link>{formatBRL(regularPrice)}</Link>
+                <Link>{formatBRL(row.regularPrice)}</Link>
               </NextLink>
             </Td>
             <Td>
               <NextLink passHref href="/">
-                <Link>{formatBRL(discount)}</Link>
+                <Link>{formatBRL(row.discount)}</Link>
               </NextLink>
             </Td>
             <Td>
               <NextLink passHref href="/">
-                <Link>{formatBRL(chargedPrice)}</Link>
+                <Link>{formatBRL(row.chargedPrice)}</Link>
               </NextLink>
             </Td>
           </Tr>
@@ -143,22 +141,24 @@ const ProductPurchasesTable = ({ purchases }) => {
         </Tr>
       </Tbody>
     </Table>
-  )
+  );
 }
 
-const ProductPage = ({ purchases }) => (
-  <>
-    <Head>
-      <title>💸 NFe Dashboard | Produto</title>
-    </Head>
-    <RoundedFrame>
-      <ProductPurchasesTable purchases={purchases} />
-    </RoundedFrame>
-  </>
-)
+function ProductPage({ purchases }) {
+  return (
+    <>
+      <Head>
+        <title>💸 NFe Dashboard | Produto</title>
+      </Head>
+      <RoundedFrame>
+        <ProductPurchasesTable purchases={purchases} />
+      </RoundedFrame>
+    </>
+  );
+}
 
 export const getServerSideProps = async ({ query }) => {
-  const { id } = query
+  const { id } = query;
   const purchases = await prisma.purchase.findMany({
     where: { ean: id },
     select: {
@@ -172,19 +172,11 @@ export const getServerSideProps = async ({ query }) => {
       chargedPrice: true,
       receiptId: true,
       marketId: true,
-      receipt: {
-        select: {
-          date: true,
-        },
-      },
+      receipt: { select: { date: true } },
     },
-  })
+  });
 
-  console.log(purchases)
+  return { props: { purchases: JSON.parse(JSON.stringify(purchases)) } };
+};
 
-  return {
-    props: { purchases: JSON.parse(JSON.stringify(purchases)) }, // will be passed to the page component as props
-  }
-}
-
-export default ProductPage
+export default ProductPage;

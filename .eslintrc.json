@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "eslint-config-airbnb",
+    "next/core-web-vitals"
+  ],
+  "rules": {
+    "radix": [
+      "error",
+      "as-needed"
+    ],
+    "no-plusplus": [
+      "error",
+      {
+        "allowForLoopAfterthoughts": true
+      }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "jsx-a11y/anchor-is-valid": "off", // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/anchor-is-valid.md#case-i-use-nextjs-and-im-getting-this-error-inside-of-links
+    "object-curly-newline": [
+      "error",
+      {
+        "multiline": true
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": "jsconfig.json"
+      }
+    }
+  }
+}

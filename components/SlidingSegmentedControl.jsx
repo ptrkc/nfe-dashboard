@@ -1,14 +1,16 @@
-import { Box, Flex } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Box, Flex } from '@chakra-ui/react';
+import { useState } from 'react';
 
-export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedValue }) => {
-  const [selectedIndex, setSelectedIndex] = useState(options.map(option => option.value).indexOf(selectedValue))
-  const optionWidth = `${100 / options.length}%`
+export default function SlidingSegmentedControl({ options, selectedValue, setSelectedValue }) {
+  const [selectedIndex, setSelectedIndex] = useState(
+    options.map((option) => option.value).indexOf(selectedValue),
+  );
+  const optionWidth = `${100 / options.length}%`;
 
   const onClick = (index) => {
-    setSelectedIndex(index)
-    setSelectedValue(options[index].value)
-  }
+    setSelectedIndex(index);
+    setSelectedValue(options[index].value);
+  };
   return (
     // Frame
     <Flex justifyContent="space-around" alignItems="center" w="full" borderRadius={6} position="relative" bg="blackAlpha.300">
@@ -17,7 +19,7 @@ export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedVal
         <Box
           position="absolute"
           key={`divider-${value}`}
-          left={`calc( ${optionWidth} * ${index + 1 } )`}
+          left={`calc( ${optionWidth} * ${index + 1} )`}
           h="55%"
           w="1px"
           bg="blackAlpha.300"
@@ -61,5 +63,5 @@ export const SlidingSegmentedControl = ({ options, selectedValue, setSelectedVal
         </Flex>
       ))}
     </Flex>
-  )
+  );
 }

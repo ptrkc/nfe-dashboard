@@ -1,7 +1,10 @@
-import { useRef, useState } from 'react'
-import { Box, Button, Center, HStack, Icon, IconButton, Input, List, ListItem, Spinner, Text, Tooltip, VStack } from '@chakra-ui/react'
-import { FiUploadCloud, FiTrash2, FiFileText } from 'react-icons/fi'
-import { RoundedFrame } from 'components/RoundedFrame'
+import { useRef, useState } from 'react';
+import {
+  Box, Button, Center, HStack, Icon, IconButton, Input, List, ListItem, Spinner, Text, Tooltip,
+  VStack,
+} from '@chakra-ui/react';
+import { FiUploadCloud, FiTrash2, FiFileText } from 'react-icons/fi';
+import RoundedFrame from 'components/RoundedFrame';
 
 const statusIcon = {
   loading: {
@@ -20,37 +23,37 @@ const statusIcon = {
     text: 'Já adicionada',
     icon: '😎',
   },
-}
+};
 
-const DropzoneFrame = (props) => {
+function DropzoneFrame(props) {
   const {
     children,
     isEmpty,
     inputRef,
     onDrop: onDropLogic,
     ...rest
-  } = props
-  const [isHovering, setIsHovering] = useState(false)
+  } = props;
+  const [isHovering, setIsHovering] = useState(false);
 
   const stopDefaults = (event) => {
-    event.stopPropagation()
-    event.preventDefault()
-  }
-  const onDragEnter = stopDefaults
+    event.stopPropagation();
+    event.preventDefault();
+  };
+  const onDragEnter = stopDefaults;
   const onDragOver = (event) => {
-    stopDefaults(event)
-    setIsHovering(true)
-  }
+    stopDefaults(event);
+    setIsHovering(true);
+  };
   const onDragLeave = (event) => {
-    stopDefaults(event)
-    setIsHovering(false)
-  }
+    stopDefaults(event);
+    setIsHovering(false);
+  };
   const onDrop = (event) => {
-    stopDefaults(event)
-    setIsHovering(false)
-    onDropLogic(event)
-  }
-  const onClick = () => isEmpty && inputRef.current.click()
+    stopDefaults(event);
+    setIsHovering(false);
+    onDropLogic(event);
+  };
+  const onClick = () => isEmpty && inputRef.current.click();
 
   return (
     <VStack
@@ -58,9 +61,7 @@ const DropzoneFrame = (props) => {
       borderWidth="1px"
       borderStyle="dashed"
       borderColor="inherit"
-      _hover={{
-        borderColor: 'blackAlpha.400',
-      }}
+      _hover={{ borderColor: 'blackAlpha.400' }}
       transition=".2s"
       overflow="hidden"
       fontSize="sm"
@@ -77,48 +78,48 @@ const DropzoneFrame = (props) => {
     >
       {children}
     </VStack>
-  )
+  );
 }
 
-const DeleteButton = ({ name, selectedFiles, setSelectedFiles }) => {
-  const removeFile = () => setSelectedFiles(selectedFiles.filter(file => file.name !== name))
+function DeleteButton({ name, selectedFiles, setSelectedFiles }) {
+  const removeFile = () => setSelectedFiles(selectedFiles.filter((file) => file.name !== name));
   return (
     <IconButton onClick={removeFile}><FiTrash2 /></IconButton>
-  )
+  );
 }
 
-const readFile = file => new Promise((resolve) => {
-  const reader = new FileReader()
-  reader.onload = () => resolve(reader.result)
-  reader.readAsText(file)
-})
+const readFile = (file) => new Promise((resolve) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result);
+  reader.readAsText(file);
+});
 
-export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedFiles, multiple }) => {
-  const isEmpty = !selectedFiles.length
-  const inputRef = useRef()
+export default function FileDropzone({
+  value: selectedFiles = [],
+  onChange: setSelectedFiles,
+  multiple,
+}) {
+  const isEmpty = !selectedFiles.length;
+  const inputRef = useRef();
 
   const onDrop = async (event) => {
-    const files = [...selectedFiles]
-    for (const item of event.dataTransfer.items) {
-      if (item?.kind === 'file') {
-        const file = item.getAsFile()
-        const content = await readFile(file)
-        files.push({ name: file.name, content })
-      }
-    }
-    setSelectedFiles(files)
-  }
+    const validItems = event.dataTransfer.items.filter((item) => item?.kind === 'file');
+    const newSelectedFiles = await Promise.all(validItems.map(async (item) => {
+      const file = item.getAsFile();
+      const content = await readFile(file);
+      return { name: file.name, content };
+    }));
+    setSelectedFiles([...selectedFiles, ...newSelectedFiles]);
+  };
 
   const handleFilePicker = async (event) => {
-    const files = [...selectedFiles]
-    for (const file of event.target.files) {
-      if (file.type === 'text/html') {
-        const content = await readFile(file)
-        files.push({ name: file.name, content })
-      }
-    }
-    setSelectedFiles(files)
-  }
+    const validFiles = event.target.files.filter((file) => file.type === 'text/html');
+    const newSelectedFiles = await Promise.all(validFiles.map(async (file) => {
+      const content = await readFile(file);
+      return { name: file.name, content };
+    }));
+    setSelectedFiles([...selectedFiles, ...newSelectedFiles]);
+  };
 
   return (
     <DropzoneFrame
@@ -162,7 +163,11 @@ export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedF
                       {statusIcon[status].icon}
                     </Tooltip>
                   ) : (
-                    <DeleteButton name={name} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+                    <DeleteButton
+                      name={name}
+                      selectedFiles={selectedFiles}
+                      setSelectedFiles={setSelectedFiles}
+                    />
                   )}
                 </RoundedFrame>
               </ListItem>
@@ -179,7 +184,8 @@ export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedF
               Clique para selecionar
             </Button>
             <Text as="span">
-              {' '}ou arraste o(s) arquivo(s) HTML
+              {' '}
+              ou arraste o(s) arquivo(s) HTML
             </Text>
           </Box>
         </>
@@ -192,5 +198,5 @@ export const FileDropzone = ({ value: selectedFiles = [], onChange: setSelectedF
         hidden
       />
     </DropzoneFrame>
-  )
+  );
 }

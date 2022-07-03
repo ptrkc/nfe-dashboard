@@ -1,16 +1,19 @@
-import { useRouter } from 'next/router'
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
-import { useMutation } from 'react-query'
-import { fetchData } from 'lib/fetchData'
+import { useRouter } from 'next/router';
+import {
+  Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { useMutation } from 'react-query';
+import fetchData from 'lib/fetchData';
 
-export const DeleteConfirmation = ({ reqUrl, redirectUrl, header, body }) => {
-  const router = useRouter()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+export default function DeleteConfirmation({ reqUrl, redirectUrl, header, body }) {
+  const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { isLoading, mutate } = useMutation(
     () => fetchData(reqUrl, { method: 'DELETE' }),
     { onSuccess: () => router.push(redirectUrl) },
-  )
+  );
 
   return (
     <>
@@ -45,5 +48,5 @@ export const DeleteConfirmation = ({ reqUrl, redirectUrl, header, body }) => {
         </ModalContent>
       </Modal>
     </>
-  )
+  );
 }

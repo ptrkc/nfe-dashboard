@@ -1,38 +1,43 @@
-import { prisma } from 'lib/prisma'
+import prisma from 'lib/prisma';
 
-import { useEffect, useRef, useState } from 'react'
-import Head from 'next/head'
-import { Box, Button, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, useDisclosure, VStack } from '@chakra-ui/react'
-import { AddIcon } from '@chakra-ui/icons'
-import { useForm, Controller } from 'react-hook-form'
-import { SlidingSegmentedControl } from 'components/SlidingSegmentedControl'
-import { FileDropzone } from 'components/FileDropzone'
-import { fetchData } from 'lib/fetchData'
-import { useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react';
+import Head from 'next/head';
+import {
+  Box, Button, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, Modal,
+  ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+  NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper,
+  Select, useDisclosure, VStack,
+} from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+import { useForm, Controller } from 'react-hook-form';
+import SlidingSegmentedControl from 'components/SlidingSegmentedControl';
+import FileDropzone from 'components/FileDropzone';
+import fetchData from 'lib/fetchData';
+import { useRouter } from 'next/router';
 
-const newReceiptOptions = [{ label: 'File', value: 'file' }, { label: 'Manual', value: 'manual' }]
+const newReceiptOptions = [{ label: 'File', value: 'file' }, { label: 'Manual', value: 'manual' }];
 
-const sortBy = key => (prev, next) => {
-  const prevValue = prev[key].toLowerCase()
-  const nextValue = next[key].toLowerCase()
-  if (prevValue < nextValue) return -1
-  if (prevValue > nextValue) return 1
-  return 0
-}
+const sortBy = (key) => (prev, next) => {
+  const prevValue = prev[key].toLowerCase();
+  const nextValue = next[key].toLowerCase();
+  if (prevValue < nextValue) return -1;
+  if (prevValue > nextValue) return 1;
+  return 0;
+};
 
-const TotalInput = ({ register }) => {
+function TotalInput({ register }) {
   const onKeyDownCapture = (event) => {
-    const input = event.target
+    const input = event.target;
     if (input.value.length < 5) {
-      input.selectionStart = input.value.length
-      input.selectionEnd = input.value.length
+      input.selectionStart = input.value.length;
+      input.selectionEnd = input.value.length;
     }
-  }
+  };
   const onChange = (event) => {
-    const input = event.target
-    const valueOnlyNumbers = input.value.replace(/\D/g, '').replace(/^0+/, '').padStart(3, '0')
-    input.value = `${valueOnlyNumbers.slice(0, valueOnlyNumbers.length - 2)}.${valueOnlyNumbers.slice(-2)}`
-  }
+    const input = event.target;
+    const valueOnlyNumbers = input.value.replace(/\D/g, '').replace(/^0+/, '').padStart(3, '0');
+    input.value = `${valueOnlyNumbers.slice(0, valueOnlyNumbers.length - 2)}.${valueOnlyNumbers.slice(-2)}`;
+  };
   return (
     <NumberInput
       bg="white"
@@ -45,8 +50,8 @@ const TotalInput = ({ register }) => {
       min={0}
       max={10000}
       defaultValue={0}
-      format={val => val.replace('.', ',')}
-      parse={val => val.replace(',', '.')}
+      format={(val) => val.replace('.', ',')}
+      parse={(val) => val.replace(',', '.')}
     >
       <InputLeftAddon>
         R$
@@ -55,9 +60,9 @@ const TotalInput = ({ register }) => {
         borderLeftRadius={0}
         onKeyDownCapture={onKeyDownCapture}
         onFocus={(event) => {
-          const input = event.target
-          input.selectionStart = input.value.length
-          input.selectionEnd = input.value.length
+          const input = event.target;
+          input.selectionStart = input.value.length;
+          input.selectionEnd = input.value.length;
         }}
         {...register('total', {
           onChange,
@@ -69,25 +74,25 @@ const TotalInput = ({ register }) => {
         <NumberDecrementStepper />
       </NumberInputStepper>
     </NumberInput>
-  )
+  );
 }
 
-const MarketSelection = ({ register, setValue, options }) => {
-  const [localOptions, setLocalOptions] = useState(options)
-  const [isValid, setIsValid] = useState(false)
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const modalFocusRef = useRef()
+function MarketSelection({ register, setValue, options }) {
+  const [localOptions, setLocalOptions] = useState(options);
+  const [isValid, setIsValid] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const modalFocusRef = useRef();
 
   useEffect(() => {
-    if (!localOptions[0]?.selected) return
+    if (!localOptions[0]?.selected) return;
 
-    setValue('market', localOptions[0].value)
-  }, [localOptions, setValue])
+    setValue('market', localOptions[0].value);
+  }, [localOptions, setValue]);
 
   const onModalOpen = () => {
-    setIsValid(false)
-    onOpen()
-  }
+    setIsValid(false);
+    onOpen();
+  };
   const addMarket = (value) => {
     if (isValid) {
       setLocalOptions([
@@ -97,12 +102,12 @@ const MarketSelection = ({ register, setValue, options }) => {
           selected: true,
         },
         ...options,
-      ])
-      onClose()
+      ]);
+      onClose();
     }
-  }
-  const onChange = event => setIsValid(event.target.value.length >= 3)
-  const onKeyDown = event => (event.key === 'Enter') && addMarket(modalFocusRef.current.value)
+  };
+  const onChange = (event) => setIsValid(event.target.value.length >= 3);
+  const onKeyDown = (event) => (event.key === 'Enter') && addMarket(modalFocusRef.current.value);
 
   return (
     <>
@@ -112,11 +117,11 @@ const MarketSelection = ({ register, setValue, options }) => {
           name="market"
           id="market"
           placeholder="Escolha ou adicione"
-          {...register('market', {
-            shouldUnregister: true,
-          })}
+          {...register('market', { shouldUnregister: true })}
         >
-          {localOptions.map(({ label, value }) => (<option key={value} value={value}>{label}</option>))}
+          {localOptions.map(({ label, value }) => (
+            <option key={value} value={value}>{label}</option>
+          ))}
         </Select>
         <IconButton icon={<AddIcon w={3} />} onClick={onModalOpen} />
       </InputGroup>
@@ -154,44 +159,56 @@ const MarketSelection = ({ register, setValue, options }) => {
       </Modal>
     </>
 
-  )
+  );
 }
 
-const NewReceiptForm = ({ markets }) => {
-  const router = useRouter()
-  const [formType, setFormType] = useState('file')
-  const currentYear = (new Date()).getFullYear()
-  const { register, control, handleSubmit, setValue, getValues, formState: { errors, isSubmitting } } = useForm()
-  const options = markets.map(market => ({ label: market.nickname || market.name,
-    value: JSON.stringify({ name: market.name, id: market.id }) }))
-    .sort(sortBy('label'))
+function NewReceiptForm({ markets }) {
+  const router = useRouter();
+  const [formType, setFormType] = useState('file');
+  const currentYear = (new Date()).getFullYear();
+  const {
+    register,
+    control,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState:
+    { isSubmitting },
+  } = useForm();
+  const options = markets.map((market) => ({
+    label: market.nickname || market.name,
+    value: JSON.stringify({ name: market.name, id: market.id }),
+  }))
+    .sort(sortBy('label'));
 
   const onSubmit = async (data) => {
     if (formType === 'file') {
-      const files = getValues('files').map(file => ({ ...file, status: 'loading' }))
-      setValue('files', files)
-      for (const [index, file] of data.files.entries()) {
+      const files = getValues('files').map((file) => ({ ...file, status: 'loading' }));
+      setValue('files', files);
+      for (let index = 0; index < data.files.length; index++) {
+        const file = data.files[index];
         try {
+          // eslint-disable-next-line no-await-in-loop
           const { status } = await fetchData('/api/notas/new', {
             method: 'POST',
             body: { type: formType, content: file.content },
-          })
-          files[index] = { ...file, status }
-          setValue('files', files)
+          });
+          files[index] = { ...file, status };
+          setValue('files', files);
         } catch (error) {
-          console.log(error)
-          files[index] = { ...file, status: 'error' }
-          setValue('files', files)
+          console.log(error);
+          files[index] = { ...file, status: 'error' };
+          setValue('files', files);
         }
       }
     } else {
       const response = await fetchData('/api/notas/new', {
         method: 'POST',
         body: { ...data, type: formType, total: data.total.replace(',', '.') },
-      })
-      router.push(`/notas/${response.id}`)
+      });
+      router.push(`/notas/${response.id}`);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -222,9 +239,7 @@ const NewReceiptForm = ({ markets }) => {
                   bg="white"
                   name="description"
                   id="description"
-                  {...register('description', {
-                    shouldUnregister: true,
-                  })}
+                  {...register('description', { shouldUnregister: true })}
                 />
               </InputGroup>
             </FormControl>
@@ -266,19 +281,21 @@ const NewReceiptForm = ({ markets }) => {
         </Button>
       </VStack>
     </form>
-  )
+  );
 }
 
-const NewReceipt = ({ markets }) => (
-  <>
-    <Head>
-      <title>💸 NFe Dashboard | +Nota</title>
-    </Head>
-    <Box maxW="2xl" marginX="auto">
-      <NewReceiptForm markets={markets} />
-    </Box>
-  </>
-)
+function NewReceipt({ markets }) {
+  return (
+    <>
+      <Head>
+        <title>💸 NFe Dashboard | +Nota</title>
+      </Head>
+      <Box maxW="2xl" marginX="auto">
+        <NewReceiptForm markets={markets} />
+      </Box>
+    </>
+  );
+}
 
 export const getServerSideProps = async () => {
   const markets = await prisma.market.findMany({
@@ -287,11 +304,9 @@ export const getServerSideProps = async () => {
       name: true,
       nickname: true,
     },
-  })
+  });
 
-  return {
-    props: { markets }, // will be passed to the page component as props
-  }
-}
+  return { props: { markets } };
+};
 
-export default NewReceipt
+export default NewReceipt;

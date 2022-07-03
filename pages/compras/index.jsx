@@ -1,15 +1,15 @@
-import { prisma } from 'lib/prisma'
+import prisma from 'lib/prisma';
 
-import { useMemo } from 'react'
-import Head from 'next/head'
-import NextLink from 'next/link'
-import { Link, Table, Thead, Tbody, Td, Tr, Th, Box, Flex } from '@chakra-ui/react'
-import { useTable, useSortBy } from 'react-table'
-import { RoundedFrame } from 'components/RoundedFrame'
-import { formatBRL } from 'lib/formatBRL'
+import { useMemo } from 'react';
+import Head from 'next/head';
+import NextLink from 'next/link';
+import { Link, Table, Thead, Tbody, Td, Tr, Th, Box, Flex } from '@chakra-ui/react';
+import { useTable, useSortBy } from 'react-table';
+import RoundedFrame from 'components/RoundedFrame';
+import formatBRL from 'lib/formatBRL';
 
-const PurchasesTable = ({ purchases }) => {
-  const data = useMemo(() => purchases, [purchases])
+function PurchasesTable({ purchases }) {
+  const data = useMemo(() => purchases, [purchases]);
 
   const columns = useMemo(
     () => [
@@ -19,23 +19,23 @@ const PurchasesTable = ({ purchases }) => {
       { Header: 'Total', accessor: 'chargedPrice' },
     ],
     [],
-  )
-  const initialState = useMemo(() => ({ sortBy: ['name'] }), [])
+  );
+  const initialState = useMemo(() => ({ sortBy: ['name'] }), []);
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
-  } = useTable({ columns, data, initialState }, useSortBy)
+  } = useTable({ columns, data, initialState }, useSortBy);
 
   return (
     <Table {...getTableProps()}>
       <Thead>
-        {headerGroups.map(headerGroup => (
+        {headerGroups.map((headerGroup) => (
           // eslint-disable-next-line react/jsx-key
           <Tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
+            {headerGroup.headers.map((column) => (
               // eslint-disable-next-line react/jsx-key
               <Th
                 {...(column.isNumeric && { isNumeric: true })}
@@ -82,26 +82,28 @@ const PurchasesTable = ({ purchases }) => {
         ))}
       </Tbody>
     </Table>
-  )
+  );
 }
 
-const Purchases = ({ purchases }) => (
-  <>
-    <Head>
-      <title>💸 NFe Dashboard | Compras</title>
-    </Head>
-    <Flex direction="column" gap={2}>
-      <Flex justifyContent="space-between" alignItems="center">
-        <Box>
-          Filtros..., adicionar mercado, editar
-        </Box>
+function Purchases({ purchases }) {
+  return (
+    <>
+      <Head>
+        <title>💸 NFe Dashboard | Compras</title>
+      </Head>
+      <Flex direction="column" gap={2}>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Box>
+            Filtros..., adicionar mercado, editar
+          </Box>
+        </Flex>
+        <RoundedFrame>
+          <PurchasesTable purchases={purchases} />
+        </RoundedFrame>
       </Flex>
-      <RoundedFrame>
-        <PurchasesTable purchases={purchases} />
-      </RoundedFrame>
-    </Flex>
-  </>
-)
+    </>
+  );
+}
 
 export const getServerSideProps = async () => {
   const purchases = await prisma.purchase.findMany({
@@ -118,13 +120,9 @@ export const getServerSideProps = async () => {
       receiptId: true,
       marketId: true,
     },
-  })
+  });
 
-  console.log(purchases)
+  return { props: { purchases } };
+};
 
-  return {
-    props: { purchases: JSON.parse(JSON.stringify(purchases)) }, // will be passed to the page component as props
-  }
-}
-
-export default Purchases
+export default Purchases;
