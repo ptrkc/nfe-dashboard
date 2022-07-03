@@ -100,7 +100,6 @@ function Purchases({ purchases }) {
 
 export const getServerSideProps = async () => {
   const purchases = await prisma.purchase.findMany({
-    where: {},
     distinct: ['ean'],
     select: {
       id: true,
@@ -117,7 +116,7 @@ export const getServerSideProps = async () => {
     },
   });
 
-  return { props: { purchases } };
+  return { props: { purchases: JSON.parse(JSON.stringify(purchases)) } };
 };
 
 export default Purchases;

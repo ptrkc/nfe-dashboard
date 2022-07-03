@@ -122,7 +122,7 @@ export const getServerSideProps = async () => {
     },
   });
 
-  return { props: { purchases } };
+  return { props: { purchases: JSON.parse(JSON.stringify(purchases)) } };
 };
 
 export default Purchases;

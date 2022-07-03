@@ -113,7 +113,7 @@ export default function FileDropzone({
   };
 
   const handleFilePicker = async (event) => {
-    const validFiles = event.target.files.filter((file) => file.type === 'text/html');
+    const validFiles = [...event.target.files].filter((file) => file.type === 'text/html');
     const newSelectedFiles = await Promise.all(validFiles.map(async (file) => {
       const content = await readFile(file);
       return { name: file.name, content };
