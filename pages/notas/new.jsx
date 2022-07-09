@@ -273,12 +273,13 @@ function NewReceiptForm({ markets }) {
             </FormControl>
           </>
         )}
-        <Button
+        <button
+          className="btn btn-blue"
           type="submit"
-          isLoading={isSubmitting}
+          disabled={isSubmitting} // TODO: isLoading
         >
           Enviar
-        </Button>
+        </button>
       </VStack>
     </form>
   );

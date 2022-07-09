@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+::selection {
+  @apply bg-blue-400;
+  color: #fff;
+}
+
+@layer base {
+  :target {
+    @apply scroll-mt-14;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-bold
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply p-2 font-bold rounded-lg text-center duration-200 px-4;
+  }
+  .btn-blue {
+    @apply text-white bg-blue-500 hover:bg-blue-600
+  }
+  .btn-red{
+    @apply bg-red-400 hover:bg-red-500 text-white
+  }
+  .rounded-frame{
+    @apply bg-white rounded-lg overflow-hidden duration-200 shadow hover:md:shadow-md w-full;
+  }
+}

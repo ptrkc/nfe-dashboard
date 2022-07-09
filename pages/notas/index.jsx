@@ -1,9 +1,7 @@
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { Link, Button, Box, Flex, SimpleGrid, StatLabel, StatNumber, StatHelpText, LinkBox, LinkOverlay } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import { Box, Flex, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
-import StatCard from 'components/StatCard';
 import ReceiptsTable from 'components/ReceiptsTable';
 import RoundedFrame from 'components/RoundedFrame';
 import { formatLongDateBR } from 'lib/formatLongDateBR';
@@ -12,17 +10,13 @@ import fetchData from 'lib/fetchData';
 
 function ReceiptCard({ receipt }) {
   return (
-    <LinkBox>
-      <NextLink href={`/notas/${receipt.id}`} passHref>
-        <LinkOverlay>
-          <StatCard>
-            <StatLabel>{receipt.market.name}</StatLabel>
-            <StatNumber>{formatBRL(receipt.total)}</StatNumber>
-            <StatHelpText>{formatLongDateBR(receipt.date)}</StatHelpText>
-          </StatCard>
-        </LinkOverlay>
-      </NextLink>
-    </LinkBox>
+    <NextLink href={`/notas/${receipt.id}`} passHref>
+      <a className="rounded-frame p-2">
+        <p className="text-sm">{receipt.market.name}</p>
+        <p className="font-bold text-2xl">{formatBRL(receipt.total)}</p>
+        <p className="text-sm text-gray-600">{formatLongDateBR(receipt.date)}</p>
+      </a>
+    </NextLink>
   );
 }
 
@@ -39,7 +33,9 @@ function Receipts() {
             Filtros, data, mercado,...?
           </Box>
           <NextLink href="/notas/new" passHref>
-            <Button as={Link} leftIcon={<AddIcon w={3} />}>Nova Nota</Button>
+            <a className="btn btn-blue">
+              + Nova Nota
+            </a>
           </NextLink>
         </Flex>
         <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} gap={4}>

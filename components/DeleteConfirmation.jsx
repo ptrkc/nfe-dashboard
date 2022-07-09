@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import {
-  Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+  Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
@@ -17,9 +17,9 @@ export default function DeleteConfirmation({ reqUrl, redirectUrl, header, body }
 
   return (
     <>
-      <Button colorScheme="red" onClick={onOpen}>
+      <button type="button" className="btn btn-red" onClick={onOpen}>
         Deletar
-      </Button>
+      </button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -29,21 +29,22 @@ export default function DeleteConfirmation({ reqUrl, redirectUrl, header, body }
             {body}
           </ModalBody>
           <ModalFooter>
-            <Button
-              colorScheme="blue"
-              mr={3}
+            <button
+              type="button"
+              className="btn btn-blue mr-3"
               onClick={onClose}
               isDisabled={isLoading}
             >
               Cancelar
-            </Button>
-            <Button
+            </button>
+            <button
+              type="button"
               onClick={mutate}
-              colorScheme="red"
+              className="btn btn-red"
               isLoading={isLoading}
             >
               Deletar
-            </Button>
+            </button>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import {
-  Box, Button, Center, HStack, Icon, IconButton, Input, List, ListItem, Spinner, Text, Tooltip,
+  Center, HStack, Icon, IconButton, Input, List, ListItem, Spinner, Text, Tooltip,
   VStack,
 } from '@chakra-ui/react';
 import { FiUploadCloud, FiTrash2, FiFileText } from 'react-icons/fi';
@@ -140,12 +140,12 @@ export default function FileDropzone({
             <Icon as={FiUploadCloud} w={5} h={5} />
           </Center>
           <VStack lineHeight="1">
-            <Text color="blue.300" fontWeight="bold">
+            <p className="text-blue-400 font-bold hover:text-blue-500 duration-150">
               Clique para selecionar
-            </Text>
-            <Text>
+            </p>
+            <p>
               ou arraste o(s) arquivo(s) HTML
-            </Text>
+            </p>
           </VStack>
         </>
       ) : (
@@ -173,21 +173,19 @@ export default function FileDropzone({
               </ListItem>
             ))}
           </List>
-          <Box pt="2">
-            <Button
-              variant="link"
-              color="blue.300"
-              fontWeight="bold"
-              fontSize="inherit"
+          <div className="pt-2">
+            <button
+              type="button"
+              className="text-blue-400 font-bold hover:text-blue-500 duration-150"
               onClick={() => inputRef.current.click()}
             >
               Clique para selecionar
-            </Button>
+            </button>
             <Text as="span">
               {' '}
               ou arraste o(s) arquivo(s) HTML
             </Text>
-          </Box>
+          </div>
         </>
       )}
       <Input

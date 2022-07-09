@@ -3,10 +3,7 @@ import prisma from 'lib/prisma';
 import { useMemo } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import {
-  Box, Flex, Link, Stat, StatHelpText, StatLabel, StatNumber, Table, Tbody, Td, Th, Thead, Tr,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Flex, Link, Table, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
 import formatBRL from 'lib/formatBRL';
 import { formatLongDateBR, formatTimeBR } from 'lib/formatLongDateBR';
@@ -16,14 +13,14 @@ import DeleteConfirmation from 'components/DeleteConfirmation';
 
 function ReceiptStatCard({ receipt: { id, date, total, qrCode, market: { name, nickname } } }) {
   return (
-    <RoundedFrame pt={2} px={2} bg="white">
-      <Stat>
-        <StatLabel>{nickname || name}</StatLabel>
-        <StatNumber>{formatBRL(total)}</StatNumber>
-        <StatHelpText>{`${formatLongDateBR(date)}, ${formatTimeBR(date)}`}</StatHelpText>
-        <StatHelpText><Link href={qrCode} isExternal>{id}</Link></StatHelpText>
-      </Stat>
-    </RoundedFrame>
+    <div className="rounded-frame p-2">
+      <p className="text-sm">{nickname || name}</p>
+      <p className="font-bold text-2xl">{formatBRL(total)}</p>
+      <p className="text-sm">{`${formatLongDateBR(date)}, ${formatTimeBR(date)}`}</p>
+      <p className="text-sm text-gray-600">
+        <a href={qrCode} target="_blank" rel="noopener noreferrer">{id}</a>
+      </p>
+    </div>
   );
 }
 

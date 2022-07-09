@@ -2,8 +2,8 @@ import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import {
-  Box, Button, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex,
-  Heading, Icon, IconButton, Link, Text, useBreakpointValue, useDisclosure,
+  Box, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex,
+  Icon, IconButton, useBreakpointValue, useDisclosure,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import {
@@ -29,32 +29,23 @@ function SidebarLink({ option: { href, icon, text, disabled } }) {
   const isActive = pathname.split('/')[1] === href.substring(1);
 
   return (disabled ? (
-    <Button
-      bg="blue.600"
-      _hover={{ bg: 'blue.500', textDecoration: 'none' }}
-      _active={{ bg: 'blue.500', textDecoration: 'none' }}
-      as={Link}
-      isDisabled={disabled}
+    <button
+      type="button"
+      className="btn bg-blue-600 disabled:brightness-100 text-blue-400 flex items-center gap-2"
+      disabled={disabled}
     >
-      <Flex justifyContent="flex-start" alignItems="center" w="100%" gap={2}>
-        <Icon as={icon} />
-        {text}
-      </Flex>
-    </Button>
+      <Icon as={icon} />
+      {text}
+    </button>
   ) : (
     <NextLink href={href} passHref>
-      <Button
-        bg="blue.600"
-        _hover={{ bg: 'blue.500', textDecoration: 'none' }}
-        _active={{ bg: 'blue.500', textDecoration: 'none' }}
-        as={Link}
-        isActive={isActive}
+      <button
+        type="button"
+        className={`btn ${isActive ? 'bg-blue-500' : 'bg-blue-600'} hover:bg-blue-500 flex w-full gap-2 items-center`}
       >
-        <Flex justifyContent="flex-start" w="100%" gap={2}>
-          <Icon as={icon} />
-          {text}
-        </Flex>
-      </Button>
+        <Icon as={icon} />
+        {text}
+      </button>
     </NextLink>
   ));
 }
@@ -82,26 +73,16 @@ function SidebarFooter() {
 
 function Sidebar() {
   return (
-    <Flex
-      bg="blue.600"
-      color="gray.200"
-      w="xs"
-      p={2}
-      justifyContent="space-between"
-      flexDirection="column"
-      borderRight="1px"
-      borderRightWidth="1px"
-      borderRightColor="inherit"
-    >
-      <Box>
-        <Heading as="h1" textAlign="center" display="flex" justifyContent="center" alignItems="center" noOfLines={1}>
+    <div className="bg-blue-600 w-60 text-gray-200 p-2 flex justify-between flex-col">
+      <div>
+        <h1 className="text-center flex justify-center items-center">
           <Icon as={FiFileText} />
-          <Text as="span">NFe Dash</Text>
-        </Heading>
+          NFe Dash
+        </h1>
         <SidebarContent />
-      </Box>
+      </div>
       <SidebarFooter />
-    </Flex>
+    </div>
   );
 }
 
@@ -159,9 +140,9 @@ export default function Layout({ children }) {
   const isDesktop = useBreakpointValue({ base: false, md: true });
 
   return (
-    <Flex h="100vh" direction={{ base: 'column', md: 'row' }}>
+    <div className="h-screen flex flex-col md:flex-row">
       {isDesktop ? <Sidebar /> : <TopBar />}
-      <Box w="full" overflowY="scroll" p={4}>{children}</Box>
-    </Flex>
+      <div className="w-full overflow-y-scroll p-4">{children}</div>
+    </div>
   );
 }
