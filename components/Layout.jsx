@@ -3,12 +3,11 @@ import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import {
   Box, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex,
-  Icon, IconButton, useBreakpointValue, useDisclosure,
+  Icon, useBreakpointValue, useDisclosure,
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
 import {
-  FiHome, FiFile, FiShoppingCart, FiShoppingBag, FiPackage, FiTrendingUp, FiLock, FiUserPlus,
-  FiFileText,
+  FiMenu, FiHome, FiFile, FiShoppingCart, FiShoppingBag, FiPackage, FiTrendingUp, FiLock,
+  FiUserPlus, FiFileText,
 } from 'react-icons/fi';
 
 const MAIN_OPTIONS = [
@@ -92,7 +91,15 @@ function LeftDrawer() {
 
   return (
     <>
-      <IconButton size="md" aria-label="Open Sidebar" icon={<HamburgerIcon />} ref={btnRef} onClick={onOpen} />
+      <button
+        aria-label="Open Sidebar"
+        ref={btnRef}
+        onClick={onOpen}
+        type="button"
+        className="btn-icon btn-blue"
+      >
+        <FiMenu />
+      </button>
       <Drawer
         isOpen={isOpen}
         placement="left"

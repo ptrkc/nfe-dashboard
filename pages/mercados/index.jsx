@@ -5,7 +5,6 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { Link, Table, Thead, Tbody, Td, Tr, Th, Box, Flex } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
-import RoundedFrame from 'components/RoundedFrame';
 
 function MarketsTable({ markets }) {
   const data = useMemo(() => markets, [markets]);
@@ -102,9 +101,9 @@ function Markets({ markets }) {
             Filtros..., adicionar mercado, editar
           </Box>
         </Flex>
-        <RoundedFrame>
+        <div className="rounded-frame">
           <MarketsTable markets={markets} />
-        </RoundedFrame>
+        </div>
       </Flex>
     </>
   );

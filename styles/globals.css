@@ -37,11 +37,20 @@ html {
 }
 
 @layer components {
+  .btn, .btn-icon {
+    @apply font-bold rounded-md text-center duration-200 flex border border-transparent items-center gap-1 disabled:cursor-not-allowed ;
+  }
   .btn {
-    @apply p-2 font-bold rounded-lg text-center duration-200 px-4;
+    @apply py-2 px-4;
+  }
+  .btn-icon {
+    @apply w-10 h-10 justify-center;
   }
   .btn-blue {
-    @apply text-white bg-blue-500 hover:bg-blue-600
+    @apply text-white bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 disabled:text-blue-200
+  }
+  .btn-blue-outline {
+    @apply bg-white text-blue-500 hover:bg-blue-200 border border-blue-500
   }
   .btn-red{
     @apply bg-red-400 hover:bg-red-500 text-white

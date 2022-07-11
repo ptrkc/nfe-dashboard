@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react';
 import {
-  Center, HStack, Icon, IconButton, Input, List, ListItem, Spinner, Text, Tooltip,
+  Center, HStack, Icon, Input, List, ListItem, Spinner, Text, Tooltip,
   VStack,
 } from '@chakra-ui/react';
 import { FiUploadCloud, FiTrash2, FiFileText } from 'react-icons/fi';
-import RoundedFrame from 'components/RoundedFrame';
 
 const statusIcon = {
   loading: {
@@ -84,7 +83,15 @@ function DropzoneFrame(props) {
 function DeleteButton({ name, selectedFiles, setSelectedFiles }) {
   const removeFile = () => setSelectedFiles(selectedFiles.filter((file) => file.name !== name));
   return (
-    <IconButton onClick={removeFile}><FiTrash2 /></IconButton>
+    <button
+      aria-label="Deletar arquivo"
+      type="button"
+      onClick={removeFile}
+      className="btn-icon btn-blue"
+    >
+      <FiTrash2 />
+
+    </button>
   );
 }
 
@@ -153,7 +160,7 @@ export default function FileDropzone({
           <List w="full" spacing={2}>
             {selectedFiles.map(({ name, status }) => (
               <ListItem key={name} gap={2}>
-                <RoundedFrame display="flex" p={2} justifyContent="space-between" alignItems="center">
+                <div className="rounded-frame flex p-2 justify-between items-center">
                   <HStack justifyContent="center" alignItems="center">
                     <Icon w={6} h={6} as={FiFileText} />
                     <Text noOfLines={2}>{name}</Text>
@@ -169,7 +176,7 @@ export default function FileDropzone({
                       setSelectedFiles={setSelectedFiles}
                     />
                   )}
-                </RoundedFrame>
+                </div>
               </ListItem>
             ))}
           </List>

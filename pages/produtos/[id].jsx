@@ -5,7 +5,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { Link, Table, Thead, Tbody, Td, Tr, Th } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
-import RoundedFrame from 'components/RoundedFrame';
+
 import formatBRL from 'lib/formatBRL';
 import dateSlice from 'lib/dateSlice';
 
@@ -150,9 +150,9 @@ function ProductPage({ purchases }) {
       <Head>
         <title>💸 NFe Dashboard | Produto</title>
       </Head>
-      <RoundedFrame>
+      <div className="rounded-frame">
         <ProductPurchasesTable purchases={purchases} />
-      </RoundedFrame>
+      </div>
     </>
   );
 }

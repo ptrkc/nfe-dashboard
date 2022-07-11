@@ -1,7 +1,4 @@
-import {
-  Button, ButtonGroup, Editable, EditableInput, EditablePreview, Flex, Input, Table, Tbody, Td, Th,
-  Thead, Tr, useEditableControls,
-} from '@chakra-ui/react';
+import { Button, ButtonGroup, Editable, EditableInput, EditablePreview, Flex, Input, useEditableControls } from '@chakra-ui/react';
 
 function EditableControls() {
   const {
@@ -39,38 +36,38 @@ function CustomControls({ defaultValue }) {
 
 export default function MarketTable({ market: { name, nickname, fantasia, cnpj, address, cep } }) {
   return (
-    <Table>
-      <Thead>
-        <Tr><Th colSpan="2">Mercado</Th></Tr>
-      </Thead>
-      <Tbody>
-        <Tr>
-          <Td whiteSpace="nowrap">Nome</Td>
-          <Td w="full">{name}</Td>
-        </Tr>
-        <Tr>
-          <Td whiteSpace="nowrap">Nome fantasia</Td>
-          <Td w="full">{fantasia}</Td>
-        </Tr>
-        <Tr>
-          <Td whiteSpace="nowrap">CNPJ</Td>
-          <Td w="full">{cnpj}</Td>
-        </Tr>
-        <Tr>
-          <Td whiteSpace="nowrap">Endereço</Td>
-          <Td w="full">{address}</Td>
-        </Tr>
-        <Tr>
-          <Td whiteSpace="nowrap">CEP</Td>
-          <Td w="full">{cep}</Td>
-        </Tr>
-        <Tr>
-          <Td>Alias</Td>
-          <Td py="0">
+    <table>
+      <thead>
+        <tr><th colSpan="2">Mercado</th></tr>
+      </thead>
+      <tbody>
+        <tr className="odd:bg-slate-100">
+          <td className="px-2 whitespace-nowrap">Nome</td>
+          <td className="px-2 w-full">{name}</td>
+        </tr>
+        <tr className="odd:bg-slate-100">
+          <td className="px-2 whitespace-nowrap">Nome fantasia</td>
+          <td className="px-2 w-full">{fantasia}</td>
+        </tr>
+        <tr className="odd:bg-slate-100">
+          <td className="px-2 whitespace-nowrap">CNPJ</td>
+          <td className="px-2 w-full">{cnpj}</td>
+        </tr>
+        <tr className="odd:bg-slate-100">
+          <td className="px-2 whitespace-nowrap">Endereço</td>
+          <td className="px-2 w-full">{address}</td>
+        </tr>
+        <tr className="odd:bg-slate-100">
+          <td className="px-2 whitespace-nowrap">CEP</td>
+          <td className="px-2 w-full">{cep}</td>
+        </tr>
+        <tr className="odd:bg-slate-100">
+          <td className="px-2">Alias</td>
+          <td className="px-2 w-full">
             <CustomControls defaultValue={nickname} />
-          </Td>
-        </Tr>
-      </Tbody>
-    </Table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 }

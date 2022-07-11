@@ -6,6 +6,7 @@ import {
 } from '@chakra-ui/react';
 import SlidingSegmentedControl from 'components/SlidingSegmentedControl';
 import { useState } from 'react';
+import { FiPlus } from 'react-icons/fi';
 
 const months = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro',
@@ -28,7 +29,8 @@ function Home() {
       <VStack alignItems="flex-start">
         <NextLink href="/notas/new" passHref>
           <a className="btn btn-blue">
-            + Nova Nota
+            <FiPlus />
+            Nova Nota
           </a>
         </NextLink>
         {isDesktop ? (

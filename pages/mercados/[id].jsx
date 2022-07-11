@@ -2,8 +2,8 @@ import prisma from 'lib/prisma';
 
 import Head from 'next/head';
 import { VStack } from '@chakra-ui/react';
+
 import MarketTable from 'components/MarketTable';
-import RoundedFrame from 'components/RoundedFrame';
 import ReceiptsTable from 'components/ReceiptsTable';
 import DeleteConfirmation from 'components/DeleteConfirmation';
 
@@ -14,12 +14,12 @@ function EditMarket({ market }) {
         <title>💸 NFe Dashboard | Mercado</title>
       </Head>
       <VStack alignItems="flex-start" gap={2}>
-        <RoundedFrame>
+        <div className="rounded-frame">
           <MarketTable market={market} />
-        </RoundedFrame>
-        <RoundedFrame>
+        </div>
+        <div className="rounded-frame">
           <ReceiptsTable receipts={market.receipts} />
-        </RoundedFrame>
+        </div>
         <DeleteConfirmation
           reqUrl={`/api/mercados/${market.id}`}
           redirectUrl="/mercados"

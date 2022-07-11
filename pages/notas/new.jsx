@@ -3,17 +3,16 @@ import prisma from 'lib/prisma';
 import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import {
-  Box, Button, FormControl, FormLabel, IconButton, Input, InputGroup, InputLeftAddon, Modal,
-  ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
-  NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper,
-  Select, useDisclosure, VStack,
+  Box, FormControl, FormLabel, Input, InputGroup, InputLeftAddon, Modal, ModalBody,
+  ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper,
+  NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, useDisclosure, VStack,
 } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
 import { useForm, Controller } from 'react-hook-form';
 import SlidingSegmentedControl from 'components/SlidingSegmentedControl';
 import FileDropzone from 'components/FileDropzone';
 import fetchData from 'lib/fetchData';
 import { useRouter } from 'next/router';
+import { FiPlus } from 'react-icons/fi';
 
 const newReceiptOptions = [{ label: 'File', value: 'file' }, { label: 'Manual', value: 'manual' }];
 
@@ -111,9 +110,9 @@ function MarketSelection({ register, setValue, options }) {
 
   return (
     <>
-      <InputGroup gap={2}>
-        <Select
-          bg="white"
+      <div className="flex gap-2 w-full">
+        <select
+          className="bg-white rounded-md border border-gray-200 px-3 w-full"
           name="market"
           id="market"
           placeholder="Escolha ou adicione"
@@ -122,9 +121,11 @@ function MarketSelection({ register, setValue, options }) {
           {localOptions.map(({ label, value }) => (
             <option key={value} value={value}>{label}</option>
           ))}
-        </Select>
-        <IconButton icon={<AddIcon w={3} />} onClick={onModalOpen} />
-      </InputGroup>
+        </select>
+        <button className="btn-icon btn-blue" type="button" onClick={onModalOpen}>
+          <FiPlus />
+        </button>
+      </div>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -146,14 +147,22 @@ function MarketSelection({ register, setValue, options }) {
           </ModalBody>
 
           <ModalFooter gap={3}>
-            <Button
-              colorScheme="blue"
-              isDisabled={!isValid}
+            <button
+              className="btn btn-blue"
+              type="button"
+              disabled={!isValid}
               onClick={() => addMarket(modalFocusRef.current.value)}
             >
               Adicionar
-            </Button>
-            <Button onClick={onClose} variant="outline">Cancelar</Button>
+            </button>
+            <button
+              className="btn btn-blue-outline"
+              type="button"
+              onClick={onClose}
+            >
+              Cancelar
+
+            </button>
           </ModalFooter>
         </ModalContent>
       </Modal>

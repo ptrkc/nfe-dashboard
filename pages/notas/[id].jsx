@@ -5,10 +5,10 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { Box, Flex, Link, Table, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
+
 import formatBRL from 'lib/formatBRL';
 import { formatLongDateBR, formatTimeBR } from 'lib/formatLongDateBR';
 import MarketTable from 'components/MarketTable';
-import RoundedFrame from 'components/RoundedFrame';
 import DeleteConfirmation from 'components/DeleteConfirmation';
 
 function ReceiptStatCard({ receipt: { id, date, total, qrCode, market: { name, nickname } } }) {
@@ -171,14 +171,14 @@ function Receipt({ receipt }) {
             <ReceiptStatCard receipt={receipt} />
           </Box>
           <Box>
-            <RoundedFrame>
+            <div className="rounded-frame">
               <MarketTable market={market} />
-            </RoundedFrame>
+            </div>
           </Box>
         </Flex>
-        <RoundedFrame>
+        <div className="rounded-frame">
           <PurchasesTable purchases={purchases} />
-        </RoundedFrame>
+        </div>
         <DeleteConfirmation
           reqUrl={`/api/notas/${receipt.id}`}
           redirectUrl="/notas"
