@@ -44,7 +44,7 @@ html {
     @apply py-2 px-4;
   }
   .btn-icon {
-    @apply w-10 h-10 justify-center;
+    @apply w-10 h-10 shrink-0 justify-center;
   }
   .btn-blue {
     @apply text-white bg-blue-500 hover:bg-blue-600 disabled:bg-blue-400 disabled:text-blue-200

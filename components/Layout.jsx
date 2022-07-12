@@ -1,30 +1,27 @@
-import { useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import {
-  Box, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex,
-  Icon, useDisclosure,
-} from '@chakra-ui/react';
-import {
   FiMenu, FiHome, FiFile, FiShoppingCart, FiShoppingBag, FiPackage, FiTrendingUp, FiLock,
-  FiUserPlus, FiFileText,
+  FiUserPlus, FiFileText, FiX,
 } from 'react-icons/fi';
+
 import useBreakpoint from 'hooks/useBreakpoint';
 
 const MAIN_OPTIONS = [
-  { href: '/', text: 'Home', icon: FiHome, disabled: false },
-  { href: '/notas', text: 'Notas', icon: FiFile, disabled: false },
-  { href: '/mercados', text: 'Mercados', icon: FiShoppingCart, disabled: false },
-  { href: '/compras', text: 'Compras', icon: FiShoppingBag, disabled: false },
-  { href: '/produtos', text: 'Produtos', icon: FiPackage, disabled: false },
-  { href: '/graficos', text: 'Gráficos', icon: FiTrendingUp, disabled: true },
+  { href: '/', text: 'Home', Icon: FiHome, disabled: false },
+  { href: '/notas', text: 'Notas', Icon: FiFile, disabled: false },
+  { href: '/mercados', text: 'Mercados', Icon: FiShoppingCart, disabled: false },
+  { href: '/compras', text: 'Compras', Icon: FiShoppingBag, disabled: false },
+  { href: '/produtos', text: 'Produtos', Icon: FiPackage, disabled: false },
+  { href: '/graficos', text: 'Gráficos', Icon: FiTrendingUp, disabled: true },
 ];
 const FOOTER_OPTIONS = [
-  { href: '/login', text: 'Login', icon: FiLock, disabled: true },
-  { href: '/signup', text: 'Sign Up', icon: FiUserPlus, disabled: true },
+  { href: '/login', text: 'Login', Icon: FiLock, disabled: true },
+  { href: '/signup', text: 'Sign Up', Icon: FiUserPlus, disabled: true },
 ];
 
-function SidebarLink({ option: { href, icon, text, disabled } }) {
+function SidebarLink({ toggleMenu, option: { href, Icon, text, disabled } }) {
   const { pathname } = useRouter();
   const isActive = pathname.split('/')[1] === href.substring(1);
 
@@ -34,7 +31,7 @@ function SidebarLink({ option: { href, icon, text, disabled } }) {
       className="btn bg-blue-600 disabled:brightness-100 text-blue-400 flex items-center gap-2"
       disabled={disabled}
     >
-      <Icon as={icon} />
+      <Icon />
       {text}
     </button>
   ) : (
@@ -42,105 +39,107 @@ function SidebarLink({ option: { href, icon, text, disabled } }) {
       <button
         type="button"
         className={`btn ${isActive ? 'bg-blue-500' : 'bg-blue-600'} hover:bg-blue-500 flex w-full gap-2 items-center`}
+        {...(toggleMenu && { onClick: toggleMenu })}
       >
-        <Icon as={icon} />
+        <Icon />
         {text}
       </button>
     </NextLink>
   ));
 }
 
-function SidebarContent() {
+function SidebarContent({ toggleMenu }) {
   return (
-    <Box>
-      <Flex direction="column" gap={2} m={2}>
-        {MAIN_OPTIONS.map((option) => (<SidebarLink key={option.href} option={option} />))}
-      </Flex>
-    </Box>
+    <div>
+      <div className="flex flex-col gap-2 m-2">
+        {MAIN_OPTIONS.map((option) => (
+          <SidebarLink
+            key={option.href}
+            option={option}
+            toggleMenu={toggleMenu}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
 function SidebarFooter() {
   return (
-    <Box>
-      <Divider />
-      <Flex direction="column" gap={2} m={2}>
+    <div>
+      <hr />
+      <div className="flex flex-col gap-2 m-2">
         {FOOTER_OPTIONS.map((option) => (<SidebarLink key={option.href} option={option} />))}
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 }
 
-function Sidebar() {
+function Sidebar({ toggleMenu }) {
   return (
-    <div className="bg-blue-600 w-60 text-gray-200 p-2 flex justify-between flex-col">
+    <div className="bg-blue-600 w-52 text-gray-200 p-2 flex justify-between flex-col h-screen relative shrink-0">
+      {toggleMenu && (
+      <button
+        className="btn-icon absolute right-1 top-1 hover:bg-blue-500"
+        onClick={toggleMenu}
+        type="button"
+        aria-label="Close menu"
+      >
+        <FiX />
+      </button>
+      )}
       <div>
         <h1 className="text-center flex justify-center items-center">
-          <Icon as={FiFileText} />
+          <FiFileText />
           NFe Dash
         </h1>
-        <SidebarContent />
+        <SidebarContent toggleMenu={toggleMenu} />
       </div>
       <SidebarFooter />
     </div>
   );
 }
 
-function LeftDrawer() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef();
+function TopBar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [classes, setClasses] = useState({ container: 'w-0', sidebar: '-left-60', overlay: 'bg-transparent' });
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    if (isOpen) {
+      setClasses({ container: 'w-full right-0 ', sidebar: 'left-0', overlay: 'bg-black/50' });
+    } else {
+      setClasses({ container: 'w-full right-0 ', sidebar: '-left-60', overlay: 'bg-transparent' });
+      setTimeout(() => {
+        setClasses({ container: 'w-0', sidebar: '-left-60', overlay: 'bg-transparent' });
+      }, 200);
+    }
+  }, [isOpen]);
 
   return (
-    <>
+    <div className="p-2 flex bg-white z-10 shadow-md relative">
       <button
-        aria-label="Open Sidebar"
-        ref={btnRef}
-        onClick={onOpen}
+        aria-label="Open menu"
         type="button"
         className="btn-icon btn-blue"
+        onClick={toggleMenu}
       >
         <FiMenu />
       </button>
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-
+      <div
+        className={`fixed top-0 bottom-0 left-0 h-screen ${classes.container}`}
       >
-        <DrawerOverlay />
-        <DrawerContent
-          bg="blue.600"
-          color="gray.200"
-          onClick={onClose}
-        >
-          <DrawerCloseButton />
-          <DrawerHeader>
-            <Icon as={FiFileText} />
-            NFe Dash
-          </DrawerHeader>
-          <Flex direction="column" justifyContent="space-between" h="100%" p={2}>
-            <SidebarContent />
-            <SidebarFooter />
-          </Flex>
-        </DrawerContent>
-      </Drawer>
-    </>
-  );
-}
-
-function TopBar() {
-  return (
-    <Flex
-      p={2}
-      bg="white"
-      w="100%"
-      zIndex={2}
-      boxShadow="md"
-      borderBottomWidth="1px"
-    >
-      <LeftDrawer />
-    </Flex>
+        <div className={`${classes.sidebar} absolute duration-200`}>
+          <Sidebar toggleMenu={toggleMenu} />
+        </div>
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,
+        jsx-a11y/no-static-element-interactions */}
+        <div
+          className={`${classes.overlay} h-screen duration-200 w-full`}
+          onClick={toggleMenu}
+        />
+      </div>
+    </div>
   );
 }
 
