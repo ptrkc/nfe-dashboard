@@ -34,6 +34,16 @@ html {
   h3 {
     @apply text-xl;
   }
+
+  table{
+    @apply text-sm w-full;
+  }
+  td{
+    @apply px-2;
+  }
+  tbody tr{
+    @apply odd:bg-slate-100;
+  }
 }
 
 @layer components {

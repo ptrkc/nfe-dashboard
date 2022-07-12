@@ -3,7 +3,7 @@ import prisma from 'lib/prisma';
 import { useMemo } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { Link, Table, Thead, Tbody, Td, Tr, Th, Box, Flex } from '@chakra-ui/react';
+import { Link, Box, Flex } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
 
 function MarketsTable({ markets }) {
@@ -29,15 +29,15 @@ function MarketsTable({ markets }) {
   } = useTable({ columns, data, initialState }, useSortBy);
 
   return (
-    <Table {...getTableProps()}>
-      <Thead>
+    <table {...getTableProps()}>
+      <thead>
         {headerGroups.map((headerGroup) => (
           // eslint-disable-next-line react/jsx-key
-          <Tr {...headerGroup.getHeaderGroupProps()}>
+          <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
               // eslint-disable-next-line react/jsx-key
-              <Th
-                {...(column.isNumeric && { isNumeric: true })}
+              <th
+                className={`${column.isNumeric ? 'text-right' : ''}`}
                 {...column.getHeaderProps(column.getSortByToggleProps())}
               >
                 {column.render('Header')}
@@ -49,43 +49,43 @@ function MarketsTable({ markets }) {
                       : ' ↓'
                     : ' ↕')}
                 </span>
-              </Th>
+              </th>
             ))}
-          </Tr>
+          </tr>
         ))}
-      </Thead>
-      <Tbody {...getTableBodyProps()}>
+      </thead>
+      <tbody {...getTableBodyProps()}>
         {rows.map(({ original: row }) => (
-          <Tr key={row.id}>
-            <Td>
+          <tr key={row.id}>
+            <td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
                 <Link>{row.name}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
                 <Link>{row.fantasia}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
                 <Link>{row.nickname}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
                 <Link>{row.address}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
                 <Link>{row.totalReceipts}</Link>
               </NextLink>
-            </Td>
-          </Tr>
+            </td>
+          </tr>
         ))}
-      </Tbody>
-    </Table>
+      </tbody>
+    </table>
   );
 }
 

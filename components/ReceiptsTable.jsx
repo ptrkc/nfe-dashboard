@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import NextLink from 'next/link';
-import { Tr, Td, Table, Thead, Th, Tbody, Link, Skeleton } from '@chakra-ui/react';
+import { Link, Skeleton } from '@chakra-ui/react';
 import { useSortBy, useTable } from 'react-table';
 import formatBRL from 'lib/formatBRL';
 import { formatLongDateBR } from 'lib/formatLongDateBR';
@@ -36,15 +36,15 @@ export default function ReceiptsTable({ receipts, isLoading }) {
   // if (isLoading) return (<Skeleton> lol</Skeleton>)
 
   return (
-    <Table {...getTableProps()}>
-      <Thead>
+    <table {...getTableProps()}>
+      <thead>
         {headerGroups.map((headerGroup) => (
           // eslint-disable-next-line react/jsx-key
-          <Tr {...headerGroup.getHeaderGroupProps()}>
+          <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
               // eslint-disable-next-line react/jsx-key
-              <Th
-                {...(column.isNumeric && { isNumeric: true })}
+              <th
+                className={`${column.isNumeric ? 'text-right' : ''}`}
                 {...column.getHeaderProps(column.getSortByToggleProps())}
               >
                 {column.render('Header')}
@@ -56,53 +56,53 @@ export default function ReceiptsTable({ receipts, isLoading }) {
                       : ' ↓'
                     : ' ↕')}
                 </span>
-              </Th>
+              </th>
             ))}
-          </Tr>
+          </tr>
         ))}
-      </Thead>
-      <Tbody {...getTableBodyProps()}>
+      </thead>
+      <tbody {...getTableBodyProps()}>
         {isLoading
           ? [...Array(5).keys()].map((key) => (
-            <Tr key={key}>
-              <Td colSpan={columns.length}>
+            <tr key={key}>
+              <td colSpan={columns.length}>
                 <Skeleton w="100%">
                   {key}
                 </Skeleton>
-              </Td>
-            </Tr>
+              </td>
+            </tr>
           ))
           : rows.map(({ original: { id, market, date, total } }) => {
             const marketName = market.nickname || market.name;
             return (
-              <Tr key={id}>
-                <Td>
+              <tr key={id}>
+                <td>
                   <NextLink passHref href={`/notas/${id}`}>
                     <Link>{marketName}</Link>
                   </NextLink>
-                </Td>
-                <Td>
+                </td>
+                <td className="text-right">
                   <NextLink passHref href={`/notas/${id}`}>
                     <Link title={formatLongDateBR(date)}>{dateSlice(date)}</Link>
                   </NextLink>
-                </Td>
-                <Td isNumeric>
+                </td>
+                <td className="text-right">
                   <NextLink passHref href={`/notas/${id}`}>
                     <Link>{formatBRL(total)}</Link>
                   </NextLink>
-                </Td>
-              </Tr>
+                </td>
+              </tr>
             );
           })}
-        <Tr>
-          <Td colSpan={2} />
-          <Td isNumeric>
+        <tr>
+          <td colSpan={2} />
+          <td className="text-right">
             <NextLink passHref href="/">
               <Link>{formatBRL(totalSum)}</Link>
             </NextLink>
-          </Td>
-        </Tr>
-      </Tbody>
-    </Table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 }

@@ -3,7 +3,6 @@ import prisma from 'lib/prisma';
 import { useMemo } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { Link, Table, Thead, Tbody, Td, Tr, Th, Box, Flex } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
 
 import formatBRL from 'lib/formatBRL';
@@ -16,7 +15,7 @@ function PurchasesTable({ purchases }) {
       { Header: 'ID', accessor: 'id' },
       { Header: 'Nome', accessor: 'name' },
       { Header: 'EAN', accessor: 'ean' },
-      { Header: 'Total', accessor: 'chargedPrice' },
+      { Header: 'Total', accessor: 'chargedPrice', isNumeric: true },
     ],
     [],
   );
@@ -30,15 +29,15 @@ function PurchasesTable({ purchases }) {
   } = useTable({ columns, data, initialState }, useSortBy);
 
   return (
-    <Table {...getTableProps()}>
-      <Thead>
+    <table className="w-full" {...getTableProps()}>
+      <thead>
         {headerGroups.map((headerGroup) => (
           // eslint-disable-next-line react/jsx-key
-          <Tr {...headerGroup.getHeaderGroupProps()}>
+          <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
               // eslint-disable-next-line react/jsx-key
-              <Th
-                {...(column.isNumeric && { isNumeric: true })}
+              <th
+                className={`${column.isNumeric ? 'text-right' : ''}`}
                 {...column.getHeaderProps(column.getSortByToggleProps())}
               >
                 {column.render('Header')}
@@ -50,38 +49,38 @@ function PurchasesTable({ purchases }) {
                       : ' ↓'
                     : ' ↕')}
                 </span>
-              </Th>
+              </th>
             ))}
-          </Tr>
+          </tr>
         ))}
-      </Thead>
-      <Tbody {...getTableBodyProps()}>
+      </thead>
+      <tbody {...getTableBodyProps()}>
         {rows.map(({ original: { id, name, ean, chargedPrice } }) => (
-          <Tr key={id}>
-            <Td>
+          <tr key={id}>
+            <td>
               <NextLink passHref href={`/produtos/${encodeURIComponent(id)}`}>
-                <Link title={id}>{id}</Link>
+                <a title={id}>{id}</a>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td>
               <NextLink passHref href={`/produtos/${encodeURIComponent(id)}`}>
-                <Link>{name}</Link>
+                <a>{name}</a>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href={`/produtos/${encodeURIComponent(id)}`}>
-                <Link>{ean}</Link>
+                <a>{ean}</a>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href={`/produtos/${encodeURIComponent(id)}`}>
-                <Link>{formatBRL(chargedPrice)}</Link>
+                <a>{formatBRL(chargedPrice)}</a>
               </NextLink>
-            </Td>
-          </Tr>
+            </td>
+          </tr>
         ))}
-      </Tbody>
-    </Table>
+      </tbody>
+    </table>
   );
 }
 
@@ -91,16 +90,16 @@ function Purchases({ purchases }) {
       <Head>
         <title>💸 NFe Dashboard | Compras</title>
       </Head>
-      <Flex direction="column" gap={2}>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Box>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center">
+          <div>
             Filtros..., adicionar mercado, editar
-          </Box>
-        </Flex>
+          </div>
+        </div>
         <div className="rounded-frame">
           <PurchasesTable purchases={purchases} />
         </div>
-      </Flex>
+      </div>
     </>
   );
 }

@@ -3,7 +3,7 @@ import prisma from 'lib/prisma';
 import { useMemo } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { Link, Table, Thead, Tbody, Td, Tr, Th, Box, Flex } from '@chakra-ui/react';
+import { Link, Box, Flex } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
 
 function PurchasesTable({ purchases }) {
@@ -27,15 +27,15 @@ function PurchasesTable({ purchases }) {
   } = useTable({ columns, data, initialState }, useSortBy);
 
   return (
-    <Table {...getTableProps()}>
-      <Thead>
+    <table {...getTableProps()}>
+      <thead>
         {headerGroups.map((headerGroup) => (
           // eslint-disable-next-line react/jsx-key
-          <Tr {...headerGroup.getHeaderGroupProps()}>
+          <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
               // eslint-disable-next-line react/jsx-key
-              <Th
-                {...(column.isNumeric && { isNumeric: true })}
+              <th
+                className={`${column.isNumeric ? 'text-right' : ''}`}
                 {...column.getHeaderProps(column.getSortByToggleProps())}
               >
                 {column.render('Header')}
@@ -47,33 +47,33 @@ function PurchasesTable({ purchases }) {
                       : ' ↓'
                     : ' ↕')}
                 </span>
-              </Th>
+              </th>
             ))}
-          </Tr>
+          </tr>
         ))}
-      </Thead>
-      <Tbody {...getTableBodyProps()}>
+      </thead>
+      <tbody {...getTableBodyProps()}>
         {rows.map(({ original: { id, ean, name } }) => (
-          <Tr key={id}>
-            <Td>
+          <tr key={id}>
+            <td>
               <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
                 <Link title={id}>{id}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td>
               <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
                 <Link>{name}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
                 <Link>{ean}</Link>
               </NextLink>
-            </Td>
-          </Tr>
+            </td>
+          </tr>
         ))}
-      </Tbody>
-    </Table>
+      </tbody>
+    </table>
   );
 }
 

@@ -47,14 +47,14 @@ function ProductPurchasesTable({ purchases }) {
   } = useTable({ columns, data, initialState }, useSortBy);
 
   return (
-    <Table {...getTableProps()}>
-      <Thead>
+    <table {...getTableProps()}>
+      <thead>
         {headerGroups.map((headerGroup) => (
           // eslint-disable-next-line react/jsx-key
-          <Tr {...headerGroup.getHeaderGroupProps()}>
+          <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
               // eslint-disable-next-line react/jsx-key
-              <Th
+              <th
                 {...column.getHeaderProps(column.getSortByToggleProps())}
               >
                 {column.render('Header')}
@@ -66,81 +66,81 @@ function ProductPurchasesTable({ purchases }) {
                       : ' ↓'
                     : ' ↕')}
                 </span>
-              </Th>
+              </th>
             ))}
-          </Tr>
+          </tr>
         ))}
-      </Thead>
-      <Tbody {...getTableBodyProps()}>
+      </thead>
+      <tbody {...getTableBodyProps()}>
         {rows.map(({ original: row }) => (
-          <Tr key={row.id}>
-            <Td>
+          <tr key={row.id}>
+            <td>
               <NextLink passHref href="/">
                 <Link>{row.name}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href="/">
                 <Link>{dateSlice(row.receipt.date)}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href="/">
                 <Link>{row.quantity}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td>
               <NextLink passHref href="/">
                 <Link>{row.unit}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href="/">
                 <Link>{formatBRL(row.unitPrice)}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href="/">
                 <Link>{formatBRL(row.regularPrice)}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href="/">
                 <Link>{formatBRL(row.discount)}</Link>
               </NextLink>
-            </Td>
-            <Td>
+            </td>
+            <td className="text-right">
               <NextLink passHref href="/">
                 <Link>{formatBRL(row.chargedPrice)}</Link>
               </NextLink>
-            </Td>
-          </Tr>
+            </td>
+          </tr>
         ))}
-        <Tr>
-          <Td colSpan={4} />
-          <Td>
+        <tr>
+          <td colSpan={4} />
+          <td className="text-right">
             <NextLink passHref href="/">
               <Link>{formatBRL(totals.unitPrice)}</Link>
             </NextLink>
-          </Td>
-          <Td>
+          </td>
+          <td className="text-right">
             <NextLink passHref href="/">
               <Link>{formatBRL(totals.regularPrice)}</Link>
             </NextLink>
-          </Td>
-          <Td>
+          </td>
+          <td className="text-right">
             <NextLink passHref href="/">
               <Link>{formatBRL(totals.discount)}</Link>
             </NextLink>
-          </Td>
-          <Td>
+          </td>
+          <td className="text-right">
             <NextLink passHref href="/">
               <Link>{formatBRL(totals.chargedPrice)}</Link>
             </NextLink>
-          </Td>
-        </Tr>
-      </Tbody>
-    </Table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 }
 

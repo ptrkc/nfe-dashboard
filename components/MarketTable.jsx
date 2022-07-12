@@ -41,29 +41,29 @@ export default function MarketTable({ market: { name, nickname, fantasia, cnpj, 
         <tr><th colSpan="2">Mercado</th></tr>
       </thead>
       <tbody>
-        <tr className="odd:bg-slate-100">
-          <td className="px-2 whitespace-nowrap">Nome</td>
-          <td className="px-2 w-full">{name}</td>
+        <tr>
+          <td className="whitespace-nowrap">Nome</td>
+          <td className="w-full">{name}</td>
         </tr>
-        <tr className="odd:bg-slate-100">
-          <td className="px-2 whitespace-nowrap">Nome fantasia</td>
-          <td className="px-2 w-full">{fantasia}</td>
+        <tr>
+          <td className="whitespace-nowrap">Nome fantasia</td>
+          <td className="w-full">{fantasia}</td>
         </tr>
-        <tr className="odd:bg-slate-100">
-          <td className="px-2 whitespace-nowrap">CNPJ</td>
-          <td className="px-2 w-full">{cnpj}</td>
+        <tr>
+          <td className="whitespace-nowrap">CNPJ</td>
+          <td className="w-full">{cnpj}</td>
         </tr>
-        <tr className="odd:bg-slate-100">
-          <td className="px-2 whitespace-nowrap">Endereço</td>
-          <td className="px-2 w-full">{address}</td>
+        <tr>
+          <td className="whitespace-nowrap">Endereço</td>
+          <td className="w-full">{address}</td>
         </tr>
-        <tr className="odd:bg-slate-100">
-          <td className="px-2 whitespace-nowrap">CEP</td>
-          <td className="px-2 w-full">{cep}</td>
+        <tr>
+          <td className="whitespace-nowrap">CEP</td>
+          <td className="w-full">{cep}</td>
         </tr>
-        <tr className="odd:bg-slate-100">
-          <td className="px-2">Alias</td>
-          <td className="px-2 w-full">
+        <tr>
+          <td>Alias</td>
+          <td className="w-full">
             <CustomControls defaultValue={nickname} />
           </td>
         </tr>
