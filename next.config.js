@@ -8,6 +8,7 @@ const nextConfig = {
       'lib',
       'pages',
       'public',
+      'hooks',
     ],
   },
 };

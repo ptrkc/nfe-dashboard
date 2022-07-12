@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import {
   Box, Divider, Drawer, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex,
-  Icon, useBreakpointValue, useDisclosure,
+  Icon, useDisclosure,
 } from '@chakra-ui/react';
 import {
   FiMenu, FiHome, FiFile, FiShoppingCart, FiShoppingBag, FiPackage, FiTrendingUp, FiLock,
   FiUserPlus, FiFileText,
 } from 'react-icons/fi';
+import useBreakpoint from 'hooks/useBreakpoint';
 
 const MAIN_OPTIONS = [
   { href: '/', text: 'Home', icon: FiHome, disabled: false },
@@ -144,7 +145,7 @@ function TopBar() {
 }
 
 export default function Layout({ children }) {
-  const isDesktop = useBreakpointValue({ base: false, md: true });
+  const isDesktop = useBreakpoint('md');
 
   return (
     <div className="h-screen flex flex-col md:flex-row">

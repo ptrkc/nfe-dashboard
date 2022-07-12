@@ -1,12 +1,11 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import {
-  Select, useBreakpointValue,
-  VStack,
-} from '@chakra-ui/react';
-import SlidingSegmentedControl from 'components/SlidingSegmentedControl';
-import { useState } from 'react';
+import { Select, VStack } from '@chakra-ui/react';
 import { FiPlus } from 'react-icons/fi';
+
+import SlidingSegmentedControl from 'components/SlidingSegmentedControl';
+import useBreakpoint from 'hooks/useBreakpoint';
 
 const months = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro',
@@ -20,7 +19,9 @@ const shortMonthOptions = months.map((month, index) => (
 
 function Home() {
   const [selectedMonth, setSelectedMonth] = useState((new Date()).getMonth());
-  const isDesktop = useBreakpointValue({ base: false, md: true });
+  const isMd = useBreakpoint('md');
+  const is2xl = useBreakpoint('2xl');
+
   return (
     <div>
       <Head>
@@ -33,26 +34,25 @@ function Home() {
             Nova Nota
           </a>
         </NextLink>
-        {isDesktop ? (
+        {isMd ? (
           <SlidingSegmentedControl
-            options={shortMonthOptions}
+            options={is2xl ? longMonthOptions : shortMonthOptions}
             selectedValue={selectedMonth}
             setSelectedValue={setSelectedMonth}
           />
-        )
-          : (
-            <Select
-              bg="white"
-              name="market"
-              id="market"
-              value={selectedMonth}
-              onChange={(evt) => setSelectedMonth(evt.target.value)}
-            >
-              {longMonthOptions.map(({ label, value }) => (
-                <option key={value} value={value}>{label}</option>
-              ))}
-            </Select>
-          )}
+        ) : (
+          <Select
+            bg="white"
+            name="market"
+            id="market"
+            value={selectedMonth}
+            onChange={(evt) => setSelectedMonth(evt.target.value)}
+          >
+            {longMonthOptions.map(({ label, value }) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </Select>
+        )}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="rounded-frame p-2">
             <p className="text-sm">Dinheiro Gasto</p>
