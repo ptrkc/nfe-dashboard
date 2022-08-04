@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Editable, EditableInput, EditablePreview, Flex, Input, useEditableControls } from '@chakra-ui/react';
+import { Editable, EditableInput, EditablePreview, Flex, Input, useEditableControls } from '@chakra-ui/react';
 
 function EditableControls() {
   const {
@@ -9,12 +9,12 @@ function EditableControls() {
   } = useEditableControls();
 
   return isEditing ? (
-    <ButtonGroup size="xs">
-      <Button {...getSubmitButtonProps()}>Salvar</Button>
-      <Button {...getCancelButtonProps()}>Cancelar</Button>
-    </ButtonGroup>
+    <div className="flex gap-2">
+      <button className="btn text-xs btn-blue px-2 py-1" type="button" {...getSubmitButtonProps()}>Salvar</button>
+      <button className="btn text-xs btn-blue-outline px-2 py-1" type="button" {...getCancelButtonProps()}>Cancelar</button>
+    </div>
   ) : (
-    <Button size="xs" {...getEditButtonProps()}>Editar</Button>
+    <button className="btn text-xs btn-blue px-2 py-1" type="button" {...getEditButtonProps()}>Editar</button>
   );
 }
 

@@ -3,7 +3,7 @@ import prisma from 'lib/prisma';
 import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import {
-  Box, FormControl, FormLabel, Input, InputGroup, InputLeftAddon, Modal, ModalBody,
+  FormControl, FormLabel, Input, InputGroup, InputLeftAddon, Modal, ModalBody,
   ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper,
   NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, useDisclosure, VStack,
 } from '@chakra-ui/react';
@@ -300,9 +300,9 @@ function NewReceipt({ markets }) {
       <Head>
         <title>💸 NFe Dashboard | +Nota</title>
       </Head>
-      <Box maxW="2xl" marginX="auto">
+      <div className="max-w-2xl mx-auto">
         <NewReceiptForm markets={markets} />
-      </Box>
+      </div>
     </>
   );
 }

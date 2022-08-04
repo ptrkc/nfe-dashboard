@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import NextLink from 'next/link';
-import { Link, Skeleton } from '@chakra-ui/react';
+import { Skeleton } from '@chakra-ui/react';
 import { useSortBy, useTable } from 'react-table';
 import formatBRL from 'lib/formatBRL';
 import { formatLongDateBR } from 'lib/formatLongDateBR';
@@ -78,17 +78,17 @@ export default function ReceiptsTable({ receipts, isLoading }) {
               <tr key={id}>
                 <td>
                   <NextLink passHref href={`/notas/${id}`}>
-                    <Link>{marketName}</Link>
+                    <a>{marketName}</a>
                   </NextLink>
                 </td>
                 <td className="text-right">
                   <NextLink passHref href={`/notas/${id}`}>
-                    <Link title={formatLongDateBR(date)}>{dateSlice(date)}</Link>
+                    <a title={formatLongDateBR(date)}>{dateSlice(date)}</a>
                   </NextLink>
                 </td>
                 <td className="text-right">
                   <NextLink passHref href={`/notas/${id}`}>
-                    <Link>{formatBRL(total)}</Link>
+                    <a>{formatBRL(total)}</a>
                   </NextLink>
                 </td>
               </tr>
@@ -98,7 +98,7 @@ export default function ReceiptsTable({ receipts, isLoading }) {
           <td colSpan={2} />
           <td className="text-right">
             <NextLink passHref href="/">
-              <Link>{formatBRL(totalSum)}</Link>
+              <a>{formatBRL(totalSum)}</a>
             </NextLink>
           </td>
         </tr>

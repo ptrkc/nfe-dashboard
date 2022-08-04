@@ -3,7 +3,6 @@ import prisma from 'lib/prisma';
 import { useMemo } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { Link, Box, Flex } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
 
 function PurchasesTable({ purchases }) {
@@ -57,17 +56,17 @@ function PurchasesTable({ purchases }) {
           <tr key={id}>
             <td>
               <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
-                <Link title={id}>{id}</Link>
+                <a title={id}>{id}</a>
               </NextLink>
             </td>
             <td>
               <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
-                <Link>{name}</Link>
+                <a>{name}</a>
               </NextLink>
             </td>
             <td className="text-right">
               <NextLink passHref href={`/produtos/${encodeURIComponent(ean)}`}>
-                <Link>{ean}</Link>
+                <a>{ean}</a>
               </NextLink>
             </td>
           </tr>
@@ -83,16 +82,16 @@ function Purchases({ purchases }) {
       <Head>
         <title>💸 NFe Dashboard | Produtos</title>
       </Head>
-      <Flex direction="column" gap={2}>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Box>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center">
+          <div>
             Filtros..., adicionar mercado, editar
-          </Box>
-        </Flex>
+          </div>
+        </div>
         <div className="rounded-frame">
           <PurchasesTable purchases={purchases} />
         </div>
-      </Flex>
+      </div>
     </>
   );
 }

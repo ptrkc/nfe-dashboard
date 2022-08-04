@@ -3,7 +3,6 @@ import prisma from 'lib/prisma';
 import { useMemo } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { Link, Table, Thead, Tbody, Td, Tr, Th } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
 
 import formatBRL from 'lib/formatBRL';
@@ -76,42 +75,42 @@ function ProductPurchasesTable({ purchases }) {
           <tr key={row.id}>
             <td>
               <NextLink passHref href="/">
-                <Link>{row.name}</Link>
+                <a>{row.name}</a>
               </NextLink>
             </td>
             <td className="text-right">
               <NextLink passHref href="/">
-                <Link>{dateSlice(row.receipt.date)}</Link>
+                <a>{dateSlice(row.receipt.date)}</a>
               </NextLink>
             </td>
             <td className="text-right">
               <NextLink passHref href="/">
-                <Link>{row.quantity}</Link>
+                <a>{row.quantity}</a>
               </NextLink>
             </td>
             <td>
               <NextLink passHref href="/">
-                <Link>{row.unit}</Link>
+                <a>{row.unit}</a>
               </NextLink>
             </td>
             <td className="text-right">
               <NextLink passHref href="/">
-                <Link>{formatBRL(row.unitPrice)}</Link>
+                <a>{formatBRL(row.unitPrice)}</a>
               </NextLink>
             </td>
             <td className="text-right">
               <NextLink passHref href="/">
-                <Link>{formatBRL(row.regularPrice)}</Link>
+                <a>{formatBRL(row.regularPrice)}</a>
               </NextLink>
             </td>
             <td className="text-right">
               <NextLink passHref href="/">
-                <Link>{formatBRL(row.discount)}</Link>
+                <a>{formatBRL(row.discount)}</a>
               </NextLink>
             </td>
             <td className="text-right">
               <NextLink passHref href="/">
-                <Link>{formatBRL(row.chargedPrice)}</Link>
+                <a>{formatBRL(row.chargedPrice)}</a>
               </NextLink>
             </td>
           </tr>
@@ -120,22 +119,22 @@ function ProductPurchasesTable({ purchases }) {
           <td colSpan={4} />
           <td className="text-right">
             <NextLink passHref href="/">
-              <Link>{formatBRL(totals.unitPrice)}</Link>
+              <a>{formatBRL(totals.unitPrice)}</a>
             </NextLink>
           </td>
           <td className="text-right">
             <NextLink passHref href="/">
-              <Link>{formatBRL(totals.regularPrice)}</Link>
+              <a>{formatBRL(totals.regularPrice)}</a>
             </NextLink>
           </td>
           <td className="text-right">
             <NextLink passHref href="/">
-              <Link>{formatBRL(totals.discount)}</Link>
+              <a>{formatBRL(totals.discount)}</a>
             </NextLink>
           </td>
           <td className="text-right">
             <NextLink passHref href="/">
-              <Link>{formatBRL(totals.chargedPrice)}</Link>
+              <a>{formatBRL(totals.chargedPrice)}</a>
             </NextLink>
           </td>
         </tr>

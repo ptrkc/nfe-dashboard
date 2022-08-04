@@ -16,6 +16,7 @@ export default function useMediaQuery(query) {
       mediaQuery.addEventListener('change', handler);
       return () => mediaQuery.removeEventListener('change', handler);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
   return matches;

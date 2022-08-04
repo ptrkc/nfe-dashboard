@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { Box, Flex, SimpleGrid } from '@chakra-ui/react';
+import { Flex, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import { FiPlus } from 'react-icons/fi';
 
@@ -30,9 +30,9 @@ function Receipts() {
       </Head>
       <Flex direction="column" gap={2}>
         <Flex justifyContent="space-between" alignItems="center">
-          <Box>
+          <div>
             Filtros, data, mercado,...?
-          </Box>
+          </div>
           <NextLink href="/notas/new" passHref>
             <a className="btn btn-blue">
               <FiPlus />

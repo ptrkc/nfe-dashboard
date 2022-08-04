@@ -3,7 +3,6 @@ import prisma from 'lib/prisma';
 import { useMemo } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { Link, Box, Flex } from '@chakra-ui/react';
 import { useTable, useSortBy } from 'react-table';
 
 function MarketsTable({ markets }) {
@@ -59,27 +58,27 @@ function MarketsTable({ markets }) {
           <tr key={row.id}>
             <td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
-                <Link>{row.name}</Link>
+                <a>{row.name}</a>
               </NextLink>
             </td>
             <td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
-                <Link>{row.fantasia}</Link>
+                <a>{row.fantasia}</a>
               </NextLink>
             </td>
             <td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
-                <Link>{row.nickname}</Link>
+                <a>{row.nickname}</a>
               </NextLink>
             </td>
             <td>
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
-                <Link>{row.address}</Link>
+                <a>{row.address}</a>
               </NextLink>
             </td>
             <td className="text-right">
               <NextLink passHref href={`/mercados/${encodeURIComponent(row.id)}`}>
-                <Link>{row.totalReceipts}</Link>
+                <a>{row.totalReceipts}</a>
               </NextLink>
             </td>
           </tr>
@@ -95,16 +94,16 @@ function Markets({ markets }) {
       <Head>
         <title>💸 NFe Dashboard | Mercados</title>
       </Head>
-      <Flex direction="column" gap={2}>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Box>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center">
+          <div>
             Filtros..., adicionar mercado, editar
-          </Box>
-        </Flex>
+          </div>
+        </div>
         <div className="rounded-frame">
           <MarketsTable markets={markets} />
         </div>
-      </Flex>
+      </div>
     </>
   );
 }
