@@ -3,6 +3,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { Select, VStack } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { FiPlus } from 'react-icons/fi';
 
 import SlidingSegmentedControl from 'components/SlidingSegmentedControl';
@@ -22,6 +23,20 @@ const shortMonthOptions = months.map((month, index) => (
 ));
 
 const sumTotalReducer = (prev, current) => prev + parseFloat(current.total);
+
+function CustomTooltip({ active, payload }) {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-2 border-black border">
+        {Object.entries(payload[0].payload).map(([key, value]) => (
+          <p key={key}>{`${key} : ${value}`}</p>
+        ))}
+      </div>
+    );
+  }
+
+  return null;
+}
 
 function Home() {
   const [selectedMonth, setSelectedMonth] = useState((new Date()).getMonth());
@@ -90,6 +105,20 @@ function Home() {
           </div>
         </div>
       </VStack>
+      {!isLoading && (
+      <BarChart
+        width={600}
+        height={500}
+        data={receipts.map((r) => ({ ...r, total: parseFloat(r.total), date: (new Date(r.date)).toLocaleDateString('pt-BR') }))}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="date" />
+        <YAxis />
+        <Tooltip content={<CustomTooltip />} />
+        <Legend />
+        <Bar dataKey="total" fill="#2563eb" label={{ position: 'top' }} />
+      </BarChart>
+      )}
     </div>
   );
 }
