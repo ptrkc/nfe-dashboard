@@ -3,7 +3,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { Select, VStack } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { FiPlus } from 'react-icons/fi';
 
 import SlidingSegmentedControl from 'components/SlidingSegmentedControl';
@@ -46,12 +46,10 @@ function Home() {
   const isMd = useBreakpoint('md');
   const is2xl = useBreakpoint('2xl');
 
-  const { data: receipts = [], isLoading } = useQuery(endpoint, () => fetchData(endpoint));
-
-  console.log(receipts);
+  const { data: receipts = [] } = useQuery(endpoint, () => fetchData(endpoint));
 
   return (
-    <div>
+    <div className="h-96">
       <Head>
         <title>💸 NFe Dashboard</title>
       </Head>
@@ -74,7 +72,7 @@ function Home() {
             name="market"
             id="market"
             value={selectedMonth}
-            onChange={(evt) => setSelectedMonth(evt.target.value)}
+            onChange={(evt) => setSelectedMonth(parseInt(evt.target.value))}
           >
             {longMonthOptions.map(({ label, value }) => (
               <option key={value} value={value}>{label}</option>
@@ -105,20 +103,18 @@ function Home() {
           </div>
         </div>
       </VStack>
-      {!isLoading && (
-      <BarChart
-        width={600}
-        height={500}
-        data={receipts.map((r) => ({ ...r, total: parseFloat(r.total), date: (new Date(r.date)).toLocaleDateString('pt-BR') }))}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip content={<CustomTooltip />} />
-        <Legend />
-        <Bar dataKey="total" fill="#2563eb" label={{ position: 'top' }} />
-      </BarChart>
-      )}
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={receipts.map((r) => ({ ...r, total: parseFloat(r.total), date: (new Date(r.date)).toLocaleDateString('pt-BR') }))}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip content={<CustomTooltip />} />
+          <Legend />
+          <Bar dataKey="total" fill="#2563eb" label={{ position: 'top' }} />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }
